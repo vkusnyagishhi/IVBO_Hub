@@ -1,0 +1,17 @@
+fastapi>=0.100.0
+pydantic>=2.0.3
+uvicorn>=0.23.1
+tortoise-orm>=0.19.3
+tortoise-orm[asyncpg]
+passlib>=1.7.4
+jwt>=1.3.1
+decouple>=0.0.7
+aerich
+async-generator
+async-timeout
+asyncpg
+email-validator
+PyJWT
+pytest
+pandas
+numpy
