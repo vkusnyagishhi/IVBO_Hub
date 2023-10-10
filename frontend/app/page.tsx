@@ -15,7 +15,7 @@ export default function Home() {
         api.get('/hw').then(res => dispatch(setData(res.data)));
     }, [dispatch]);
 
-    return <main style={{ width: '100%', height: isLaptop ? '100vh' : 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '50px 0px' }}>
+    return <main style={{ width: '100%', height: isLaptop ? '100vh' : '98vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '50px 0px' }}>
         {hw.length > 0
             ? <Accordion w={isLaptop ? '40%' : '90%'} color='white' allowToggle>
                 {hw.filter((x: IHomework) => x.content.length > 0 || x.image).map((x: IHomework, i) => <AccordionItem key={i}>
