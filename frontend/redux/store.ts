@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import miscReducer from './miscSlice';
+import adminReducer from "@/redux/adminSlice";
 
 export const store = configureStore({
     reducer: {
-        misc: miscReducer
+        misc: miscReducer,
+        admin: adminReducer
     }
 });
 
