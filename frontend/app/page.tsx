@@ -17,14 +17,14 @@ export default function Home() {
 
     return <main style={{ width: '100%', height: isLaptop ? '100vh' : 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '50px 0px' }}>
         {hw.length > 0
-            ? <Accordion w={isLaptop ? '40%' : '90%'} color='white' allowMultiple allowToggle>
+            ? <Accordion w={isLaptop ? '40%' : '90%'} color='white' allowToggle>
                 {hw.filter((x: IHomework) => x.content.length > 0 || x.image).map((x: IHomework, i) => <AccordionItem key={i}>
-                    <AccordionButton fontSize='20px'>
-                        <Text>{x.subject} (обновлено: {x.updatedAt}{x.updatedBy && `, кем: ${x.updatedBy}`})</Text>
+                    <AccordionButton fontSize='18px' w='100%'>
+                        <Text w='90%'>{x.subject}<br />Обновлено: {x.updatedAt}<br />{x.updatedBy && `Кем: ${x.updatedBy}`}</Text>
                         <AccordionIcon />
                     </AccordionButton>
 
-                    <AccordionPanel fontSize='20px'>
+                    <AccordionPanel fontSize='16px'>
                         {x.image && <Image fill src={x.image} alt='' style={{ borderRadius: '20px' }} />}
 
                         <OrderedList>
