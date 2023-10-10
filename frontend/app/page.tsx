@@ -3,11 +3,9 @@ import api from '@/api';
 import { useEffect } from "react";
 import { setData } from "@/redux/miscSlice";
 import { useDispatch, useSelector } from "@/redux/hooks";
-import { Text, VStack, ListItem, OrderedList, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, Spinner } from "@chakra-ui/react";
+import { Text, ListItem, OrderedList, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, Spinner } from "@chakra-ui/react";
 import { IHomework } from "@/misc";
 import Image from "next/image";
-import { LoginButton } from "@telegram-auth/react";
-import { motion } from 'framer-motion';
 
 export default function Home() {
     const dispatch = useDispatch();
