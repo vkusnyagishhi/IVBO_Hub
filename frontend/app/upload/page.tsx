@@ -6,9 +6,10 @@ import { iconButtonStyles, IUser, toasts } from "@/misc";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { TgLoginButton } from "@/components/Common";
 import { useDispatch, useSelector } from "@/redux/hooks";
-import { addFile, addTrusted, removeTrusted } from "@/redux/authSlice";
+import { addFile, addTrusted, deleteFile, removeTrusted } from "@/redux/authSlice";
 import { MdContentCopy } from "react-icons/md";
 import { HiUserRemove } from "react-icons/hi";
+import { BiSolidTrashAlt } from "react-icons/bi";
 
 export default function Files() {
     const [loading, setLoading] = useState(false);
@@ -18,9 +19,10 @@ export default function Files() {
     const toast = useToast();
     const dispatch = useDispatch();
     const { user, files } = useSelector(state => state.auth);
+    const { isLaptop } = useSelector(state => state.misc);
 
     return user
-        ? <VStack spacing='20px' fontSize='20px'>
+        ? <VStack spacing='20px' fontSize='20px' w={isLaptop ? '25%' : '90%'}>
             <VStack spacing='10px' color='white'>
                 <Text>Загрузить файл</Text>
 
@@ -64,19 +66,40 @@ export default function Files() {
             <Divider w='70vw' />
 
             {Object.keys(files).length > 0
-                ? Object.entries(files).map(([username, files]: [string, any], i) => <VStack key={i} color='white' spacing='10px'>
+                ? Object.entries(files).map(([username, files]: [string, any], i) => <VStack key={i} color='white' spacing='10px' w='100%'>
                     <Heading fontSize='30px'>{username === user.tg_username ? 'Твои файлы' : `Файлы ${username}`}</Heading>
 
                     <VStack spacing='5px' w='100%'>
                         {files && files.length > 0 && files.map((f: any, j: number) => <HStack w='100%' justify='space-between' key={j} color='white' spacing='20px'>
                             <ChakraLink color='blue.300' href={`https://storage.twodev.cc/${user.tg_username}/${f}`} isExternal>{f} <ExternalLinkIcon mx='2px' /></ChakraLink>
 
-                            <Tooltip label='Скопировать ссылку на файл' hasArrow>
-                                <IconButton aria-label='copy' icon={<MdContentCopy />} onClick={() => {
-                                    navigator.clipboard.writeText(`https://storage.twodev.cc/${user.tg_username}/${f}`);
-                                    toast(toasts.success('Скопировано!'));
-                                }} {...iconButtonStyles} />
-                            </Tooltip>
+                            <HStack spacing='10px'>
+                                <Tooltip label='Скопировать ссылку на файл' hasArrow>
+                                    <IconButton aria-label='copy' icon={<MdContentCopy />} onClick={() => {
+                                        navigator.clipboard.writeText(`https://storage.twodev.cc/${user.tg_username}/${f}`);
+                                        toast(toasts.success('Скопировано!'));
+                                    }} {...iconButtonStyles} />
+                                </Tooltip>
+
+                                <Tooltip label='Удалить файл' hasArrow>
+                                    <IconButton aria-label='delete' icon={<BiSolidTrashAlt />} onClick={() => {
+                                        axios
+                                            .post(
+                                                'https://api.twodev.cc/ivbo/delete',
+                                                { file: f },
+                                                {
+                                                    headers: { 'x-access-token': sessionStorage.getItem('hash') }
+                                                }
+                                            )
+                                            .then(res => {
+                                                if (res.data === 200) {
+                                                    dispatch(deleteFile(f));
+                                                    toast(toasts.success('Файл удалён!'));
+                                                } else toast(toasts.error());
+                                            });
+                                    }} {...iconButtonStyles} />
+                                </Tooltip>
+                            </HStack>
                         </HStack>)}
                     </VStack>
                 </VStack>)
