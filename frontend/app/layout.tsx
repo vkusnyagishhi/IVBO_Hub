@@ -6,7 +6,6 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { Header, Launcher } from "@/components/Common";
 
 const inter = Inter({ subsets: ['latin'] });
-
 export const metadata: Metadata = {
     title: 'IVBO-11-23 Hub',
     description: 'на описание фантазии не хватило, сори'
@@ -20,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Launcher />
             <Header />
 
-            <main style={{ width: '100%', minHeight: '96vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '50px 0px' }}>
+            <main style={{ width: '100%', minHeight: '96vh', padding: '50px 0px 120px 0px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 {children}
             </main>
         </ChakraProvider>

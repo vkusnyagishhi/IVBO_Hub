@@ -1,53 +1,17 @@
 'use client';
-import {
-    Button, HStack, Drawer,
-    DrawerBody,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerOverlay,
-    DrawerContent,
-    DrawerCloseButton,
-    useDisclosure,
-    IconButton,
-    VStack
-} from "@chakra-ui/react";
-import { EditIcon, ArrowBackIcon } from '@chakra-ui/icons';
-import { usePathname } from "next/navigation";
+import { HStack, VStack, Icon, Text } from "@chakra-ui/react";
 import { useRouter } from 'next/navigation';
+import { headerLinks } from '@/misc';
+import { useSelector } from "@/redux/hooks";
 
 export function Header() {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const pathname = usePathname();
     const router = useRouter();
+    const { isLaptop } = useSelector(state => state.misc);
 
-    return <>
-        <IconButton aria-label='menu' bg="#153156" _hover={{ bg: '#1c4172' }} _active={{ bg: '#112948' }} zIndex={10} color='white' icon={pathname === '/' ? <EditIcon /> : <ArrowBackIcon />} onClick={() => {
-            router.push(pathname === '/' ? '/admin' : '/');
-        }} pos='fixed' bottom='30px' right='30px' boxSize='70px' fontSize='25px' borderRadius='200px' />
-
-        <Drawer
-            isOpen={isOpen}
-            placement='bottom'
-            onClose={onClose}
-        >
-            <DrawerOverlay />
-            <DrawerContent color='white' bg='black'>
-                <DrawerCloseButton />
-                <DrawerHeader>Меню</DrawerHeader>
-
-                <DrawerBody pb='20px'>
-                    <VStack spacing='20px' w='100%'>
-                        <Button w='50%' bg='gray.200' onClick={() => {
-                            router.push('/');
-                            onClose();
-                        }}>Главная</Button>
-                        <Button w='50%' bg='gray.200' onClick={() => {
-                            router.push('/admin');
-                            onClose();
-                        }}>Админка</Button>
-                    </VStack>
-                </DrawerBody>
-            </DrawerContent>
-        </Drawer>
-    </>
+    return <HStack w='100%' borderRadius='25px 25px 0px 0px' h='80px' px={isLaptop ? '30vw' : '50px'} py='10px' bg='gray.700' pos='fixed' bottom={0} justify='space-between' zIndex={10}>
+        {headerLinks.map((link, i) => <VStack key={i} w='50px' h='100%' color='white' spacing={0} onClick={() => router.push(link.pathname)} transition='0.3s' _hover={{ color: 'gray.300', cursor: 'pointer' }} _active={{ color: 'gray.500' }}>
+            <Icon as={link.icon} boxSize='50%' />
+            <Text w='max-content' userSelect='none'>{link.title}</Text>
+        </VStack>)}
+    </HStack>
 }

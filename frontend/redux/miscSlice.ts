@@ -2,12 +2,19 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { IHomework } from "@/misc";
 
+interface MiscState {
+    isLaptop: boolean;
+    hw: IHomework[];
+}
+
+const initialState: MiscState = {
+    isLaptop: false,
+    hw: []
+};
+
 export const miscSlice = createSlice({
     name: 'misc',
-    initialState: {
-        isLaptop: false,
-        hw: []
-    },
+    initialState,
     reducers: {
         setData: (state, action: PayloadAction<object>) => {
             Object.assign(state, action.payload);
