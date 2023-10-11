@@ -30,13 +30,15 @@ export const toasts = {
         status: 'success',
         title: 'Успешно',
         description: desc,
-        duration: 5000
+        duration: 3000,
+        isClosable: true
     }),
     error: (desc?: string): any => ({
         status: 'error',
         title: 'Ошибка',
         description: desc ?? 'Обратитесь к админу',
-        duration: 5000
+        duration: 3000,
+        isClosable: true
     })
 };
 

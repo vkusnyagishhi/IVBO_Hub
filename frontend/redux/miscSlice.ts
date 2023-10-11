@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { IHomework } from "@/misc";
+import { act } from "react-dom/test-utils";
 
 interface MiscState {
     isLaptop: boolean;
@@ -37,9 +38,12 @@ export const miscSlice = createSlice({
         deletePhoto: (state, action: PayloadAction<any>) => {
             // @ts-ignore
             state.hw[action.payload].image = null;
+        },
+        clearEmptyContent: (state, action: PayloadAction<number>) => {
+            state.hw[action.payload].content = state.hw[action.payload].content.filter(x => x && x.length > 0);
         }
     }
 })
 
-export const { setData, setIsLaptop, editHW, addHWField, removeHWField, deletePhoto } = miscSlice.actions;
+export const { setData, setIsLaptop, editHW, addHWField, removeHWField, deletePhoto, clearEmptyContent } = miscSlice.actions;
 export default miscSlice.reducer;

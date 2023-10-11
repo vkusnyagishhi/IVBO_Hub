@@ -23,11 +23,11 @@ export default function Files() {
 
     return user
         ? <VStack spacing='20px' fontSize='20px' w={isLaptop ? '25%' : '90%'}>
-            <VStack spacing='10px' color='white'>
-                <Text>Загрузить файл</Text>
+            <VStack spacing='16px' color='white'>
+                <Heading fontSize='22px'>Загрузить файл</Heading>
 
-                <HStack w='100%'>
-                    <Input type='file' onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                <VStack w='100%'>
+                    <input type='file' onChange={(e: ChangeEvent<HTMLInputElement>) => {
                         if (e.target.files) {
                             file.current.append('files', e.target.files[0]);
                             setUploaded(true);
@@ -60,7 +60,7 @@ export default function Files() {
                                 }
                             });
                     }}>Загрузить</Button>}
-                </HStack>
+                </VStack>
             </VStack>
 
             <Divider w='70vw' />
@@ -70,7 +70,7 @@ export default function Files() {
                     <Heading fontSize='30px'>{username === user.tg_username ? 'Твои файлы' : `Файлы ${username}`}</Heading>
 
                     <Tooltip label='Нажми, чтобы скопировать' hasArrow>
-                        <Text color='blue.400' _hover={{ cursor: 'pointer' }} _active={{ color: 'blue.200' }} onClick={() => {
+                        <Text fontSize='18px' color='blue.400' _hover={{ cursor: 'pointer' }} _active={{ color: 'blue.200' }} onClick={() => {
                             navigator.clipboard.writeText(`https://storage.twodev.cc/${username}`);
                             toast(toasts.success('Ссылка на папку скопирована!'));
                         }}>🔗 https://storage.twodev.cc/{username} 🔗</Text>
@@ -112,12 +112,13 @@ export default function Files() {
                 </VStack>)
                 : <Text color='gray.300'>Ты ещё не загружал никакие файлы!</Text>}
 
-            <Text color='gray.500'>Не загружай сюда личные файлы.</Text>
+            <Text color='gray.500' fontSize='16px'>Не загружай сюда личные файлы.</Text>
 
             <Divider w='70vw' />
 
-            <VStack spacing='10px' color='white'>
-                <Text align='center'>Добавить доверенное лицо<br />(сможет смотреть ваши файлы, но не удалять их)</Text>
+            <VStack spacing='16px' color='white'>
+                <Heading fontSize='18px'>Добавить доверенное лицо</Heading>
+                <Text align='center' fontSize='16px' color='gray.400'>сможет смотреть ваши файлы,<br/>но не сможет удалять</Text>
 
                 <HStack w='100%'>
                     <Input placeholder='@username' value={'@' + trustedField} onChange={e => setTrustedField(e.target.value.slice(1))} />
@@ -127,6 +128,7 @@ export default function Files() {
                             .then(res => {
                                 if (res.data === 500) return toast(toasts.error('Нет такого пользователя!'));
                                 dispatch(addTrusted(trustedField));
+                                setTrustedField('');
                                 toast(toasts.success('Пользователь добавлен как доверенный!'));
                             });
                     }}>Добавить</Button>

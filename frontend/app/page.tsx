@@ -9,13 +9,13 @@ export default function Home() {
 
     return hw.length > 0
         ? <Accordion w={isLaptop ? '40%' : '90%'} color='white' allowToggle>
-            {hw.map((x: IHomework, i) => <AccordionItem key={i}>
+            {[...hw.filter(x => x.content.length > 0 || x.image), ...hw.filter(x => x.content.length <= 0 && !x.image)].map((x: IHomework, i) => <AccordionItem key={i}>
                 {x.content.length > 0 || x.image
                     ? <AccordionButton fontSize='18px' w='100%'>
                         <Text w='90%'>{x.subject}<br />Обновлено: {x.updatedAt}</Text>
                         <AccordionIcon />
                     </AccordionButton>
-                    : <AccordionButton fontSize='18px' w='100%'>
+                    : <AccordionButton fontSize='18px' w='100%' opacity={0.5}>
                         <Text w='90%'>{x.subject}<br />Нет ДЗ</Text>
                     </AccordionButton>}
 
