@@ -26,7 +26,7 @@ export const authSlice = createSlice({
         },
         deleteFile: (state, action: PayloadAction<string>) => {
             if (!state.user || !state.files[state.user.tg_username].includes(action.payload)) return;
-            state.files[state.user.tg_username] = state.files[state.user.tg_username].filter(x => x !== action.payload);
+            state.files[state.user.tg_username] = state.files[state.user.tg_username].filter((x: string) => x !== action.payload);
         },
         addTrusted: (state, action: PayloadAction<string>) => {
             if (!state.user) return;
@@ -34,7 +34,7 @@ export const authSlice = createSlice({
         },
         removeTrusted: (state, action: PayloadAction<string>) => {
             if (!state.user) return;
-            state.user.trusted = state.user.trusted.filter(x => x !== action.payload);
+            state.user.trusted = state.user.trusted.filter((x: string) => x !== action.payload);
         }
     }
 });
