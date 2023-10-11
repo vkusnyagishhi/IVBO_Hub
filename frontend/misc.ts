@@ -13,6 +13,8 @@ export interface IUser {
     tg_username: string;
 }
 
+export const ease = [0.410, 0.030, 0.000, 0.995];
+
 export const toasts = {
     success: (desc: string): any => ({
         status: 'success',
