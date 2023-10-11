@@ -28,6 +28,7 @@ export const miscSlice = createSlice({
             if (found) found.content.splice(action.payload[1], 1);
         },
         deletePhoto: (state, action: PayloadAction<any>) => {
+            // @ts-ignore
             state.hw[action.payload].image = null;
         }
     }
