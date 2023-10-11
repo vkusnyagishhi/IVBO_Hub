@@ -6,14 +6,22 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from tortoise.contrib.fastapi import register_tortoise
 
+from app.core.exceptions import APIException, on_api_exception
 from app.settings.log import DEFAULT_LOGGING
 from app.settings.config import settings
+from app.core.auth.utils.contrib import get_current_admin, get_current_user
+from app.applications.users.models import User
+from app.applications.users.schemas import BaseUserCreate
+from app.core.auth.utils.password import get_password_hash
+
+from app.core.auth.routers.login import router as login_router
+from app.applications.users.routers import router as users_router
 
 from aerich import Command
 
-def configure_logging(log_settings: dict = None):
-    log_settings = log_settings or DEFAULT_LOGGING
-    logging.config.dictConfig(log_settings)
+# def configure_logging(log_settings: dict = None):
+#     log_settings = log_settings or DEFAULT_LOGGING
+#     logging.config.dictConfig(log_settings)
 
 
 def init_middlewares(app: FastAPI):
@@ -46,6 +54,20 @@ def get_tortoise_config() -> dict:
 TORTOISE_ORM = get_tortoise_config()
 
 
+async def create_default_admin_user():
+    user = await User.get_by_email(email=settings.ROOT_ADMIN_EMAIL)
+    if user:
+        return
+    
+    hashed_password = get_password_hash(settings.ROOT_ADMIN_PASSWORD)
+
+    admin_user = User()
+    admin_user.email = settings.ROOT_ADMIN_EMAIL
+    admin_user.password_hash = hashed_password
+    admin_user.is_admin = True
+    return admin_user
+
+
 def register_db(app: FastAPI, db_url: str = None):
     db_url = db_url or settings.DB_URL
     app_list = get_app_list()
@@ -54,6 +76,7 @@ def register_db(app: FastAPI, db_url: str = None):
         app, 
         db_url=db_url,
         modules={"models": app_list},
+        generate_schemas=True,
         add_exception_handlers=True,
     )
 
@@ -61,4 +84,14 @@ def register_db(app: FastAPI, db_url: str = None):
 async def upgrade_db(app: FastAPI, db_url: str = None):
     command = Command(tortoise_config=TORTOISE_ORM, app="models")
     await command.init()
-    await command.upgrade()
+    # await command.migrate("test")
+    # await command.upgrade(run_in_transction=False)
+
+
+def register_exceptions(app: FastAPI):
+    app.exception_handler(APIException)
+
+
+def register_routers(app: FastAPI):
+    app.include_router(login_router, prefix="/api/auth/login", tags=["login"])
+    app.include_router(users_router, prefix="/api/auth/users", tags=[])
