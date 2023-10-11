@@ -6,8 +6,8 @@ from typing import Optional
 import jwt
 from fastapi import HTTPException, Security
 from fastapi.security import OAuth2PasswordBearer
-from jwt import PyJWTError
-from jwt.exceptions import InvalidTokenError
+# from jwt import PyJWTError
+# from jwt.exceptions import InvalidTokenError
 from starlette.status import HTTP_403_FORBIDDEN
 
 from app.applications.users.models import User
@@ -23,7 +23,7 @@ async def get_current_user(token: str = Security(reusable_oauth2)) -> Optional[U
     try:
         payload = jwt.encode(token, settings.SECRET_KEY, algorithms=[ALGORITHM])
         token_data = JWTTokenPayload(**payload)
-    except PyJWTError:
+    except jwt.PyJWTError:
         raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail="Could not validate credentials")
     
     user = await User.filter(uuid=token_data.user_uuid).first()
