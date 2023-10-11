@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Launcher />
             <Header />
 
-            <main style={{ width: '100%', minHeight: '96vh', paddingTop: '70px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '50px 0px' }}>
+            <main style={{ width: '100%', minHeight: '96vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '50px 0px' }}>
                 {children}
             </main>
         </ChakraProvider>
