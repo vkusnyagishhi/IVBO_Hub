@@ -3,15 +3,13 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { IUser } from "@/misc";
 
 interface AuthState {
-    isRealAdmin: boolean;
     user: IUser | null;
-    files: string[];
+    files: any;
 }
 
 const initialState: AuthState = {
-    isRealAdmin: false,
     user: null,
-    files: []
+    files: {}
 };
 
 export const authSlice = createSlice({
@@ -22,11 +20,20 @@ export const authSlice = createSlice({
             Object.assign(state, action.payload);
         },
         addFile: (state, action: PayloadAction<string>) => {
-            if (!state.files.includes(action.payload)) state.files.push(action.payload);
-            else state.files = [...state.files.filter(f => f !== action.payload), action.payload];
+            if (!state.user) return;
+            if (!state.files[state.user.tg_username].includes(action.payload)) state.files[state.user.tg_username].push(action.payload);
+            else state.files = [...state.files[state.user.tg_username].filter((f: string) => f !== action.payload), action.payload];
+        },
+        addTrusted: (state, action: PayloadAction<string>) => {
+            if (!state.user) return;
+            state.user.trusted.push(action.payload);
+        },
+        removeTrusted: (state, action: PayloadAction<string>) => {
+            if (!state.user) return;
+            state.user.trusted = state.user.trusted.filter(x => x !== action.payload);
         }
-    },
-})
+    }
+});
 
-export const { setAuthData, addFile } = authSlice.actions;
+export const { setAuthData, addFile, addTrusted, removeTrusted } = authSlice.actions;
 export default authSlice.reducer;

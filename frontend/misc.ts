@@ -11,9 +11,19 @@ export interface IHomework {
 
 export interface IUser {
     tg_username: string;
+    trusted: string[];
 }
 
 export const ease = [0.410, 0.030, 0.000, 0.995];
+export const iconButtonStyles = {
+    boxSize: '50px',
+    fontSize: '20px',
+    color: 'white',
+    bg: 'gray.700',
+    transition: '0.3s',
+    _hover: { color: 'gray.300', cursor: 'pointer' },
+    _active: { color: 'gray.500' }
+};
 
 export const toasts = {
     success: (desc: string): any => ({

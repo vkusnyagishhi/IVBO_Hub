@@ -14,11 +14,11 @@ export default function Admin() {
     const [loading, setLoading] = useState(false);
     const file = useRef(new FormData());
     const { hw, isLaptop } = useSelector(state => state.misc);
-    const { isRealAdmin, user } = useSelector(state => state.auth);
+    const { user } = useSelector(state => state.auth);
 
     return user
         ? <VStack spacing='20px' w={isLaptop ? '70%' : '90%'}>
-            {isRealAdmin && hw.map((x: IHomework, i) => <VStack w='100%' key={i} p='20px' border='2px solid gray' borderRadius='20px' color='white' spacing='14px'>
+            {hw.map((x: IHomework, i) => <VStack w='100%' key={i} p='20px' border='2px solid gray' borderRadius='20px' color='white' spacing='14px'>
                 <Text fontSize='20px'>{x.subject}</Text>
 
                 {x.content.map((c, j) => <HStack key={j} w='100%'>
@@ -70,7 +70,6 @@ export default function Admin() {
                             </HStack>}
 
                             <HStack w='100%' spacing='20px'>
-                                <Text>Загрузить фото:</Text>
                                 <Input type='file' onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                     if (e.target.files) {
                                         file.current.append('files', e.target.files[0]);
