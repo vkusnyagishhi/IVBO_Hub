@@ -6,5 +6,13 @@ const withPWA = require('next-pwa')({
 });
 
 module.exports = withPWA({
-    reactStrictMode: false
+    reactStrictMode: false,
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'storage.twodev.cc'
+            }
+        ]
+    }
 })

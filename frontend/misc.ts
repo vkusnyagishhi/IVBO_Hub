@@ -1,6 +1,6 @@
 export interface IHomework {
     subject: string;
     content: string[];
-    image?: string;
+    image: string;
     updatedAt: string;
 }

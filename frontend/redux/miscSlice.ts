@@ -26,9 +26,12 @@ export const miscSlice = createSlice({
         removeHWField: (state, action: PayloadAction<any>) => {
             const found: IHomework | any = state.hw.find((h: IHomework) => h.subject === action.payload[0]);
             if (found) found.content.splice(action.payload[1], 1);
+        },
+        deletePhoto: (state, action: PayloadAction<any>) => {
+            state.hw[action.payload].image = null;
         }
     }
 })
 
-export const { setData, setIsLaptop, editHW, addHWField, removeHWField } = miscSlice.actions;
+export const { setData, setIsLaptop, editHW, addHWField, removeHWField, deletePhoto } = miscSlice.actions;
 export default miscSlice.reducer;
