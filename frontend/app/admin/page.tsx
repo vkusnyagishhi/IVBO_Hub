@@ -21,7 +21,7 @@ export default function Admin() {
             <Text fontSize='20px'>{x.subject}</Text>
             {x.content.map((c, j) => <HStack key={j} w='100%'>
                 {/* @ts-ignore */}
-                <Textarea value={hw[i].content[j]} minH='200px' resize='vertical' onChange={e => {
+                <Textarea value={hw[i].content[j]} minH='120px' resize='vertical' onChange={e => {
                     if (!activated.includes(x.subject)) setActivated(s => [...s, x.subject]);
                     dispatch(editHW({ subject: x.subject, contentNum: j, value: e.target.value }));
                 }} />

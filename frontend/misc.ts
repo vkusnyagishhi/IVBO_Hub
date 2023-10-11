@@ -3,5 +3,4 @@ export interface IHomework {
     content: string[];
     image?: string;
     updatedAt: string;
-    updatedBy?: string;
 }

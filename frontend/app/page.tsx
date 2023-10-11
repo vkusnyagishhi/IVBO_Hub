@@ -11,7 +11,7 @@ export default function Home() {
         ? <Accordion w={isLaptop ? '40%' : '90%'} color='white' allowToggle>
             {hw.filter((x: IHomework) => x.content.length > 0 || x.image).map((x: IHomework, i) => <AccordionItem key={i}>
                 <AccordionButton fontSize='18px' w='100%'>
-                    <Text w='90%'>{x.subject}<br />Обновлено: {x.updatedAt}<br />{x.updatedBy && `Кем: ${x.updatedBy}`}</Text>
+                    <Text w='90%'>{x.subject}<br />Обновлено: {x.updatedAt}</Text>
                     <AccordionIcon />
                 </AccordionButton>
 
