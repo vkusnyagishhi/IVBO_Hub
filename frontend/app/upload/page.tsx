@@ -66,8 +66,15 @@ export default function Files() {
             <Divider w='70vw' />
 
             {Object.keys(files).length > 0
-                ? Object.entries(files).map(([username, files]: [string, any], i) => <VStack key={i} color='white' spacing='10px' w='100%'>
+                ? Object.entries(files).map(([username, files]: [string, any], i) => <VStack key={i} color='white' spacing='20px' w='100%'>
                     <Heading fontSize='30px'>{username === user.tg_username ? 'Твои файлы' : `Файлы ${username}`}</Heading>
+
+                    <Tooltip label='Нажми, чтобы скопировать' hasArrow>
+                        <Text color='blue.400' _hover={{ cursor: 'pointer' }} _active={{ color: 'blue.200' }} onClick={() => {
+                            navigator.clipboard.writeText(`https://storage.twodev.cc/${username}`);
+                            toast(toasts.success('Ссылка на папку скопирована!'));
+                        }}>🔗 https://storage.twodev.cc/{username} 🔗</Text>
+                    </Tooltip>
 
                     <VStack spacing='5px' w='100%'>
                         {files && files.length > 0 && files.map((f: any, j: number) => <HStack w='100%' justify='space-between' key={j} color='white' spacing='20px'>
@@ -77,7 +84,7 @@ export default function Files() {
                                 <Tooltip label='Скопировать ссылку на файл' hasArrow>
                                     <IconButton aria-label='copy' icon={<MdContentCopy />} onClick={() => {
                                         navigator.clipboard.writeText(`https://storage.twodev.cc/${user.tg_username}/${f}`);
-                                        toast(toasts.success('Скопировано!'));
+                                        toast(toasts.success('Ссылка на файл скопирована!'));
                                     }} {...iconButtonStyles} />
                                 </Tooltip>
 
