@@ -44,7 +44,7 @@ export default function Files() {
                                 {
                                     headers: {
                                         'Content-Type': 'multipart/form-data',
-                                        'x-access-token': sessionStorage.getItem('hash')
+                                        'x-access-token': localStorage.getItem('hash')
                                     }
                                 }
                             )
@@ -70,7 +70,7 @@ export default function Files() {
                     <Heading fontSize='30px'>{username === user.tg_username ? 'Твои файлы' : `Файлы ${username}`}</Heading>
 
                     <Tooltip label='Нажми, чтобы скопировать' hasArrow>
-                        <Text fontSize='18px' color='blue.400' _hover={{ cursor: 'pointer' }} _active={{ color: 'blue.200' }} onClick={() => {
+                        <Text userSelect='none' fontSize='18px' color='blue.400' _hover={{ cursor: 'pointer' }} _active={{ color: 'blue.200' }} onClick={() => {
                             navigator.clipboard.writeText(`https://storage.twodev.cc/${username}`);
                             toast(toasts.success('Ссылка на папку скопирована!'));
                         }}>🔗 https://storage.twodev.cc/{username} 🔗</Text>
@@ -95,7 +95,7 @@ export default function Files() {
                                                 'https://api.twodev.cc/ivbo/delete',
                                                 { file: f },
                                                 {
-                                                    headers: { 'x-access-token': sessionStorage.getItem('hash') }
+                                                    headers: { 'x-access-token': localStorage.getItem('hash') }
                                                 }
                                             )
                                             .then(res => {
@@ -124,7 +124,7 @@ export default function Files() {
                     <Input placeholder='@username' value={'@' + trustedField} onChange={e => setTrustedField(e.target.value.slice(1))} />
                     <Button onClick={() => {
                         if (trustedField.length >= 5) axios
-                            .post('https://api.twodev.cc/ivbo/trust', { target: trustedField }, { headers: { 'x-access-token': sessionStorage.getItem('hash') } })
+                            .post('https://api.twodev.cc/ivbo/trust', { target: trustedField }, { headers: { 'x-access-token': localStorage.getItem('hash') } })
                             .then(res => {
                                 if (res.data === 500) return toast(toasts.error('Нет такого пользователя!'));
                                 dispatch(addTrusted(trustedField));
@@ -139,7 +139,7 @@ export default function Files() {
                         <Text>{t}</Text>
                         <IconButton aria-label='remove' icon={<HiUserRemove />} {...iconButtonStyles} onClick={() => {
                             axios
-                                .post('https://api.twodev.cc/ivbo/untrust', { target: t }, { headers: { 'x-access-token': sessionStorage.getItem('hash') } })
+                                .post('https://api.twodev.cc/ivbo/untrust', { target: t }, { headers: { 'x-access-token': localStorage.getItem('hash') } })
                                 .then(res => {
                                     if (res.data === 500) return toast(toasts.error());
                                     dispatch(removeTrusted(t));

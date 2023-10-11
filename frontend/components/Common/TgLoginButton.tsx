@@ -18,7 +18,7 @@ export function TgLoginButton() {
                 if (res.data === 500) toast(toasts.error('Вы не состоите в группе ИВБО-11-23!'));
                 else {
                     dispatch(setAuthData(res.data));
-                    sessionStorage.setItem('hash', data.hash);
+                    localStorage.setItem('hash', data.hash);
                 }
             });
         }}

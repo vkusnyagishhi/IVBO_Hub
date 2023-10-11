@@ -26,7 +26,7 @@ export default function Admin() {
     return user && hw.length > 0
         ? <>
             <VStack spacing='20px' w={isLaptop ? '30%' : '50%'}>
-                {hw.map((x: IHomework, i) => <Button w='100%' h='50px' fontSize='20px' key={i} bg='gray.600' color='white' onClick={() => {
+                {hw.map((x: IHomework, i) => <Button w='100%' h='50px' fontSize='20px' key={i} bg='gray.600' _hover={{ bg: 'gray.500' }} _active={{ bg: 'gray.400' }} color='white' onClick={() => {
                     setSelected(i);
                     onOpen();
                 }}>{x.subject}</Button>)}
@@ -77,7 +77,7 @@ export default function Admin() {
                                                     {
                                                         subject: hw[selected].subject.split(' ')[1]
                                                     },
-                                                    { headers: { 'x-access-token': sessionStorage.getItem('hash') } }
+                                                    { headers: { 'x-access-token': localStorage.getItem('hash') } }
                                                 ).then(res => {
                                                     setLoading(false);
                                                     if (res.data === 200) {
@@ -103,7 +103,7 @@ export default function Admin() {
                                                         headers: {
                                                             'Content-Type': 'multipart/form-data',
                                                             'filename': encodeURIComponent(`${hw[selected].subject.split(' ')[1]}`),
-                                                            'x-access-token': sessionStorage.getItem('hash')
+                                                            'x-access-token': localStorage.getItem('hash')
                                                         }
                                                     }
                                                 ).then(res => {
@@ -127,7 +127,7 @@ export default function Admin() {
                                 setLoading(true);
                                 setActivated(s => s.filter(c => c !== hw[selected].subject));
                                 dispatch(clearEmptyContent(selected));
-                                axios.post('https://api.twodev.cc/ivbo/hw/edit', hw[selected], { headers: { 'x-access-token': sessionStorage.getItem('hash') } }).then(res => {
+                                axios.post('https://api.twodev.cc/ivbo/hw/edit', hw[selected], { headers: { 'x-access-token': localStorage.getItem('hash') } }).then(res => {
                                     setLoading(false);
                                     if (res.data === 200) {
                                         toast(toasts.success('Домашка сохранена!'));
