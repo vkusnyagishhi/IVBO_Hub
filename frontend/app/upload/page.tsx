@@ -118,7 +118,7 @@ export default function Files() {
 
             <VStack spacing='16px' color='white'>
                 <Heading fontSize='18px'>Добавить доверенное лицо</Heading>
-                <Text align='center' fontSize='16px' color='gray.400'>сможет смотреть ваши файлы,<br/>но не сможет удалять</Text>
+                <Text align='center' fontSize='16px' color='gray.400'>сможет смотреть ваши файлы,<br/>но не сможет их удалять</Text>
 
                 <HStack w='100%'>
                     <Input placeholder='@username' value={'@' + trustedField} onChange={e => setTrustedField(e.target.value.slice(1))} />

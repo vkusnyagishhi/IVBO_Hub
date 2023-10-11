@@ -1,11 +1,12 @@
 'use client';
 import { useDispatch, useSelector } from "@/redux/hooks";
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Button, HStack, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Textarea, useDisclosure, useToast, VStack } from "@chakra-ui/react";
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Button, HStack, Icon, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Textarea, useDisclosure, useToast, VStack } from "@chakra-ui/react";
 import { IHomework, toasts } from "@/misc";
 import { ChangeEvent, useRef, useState } from "react";
-import { editHW, addHWField, removeHWField, deletePhoto, clearEmptyContent } from "@/redux/miscSlice";
+import { editHW, addHWField, removeHWField, deletePhoto } from "@/redux/miscSlice";
 import axios from "axios";
 import { TgLoginButton } from "@/components/Common";
+import { AiFillBulb } from "react-icons/ai";
 
 export default function Admin() {
     const { isOpen, onOpen, onClose: onCloseRaw } = useDisclosure();
@@ -14,6 +15,7 @@ export default function Admin() {
     const [activated, setActivated] = useState(['']);
     const [loading, setLoading] = useState(false);
     const [selected, setSelected] = useState(0);
+    const [uploaded, setUploaded] = useState(false);
     const file = useRef(new FormData());
     const { hw, isLaptop } = useSelector(state => state.misc);
     const { user } = useSelector(state => state.auth);
@@ -53,7 +55,7 @@ export default function Admin() {
                                 }}>-</Button>
                             </HStack>)}
 
-                            <Button fontSize='26px' onClick={() => dispatch(addHWField(hw[selected].subject))}>+</Button>
+                            {(hw[selected].content.length === 0 || hw[selected].content.filter((x: string) => x.length < 1).length === 0) && <Button fontSize='26px' onClick={() => dispatch(addHWField(hw[selected].subject))}>+</Button>}
 
                             <Accordion w='90%' allowToggle>
                                 <AccordionItem>
@@ -91,10 +93,11 @@ export default function Admin() {
                                         <VStack w='100%' spacing='20px'>
                                             <input type='file' onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                                 if (e.target.files) {
+                                                    setUploaded(true);
                                                     file.current.append('files', e.target.files[0]);
                                                 }
                                             }} />
-                                            <Button isLoading={loading} w='200px' onClick={() => {
+                                            {uploaded && <Button isLoading={loading} w='200px' onClick={() => {
                                                 setLoading(true);
                                                 axios.post(
                                                     'https://api.twodev.cc/ivbo/hw/upload',
@@ -108,10 +111,11 @@ export default function Admin() {
                                                     }
                                                 ).then(res => {
                                                     setLoading(false);
+                                                    setUploaded(false);
                                                     if (res.data === 200) toast(toasts.success('Фото сохранено!\nОбновите страницу, чтобы увидеть изменения'));
                                                     else toast(toasts.error());
                                                 });
-                                            }}>Сохранить</Button>
+                                            }}>Сохранить</Button>}
                                         </VStack>
                                     </AccordionPanel>
                                 </AccordionItem>
@@ -120,24 +124,31 @@ export default function Admin() {
                     </ModalBody>
 
                     <ModalFooter>
-                        <HStack w='100%' justify='space-between'>
-                            <Button w='48%' onClick={onClose}>Закрыть</Button>
+                        <VStack w='100%' spacing='14px'>
+                            <HStack w='90%' color='white' opacity={0.3}>
+                                <Icon as={AiFillBulb} boxSize='20px' />
+                                <Text fontSize='14px'><b>Подсказка:</b> попробуй потянуть область ввода текста за нижний правый угол</Text>
+                            </HStack>
 
-                            <Button isDisabled={!activated.includes(hw[selected].subject)} isLoading={loading} w='48%' colorScheme='blue' mr={3} onClick={() => {
-                                setLoading(true);
-                                setActivated(s => s.filter(c => c !== hw[selected].subject));
-                                dispatch(clearEmptyContent(selected));
-                                axios.post('https://api.twodev.cc/ivbo/hw/edit', hw[selected], { headers: { 'x-access-token': localStorage.getItem('hash') } }).then(res => {
-                                    setLoading(false);
-                                    if (res.data === 200) {
-                                        toast(toasts.success('Домашка сохранена!'));
-                                        onClose();
-                                    } else toast(toasts.error());
-                                });
-                            }}>
-                                Сохранить
-                            </Button>
-                        </HStack>
+                            <HStack w='100%' justify='space-between'>
+                                <Button w='48%' onClick={onClose}>Закрыть</Button>
+
+                                <Button isDisabled={!activated.includes(hw[selected].subject)} isLoading={loading} w='48%' colorScheme='blue' mr={3} onClick={() => {
+                                    setLoading(true);
+                                    setActivated(s => s.filter(c => c !== hw[selected].subject));
+
+                                    axios.post('https://api.twodev.cc/ivbo/hw/edit', hw[selected], { headers: { 'x-access-token': localStorage.getItem('hash') } }).then(res => {
+                                        setLoading(false);
+                                        if (res.data === 200) {
+                                            toast(toasts.success('Домашка сохранена!'));
+                                            onClose();
+                                        } else toast(toasts.error());
+                                    });
+                                }}>
+                                    Сохранить
+                                </Button>
+                            </HStack>
+                        </VStack>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
