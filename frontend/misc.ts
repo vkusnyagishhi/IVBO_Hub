@@ -27,18 +27,22 @@ export const iconButtonStyles = {
 
 export const toasts = {
     success: (desc: string): any => ({
+        // id: 'success-toast',
         status: 'success',
         title: 'Успешно',
         description: desc,
-        duration: 3000,
-        isClosable: true
+        duration: 2000,
+        isClosable: true,
+        containerStyle: { marginBottom: '100px' }
     }),
     error: (desc?: string): any => ({
+        // id: 'error-toast',
         status: 'error',
         title: 'Ошибка',
         description: desc ?? 'Обратитесь к админу',
         duration: 3000,
-        isClosable: true
+        isClosable: true,
+        containerStyle: { marginBottom: '100px' }
     })
 };
 

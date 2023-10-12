@@ -15,8 +15,9 @@ export function TgLoginButton() {
         usePic={true}
         dataOnauth={(data: TelegramUser) => {
             api.post('/login', data).then(res => {
-                if (res.data === 500) toast(toasts.error('Вы не состоите в группе ИВБО-11-23!'));
-                else {
+                if (res.data === 500) {
+                    if (!toast.isActive('error-toast')) toast(toasts.error('Вы не состоите в группе ИВБО-11-23!'));
+                } else {
                     dispatch(setAuthData(res.data));
                     localStorage.setItem('hash', data.hash);
                 }

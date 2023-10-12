@@ -84,8 +84,10 @@ export default function Admin() {
                                                     setLoading(false);
                                                     if (res.data === 200) {
                                                         dispatch(deletePhoto(selected));
-                                                        toast(toasts.success('Фото удалено!'));
-                                                    } else toast(toasts.error());
+                                                        if (!toast.isActive('success-toast')) toast(toasts.success('Фото удалено!'));
+                                                    } else {
+                                                        if (!toast.isActive('error-toast')) toast(toasts.error());
+                                                    }
                                                 });
                                             }}>-</Button>
                                         </HStack>}
@@ -99,22 +101,27 @@ export default function Admin() {
                                             }} />
                                             {uploaded && <Button isLoading={loading} w='200px' onClick={() => {
                                                 setLoading(true);
-                                                axios.post(
-                                                    'https://api.twodev.cc/ivbo/hw/upload',
-                                                    file.current,
-                                                    {
-                                                        headers: {
-                                                            'Content-Type': 'multipart/form-data',
-                                                            'filename': encodeURIComponent(`${hw[selected].subject.split(' ')[1]}`),
-                                                            'x-access-token': localStorage.getItem('hash')
+                                                axios
+                                                    .post(
+                                                        'https://api.twodev.cc/ivbo/hw/upload',
+                                                        file.current,
+                                                        {
+                                                            headers: {
+                                                                'Content-Type': 'multipart/form-data',
+                                                                'filename': encodeURIComponent(`${hw[selected].subject.split(' ')[1]}`),
+                                                                'x-access-token': localStorage.getItem('hash')
+                                                            }
                                                         }
-                                                    }
-                                                ).then(res => {
-                                                    setLoading(false);
-                                                    setUploaded(false);
-                                                    if (res.data === 200) toast(toasts.success('Фото сохранено!\nОбновите страницу, чтобы увидеть изменения'));
-                                                    else toast(toasts.error());
-                                                });
+                                                    )
+                                                    .then(res => {
+                                                        setLoading(false);
+                                                        setUploaded(false);
+                                                        if (res.data === 200) {
+                                                            if (!toast.isActive('success-toast')) toast(toasts.success('Фото сохранено!\nОбновите страницу, чтобы увидеть изменения'));
+                                                        } else {
+                                                            if (!toast.isActive('error-toast')) toast(toasts.error());
+                                                        }
+                                                    });
                                             }}>Сохранить</Button>}
                                         </VStack>
                                     </AccordionPanel>
@@ -140,9 +147,11 @@ export default function Admin() {
                                     axios.post('https://api.twodev.cc/ivbo/hw/edit', hw[selected], { headers: { 'x-access-token': localStorage.getItem('hash') } }).then(res => {
                                         setLoading(false);
                                         if (res.data === 200) {
-                                            toast(toasts.success('Домашка сохранена!'));
+                                            if (!toast.isActive('success-toast')) toast(toasts.success('Домашка сохранена!'));
                                             onClose();
-                                        } else toast(toasts.error());
+                                        } else {
+                                            if (!toast.isActive('error-toast')) toast(toasts.error());
+                                        }
                                     });
                                 }}>
                                     Сохранить
