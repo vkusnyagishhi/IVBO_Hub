@@ -55,6 +55,7 @@ TORTOISE_ORM = get_tortoise_config()
 
 
 async def create_default_admin_user():
+    await sleep(3)
     user = await User.get_by_email(email=settings.ROOT_ADMIN_EMAIL)
     if user:
         return
@@ -65,6 +66,7 @@ async def create_default_admin_user():
     admin_user.email = settings.ROOT_ADMIN_EMAIL
     admin_user.password_hash = hashed_password
     admin_user.is_admin = True
+    await admin_user.save()
     return admin_user
 
 
@@ -94,4 +96,4 @@ def register_exceptions(app: FastAPI):
 
 def register_routers(app: FastAPI):
     app.include_router(login_router, prefix="/api/auth/login", tags=["login"])
-    app.include_router(users_router, prefix="/api/auth/users", tags=[])
+    app.include_router(users_router, prefix="/api/auth/users", tags=["users"])

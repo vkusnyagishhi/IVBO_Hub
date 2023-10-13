@@ -6,6 +6,7 @@ from typing import Optional
 import jwt
 from fastapi import HTTPException, Security
 from fastapi.security import OAuth2PasswordBearer
+from fastapi.encoders import jsonable_encoder
 # from jwt import PyJWTError
 # from jwt.exceptions import InvalidTokenError
 from starlette.status import HTTP_403_FORBIDDEN
@@ -20,8 +21,9 @@ reusable_oauth2 = OAuth2PasswordBearer(tokenUrl="/api/auth/login/access-token")
 
 
 async def get_current_user(token: str = Security(reusable_oauth2)) -> Optional[User]:
+    #TODO jwt.exceptions.DecodeError: Expiration Time claim (exp) must be an integer. thats it.
     try:
-        payload = jwt.encode(token, settings.SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[ALGORITHM])
         token_data = JWTTokenPayload(**payload)
     except jwt.PyJWTError:
         raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail="Could not validate credentials")

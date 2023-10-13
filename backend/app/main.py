@@ -8,7 +8,7 @@ from app.core.init_app import (
     register_db,
     upgrade_db,
     register_exceptions,
-    register_tortoise,
+    register_routers,
     create_default_admin_user
 )
 
@@ -37,4 +37,4 @@ asyncio.create_task(create_default_admin_user())
 # configure_logging()
 init_middlewares(app)
 register_exceptions(app)
-register_tortoise(app)
+register_routers(app)

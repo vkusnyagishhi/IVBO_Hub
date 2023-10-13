@@ -123,7 +123,7 @@ async def generate_token(
      return TgToken(token=token)
 
 
-@router.post("/telegram/get_jwt", response_class=JWTToken, status_code=200)
+@router.post("/telegram/get_jwt", response_model=JWTToken, status_code=200)
 async def generate_jwt_by_short_token(tg_token_in: TgTokenWithId):
     tg_token = await ShortTgToken.filter(value=tg_token_in.token).prefetch_related("User").first()
 
