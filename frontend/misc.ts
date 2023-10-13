@@ -5,7 +5,7 @@ import { BsFillFileEarmarkEaselFill } from "react-icons/bs";
 export interface IHomework {
     subject: string;
     content: string[];
-    image: string;
+    image: string | null;
     updatedAt: string;
 }
 
