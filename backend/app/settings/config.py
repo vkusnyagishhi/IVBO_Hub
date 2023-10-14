@@ -17,7 +17,7 @@ class Settings:
     DEBUG = config("DEBUG", cast=bool, default=False)
 
     APPLICATIONS = [
-        "users"
+        "users",
     ]
 
     PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))

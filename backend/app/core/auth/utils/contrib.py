@@ -21,7 +21,6 @@ reusable_oauth2 = OAuth2PasswordBearer(tokenUrl="/api/auth/login/access-token")
 
 
 async def get_current_user(token: str = Security(reusable_oauth2)) -> Optional[User]:
-    #TODO jwt.exceptions.DecodeError: Expiration Time claim (exp) must be an integer. thats it.
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[ALGORITHM])
         token_data = JWTTokenPayload(**payload)

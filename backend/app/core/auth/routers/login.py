@@ -21,6 +21,6 @@ async def login_access_token(credentials: OAuth2PasswordRequestForm = Depends())
     access_token_expires = timedelta(minutes=settings.JWT_ACCESS_TOKEN_EXPIRE_MINUTES)
 
     return {
-        "access_token": create_access_token(data={"user_uuid": str(user.uuid), "expires_delta": access_token_expires}),
+        "access_token": create_access_token(data={"user_uuid": str(user.uuid)}, expires_delta=access_token_expires),
         "token_type": "bearer",
     }

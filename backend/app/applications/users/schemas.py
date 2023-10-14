@@ -17,7 +17,6 @@ class BaseUser(BaseProperties):
 
 
 class BaseUserCreate(BaseProperties):
-    uuid: Optional[UUID4] = None
     email: EmailStr
     password: str
 
@@ -49,7 +48,7 @@ class BaseUserOut(BaseUser):
             "example": {
                 "uuid": "b3b4c5d6-e7f8-g9h0-i1j2-k3l4m5n6o7p8",
                 "email": "my_email@gmail.com",
-                "s_admin": False,
+                "is_admin": False,
                 "tg_id": "372203395",
             }
         }

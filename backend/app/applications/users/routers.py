@@ -16,6 +16,7 @@ from app.settings.config import settings
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.encoders import jsonable_encoder
 
 import logging
 import string
@@ -32,7 +33,7 @@ async def read_users(
     limit: int = 100,
     current_user: User = Depends(get_current_admin)
 ):
-    users = User.all().limit(limit=limit).offset(skip)
+    users = await User.all().limit(limit=limit).offset(skip)
     return users
 
 
@@ -116,7 +117,7 @@ async def update_user(
 async def generate_token(
     current_user: User = Depends(get_current_user)
 ):
-     token = "".join([random.choise(string.ascii_letters) for _ in range(32)])
+     token = "".join([random.choice(string.ascii_letters) for _ in range(32)])
      tg_token = await ShortTgToken(value=token, user=current_user)
      await tg_token.save()
 
@@ -125,7 +126,7 @@ async def generate_token(
 
 @router.post("/telegram/get_jwt", response_model=JWTToken, status_code=200)
 async def generate_jwt_by_short_token(tg_token_in: TgTokenWithId):
-    tg_token = await ShortTgToken.filter(value=tg_token_in.token).prefetch_related("User").first()
+    tg_token = await ShortTgToken.filter(value=tg_token_in.token).prefetch_related("user").first()
 
     if tg_token is None:
         raise HTTPException(
