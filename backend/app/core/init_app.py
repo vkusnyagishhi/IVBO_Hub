@@ -16,6 +16,7 @@ from app.core.auth.utils.password import get_password_hash
 
 from app.core.auth.routers.login import router as login_router
 from app.applications.users.routers import router as users_router
+from app.applications.files.routers import router as files_router
 
 from aerich import Command
 
@@ -97,3 +98,4 @@ def register_exceptions(app: FastAPI):
 def register_routers(app: FastAPI):
     app.include_router(login_router, prefix="/api/auth/login", tags=["login"])
     app.include_router(users_router, prefix="/api/auth/users", tags=["users"])
+    app.include_router(files_router, prefix="/api/files", tags=["files"])

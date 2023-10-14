@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from uuid import UUID4
+from pydantic import UUID4
 
 from app.applications.users.models import User
 from app.core.auth.utils.contrib import get_current_admin, get_current_user
@@ -21,13 +21,14 @@ import string
 router = APIRouter()
 
 
-@router.get("/", response_model=BaseFileOut, status_code=201)
+@router.get("/", response_model=List[BaseFileOut], status_code=201)
 async def read_files_info(
     skip: int = 0,
-    limit: int = 0,
+    limit: int = 100,
     current_user: User = Depends(get_current_admin)
 ):
     files = await FileModel.all().limit(limit=limit).offset(skip)
+    print(files)
     return files
 
 

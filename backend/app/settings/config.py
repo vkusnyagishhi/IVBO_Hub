@@ -18,6 +18,7 @@ class Settings:
 
     APPLICATIONS = [
         "users",
+        "files"
     ]
 
     PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
@@ -56,6 +57,8 @@ class Settings:
     CORS_ALLOW_CREDENTIALS = True
     CORS_ALLOW_METHODS = ["*"]
     CORS_ALLOW_HEADERS = ["*"]
+
+    DATA_PATH = "data/files/"
 
 
 settings = Settings()
