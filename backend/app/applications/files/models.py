@@ -27,6 +27,15 @@ class File(BaseModel):
             return None
         
     @classmethod
+    async def get_by_uuid(cls, uuid: str) -> Optional["File"]:
+        try:
+            query = cls.get_or_none(uuid=uuid)
+            file = await query
+            return file
+        except DoesNotExist:
+            return None
+        
+    @classmethod
     async def create(cls, file: BaseFileCreate) -> "File":
         file_dict = file.model_dump()
         model = cls(**file_dict)
