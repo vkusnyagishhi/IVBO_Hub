@@ -140,6 +140,15 @@ async def upload_file(
     if file_fields.user_id != current_user.uuid:
         raise HTTPException(status_code=400, detail="Not enough permissions to edit this file")
 
+    media_type = ""
+
+    for keys, values in settings.MEDIA_TYPES.items():
+        if file_fields in values:
+            media_type = keys
+
+    if media_type == "": 
+        raise HTTPException(status_code=422, detail="This file type is not writable yet")
+
     try:
         file_directory = f"data"
         if not path.exists(file_directory):
@@ -167,10 +176,17 @@ async def get_file(
     if not file_fields:
         raise HTTPException(status_code=404, detail="The file with this uuid does not exist")
 
-    if file_fields.user != current_user:
+    if file_fields.user_id != current_user.uuid:
         raise HTTPException(status_code=400, detail="Not enough permissions to edit this file")
     
+    media_type = ""
+
+    for keys, values in settings.MEDIA_TYPES.items():
+        if file_fields in values:
+            media_type = keys
+
     return FileResponse(
         file_fields.path,
+        media_type=media_type,
         filename=f"{file_fields.title}/{file_fields.type}"
     )

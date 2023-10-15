@@ -60,5 +60,13 @@ class Settings:
 
     DATA_PATH = "data/files/"
 
+    MEDIA_TYPES = {
+        "application": ["atom", "json", "pdf", "soap", "zip", "gzip", "msword", "yaml"],
+        "audio": ["aac", "mpeg", "mp3", "ogg", "wav"],
+        "image": ["gif", "jpeg", "pjpeg", "png", "svg", "tiff", "webp"],
+        "text": ["cmd", "css", "csv", "html", "js", "plain", "php", "xml", "cpp", "h", "py", "java"],
+        "video": ["mpeg", "mp4", "ogg", "webm"]
+    }
+
 
 settings = Settings()

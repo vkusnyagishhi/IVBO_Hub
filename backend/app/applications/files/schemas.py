@@ -37,7 +37,7 @@ class BaseFileDB(BaseFile):
     modifying_datetime: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class BaseFileOut(BaseFile):
@@ -48,7 +48,7 @@ class BaseFileOut(BaseFile):
     user_id: UUID4
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
         schemas_extra = {
             "example": {

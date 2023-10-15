@@ -34,7 +34,7 @@ class BaseUserDB(BaseUser):
     password_hash: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class BaseUserOut(BaseUser):
@@ -42,7 +42,7 @@ class BaseUserOut(BaseUser):
     tg_id: Optional[str]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
         schemas_extra = {
             "example": {
