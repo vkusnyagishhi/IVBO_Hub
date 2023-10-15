@@ -1,3 +1,7 @@
+from os import path, makedirs
+import uuid as uuid_
+import shutil
+
 from datetime import datetime, timedelta
 
 from pydantic import UUID4
@@ -15,6 +19,7 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from fastapi import File
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import FileResponse
+from fastapi.concurrency import run_in_threadpool
 
 import string
 
@@ -35,10 +40,12 @@ async def read_files_info(
 @router.post("/", response_model=BaseFileOut, status_code=201)
 async def create_file(
     *,
-    file_in: BaseFileCreate
+    file_in: BaseFileCreate,
+    current_user: User = Depends(get_current_user)
 ):
     db_file = BaseFileCreate(**file_in.model_dump())
-    created_file = await FileModel.create(db_file)
+    created_file = await FileModel.create(db_file, user=current_user)
+    
     return created_file
 
 
@@ -94,7 +101,7 @@ async def update_file(
     file_in: BaseFileUpdate,
     current_user: User = Depends(get_current_admin)
 ):
-    file = await FileModel.get(uuid=uuid)
+    file = await FileModel.get_or_none(uuid=uuid)
     if not file:
         raise HTTPException(status_code=404, detail="The file with this uuid does not exist")
 
@@ -110,10 +117,60 @@ async def delete_file(
     uuid: UUID4,
     current_user: User = Depends(get_current_admin)
 ):
-    file = await FileModel.get(uuid=uuid)
+    file = await FileModel.get_or_none(uuid=uuid)
     if not file:
         raise HTTPException(status_code=404, detail="The file with this uuid does not exist")
 
     file = await FileModel.delete()
 
     await file.save()
+
+
+@router.post("/my_files/upload/{uuid}", status_code=200)
+async def upload_file(
+    uuid: UUID4,
+    file: UploadFile = File(...),
+    current_user: User = Depends(get_current_user)
+):
+    file_fields = await FileModel.get_or_none(uuid=uuid)
+
+    if not file_fields:
+        raise HTTPException(status_code=404, detail="The file with this uuid does not exist")
+
+    if file_fields.user_id != current_user.uuid:
+        raise HTTPException(status_code=400, detail="Not enough permissions to edit this file")
+
+    try:
+        file_directory = f"data"
+        if not path.exists(file_directory):
+            makedirs(file_directory)
+        file.filename = f"{str(uuid_.uuid4())}.{file_fields.type}"
+        f = await run_in_threadpool(open, f"{file_directory}/{file.filename}", "wb")
+        await run_in_threadpool(shutil.copyfileobj, file.file, f)
+    except Exception():
+        raise HTTPException(status_code=400, detail="Unable to write file")
+    finally:
+        if 'f' in locals(): await run_in_threadpool(f.close)
+        await file.close()
+
+    file_fields.path = f"{file_directory}/{file.filename}"
+    await file_fields.save()
+
+
+@router.get("/my_files/{uuid}", response_class=FileResponse, status_code=200)
+async def get_file(
+    uuid: UUID4,
+    current_user: User = Depends(get_current_user)
+):
+    file_fields = await FileModel.get_or_none(uuid=uuid)
+
+    if not file_fields:
+        raise HTTPException(status_code=404, detail="The file with this uuid does not exist")
+
+    if file_fields.user != current_user:
+        raise HTTPException(status_code=400, detail="Not enough permissions to edit this file")
+    
+    return FileResponse(
+        file_fields.path,
+        filename=f"{file_fields.title}/{file_fields.type}"
+    )

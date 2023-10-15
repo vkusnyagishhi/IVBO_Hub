@@ -13,7 +13,8 @@ class File(BaseModel):
     title = fields.CharField(max_length=256)
     type = fields.CharField(max_length=32)
     modifying_datetime = fields.DatetimeField(auto_now_add=True)
-    user: fields.ForeignKeyRelation["User"] = fields.ForeignKeyRelation(
+    path = fields.CharField(max_length=256, null=True)
+    user: fields.ForeignKeyRelation["User"] = fields.ForeignKeyField(
         "models.User", related_name="file", to_field="uuid", on_delete=fields.CASCADE
     )
 
@@ -36,9 +37,9 @@ class File(BaseModel):
             return None
         
     @classmethod
-    async def create(cls, file: BaseFileCreate) -> "File":
+    async def create(cls, file: BaseFileCreate, user: User) -> "File":
         file_dict = file.model_dump()
-        model = cls(**file_dict)
+        model = cls(**file_dict, user=user)
         await model.save()
         return model
     

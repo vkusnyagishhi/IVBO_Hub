@@ -20,10 +20,9 @@ class BaseFile(BaseProperties):
 class BaseFileCreate(BaseProperties):
     title: str
     type: str
-    user_id: str
 
     class Config:
-        schemas_extra = {"example": {"title": "string", "type": "string", "user_id": "b3b4c5d6-e7f8-g9h0-i1j2-k3l4m5n6o7p8"}}
+        schemas_extra = {"example": {"title": "string", "type": "string"}}
 
 
 class BaseFileUpdate(BaseProperties):
@@ -46,7 +45,7 @@ class BaseFileOut(BaseFile):
     title: str
     type: str
     modifying_datetime: datetime
-    user_id: str
+    user_id: UUID4
 
     class Config:
         orm_mode = True
@@ -57,5 +56,6 @@ class BaseFileOut(BaseFile):
                 "title": "string",
                 "type": "string",
                 "user_id": "b3b4c5d6-e7f8-g9h0-i1j2-k3l4m5n6o7p8",
+                "modifying_datetime": "2023-10-15T19:09:05.479219Z",
             }
         }
