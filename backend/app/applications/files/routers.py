@@ -63,6 +63,23 @@ async def update_my_file_by_uuid(
     return file
 
 
+@router.delete("/my_files/{uuid}", status_code=204)
+async def delete_my_file(
+    uuid: UUID4,
+    current_user: User = Depends(get_current_user)
+):
+    file = await FileModel.get_or_none(uuid=uuid)
+    if not file:
+        raise HTTPException(status_code=404, detail="The file with this uuid does not exist")
+    
+    if file.user != current_user:
+        raise HTTPException(status_code=400, detail="Not enough permissions to delete this file")
+    
+    file = await FileModel.delete()
+
+    await file.save()
+
+
 @router.get("/my_files", response_model=List[BaseFileOut], status_code=200)
 async def read_my_files(
     current_user: User = Depends(get_current_user),
@@ -72,7 +89,7 @@ async def read_my_files(
 
 
 @router.patch("/files/{uuid}", response_model=BaseFileOut, status_code=200)
-async def update_file_by_uuid(
+async def update_file(
     uuid: UUID4,
     file_in: BaseFileUpdate,
     current_user: User = Depends(get_current_admin)
@@ -86,3 +103,17 @@ async def update_file_by_uuid(
 
     await file.save()
     return file
+
+
+@router.delete("/files/{uuid}", status_code=204)
+async def delete_file(
+    uuid: UUID4,
+    current_user: User = Depends(get_current_admin)
+):
+    file = await FileModel.get(uuid=uuid)
+    if not file:
+        raise HTTPException(status_code=404, detail="The file with this uuid does not exist")
+
+    file = await FileModel.delete()
+
+    await file.save()
