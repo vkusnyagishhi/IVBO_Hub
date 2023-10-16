@@ -7,37 +7,49 @@ import { setTable } from "@/redux/miscSlice";
 
 export default function TestPage() {
     const dispatch = useDispatch();
-    const { table: data } = useSelector(state => state.misc);
+    const { table: data, isLaptop } = useSelector(state => state.misc);
     const [[weekIndex, weekDayIndex], setSelected] = useState([0, 0]);
 
     useEffect(() => {
         axios.get('https://api.twodev.cc/ivbo/data').then(res => dispatch(setTable(res.data)));
     }, [dispatch]);
 
-    return <VStack>
-        {data.length > 0 && data.map((week: object[], i) => <HStack key={i}>
-            {week.map((day: any, j) => {
-                const isEmpty = day.every((l: any) => !l);
-                let alloverDay = 7 * i + j - 4 + 1;
+    return <VStack w='max-content'>
+        <HStack w={isLaptop ? '47%' : '75%'} color='gray.500' spacing='22px' justify={isLaptop ? 'end' : 'center'}>
+            {['неделя', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'].map(d => <Text key={d}>{d}</Text>)}
+        </HStack>
 
-                const alloverMonth = Math.round(alloverDay / 31) + 8;
-                console.log(alloverDay, alloverMonth);
+        {data.length > 0 && data.map((week: object[], i) => <HStack key={i} color='white' spacing='10px'>
+            <Text w='20px' align='center'>{i + 1}</Text>
 
-                const lastDayOfMonth = new Date(2023, alloverMonth, 0).getDate();
-                if (alloverDay > lastDayOfMonth) alloverDay -= lastDayOfMonth;
+            {week.map((dayTable: any, j) => {
+                const isEmpty = dayTable.every((l: any) => !l);
+                let day = 7 * i + j + 1 - 4;
+                let month = 0;
+
+                if (day > 30 && day <= 61) {
+                    day -= 30;
+                    month = 9;
+                } else if (day > 61 && day <= 91) {
+                    day -= 61;
+                    month = 10;
+                } else if (day > 91 && day <= 121) {
+                    day -= 91;
+                    month = 11;
+                }
 
                 const cellColor = weekIndex === i && weekDayIndex === j
-                    ? 'red.300'
-                    : new Date().getDate() === alloverDay
+                    ? 'purple.500'
+                    : new Date().getDate() === day && new Date().getMonth() === month
                         ? 'green.500'
                         : isEmpty
                             ? 'gray.500'
                             : 'blue.600';
 
-                return <VStack w='30px' key={j} bg={cellColor} _hover={{ cursor: 'pointer' }} onClick={() => {
+                return <VStack w='30px' color='white' key={j} bg={cellColor} _hover={{ cursor: 'pointer' }} onClick={() => {
                     if (!isEmpty) setSelected([i, j]);
                 }}>
-                    {alloverDay > 0 && <Text color='white'>{alloverDay}</Text>}
+                    {day > 0 && <Text>{day}</Text>}
                 </VStack>;
             })}
         </HStack>)}

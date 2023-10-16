@@ -69,7 +69,7 @@ export default function Admin() {
                                     <AccordionPanel>
                                         {hw[selected].image && <HStack w='100%' justify='center' spacing='40px'>
                                             <VStack w='100%' pb='20px'>
-                                                <Image src={hw[selected].image} alt='' maxH='250px' />
+                                                <Image src={hw[selected].image ?? undefined} alt='' maxH='250px' />
                                             </VStack>
 
                                             <Button fontSize='26px' onClick={() => {
