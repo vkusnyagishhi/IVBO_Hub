@@ -1,4 +1,4 @@
-from os import path, makedirs
+from os import path, makedirs, remove
 import uuid as uuid_
 import shutil
 
@@ -60,7 +60,7 @@ async def update_my_file_by_uuid(
     if not file:
         raise HTTPException(status_code=404, detail="The file with this UUID does not exist")
     
-    if file.user != current_user:
+    if file.user_id != current_user.uuid:
         raise HTTPException(status_code=400, detail="Not enough permissions to edit this file")
     
     file = await FileModel.update_from_dict(file_in)
@@ -79,12 +79,13 @@ async def delete_my_file(
     if not file:
         raise HTTPException(status_code=404, detail="The file with this uuid does not exist")
     
-    if file.user != current_user:
+    if file.user_id != current_user.uuid:
         raise HTTPException(status_code=400, detail="Not enough permissions to delete this file")
     
-    file = await FileModel.delete()
-
-    await file.save()
+    if path.exists(file.path):
+        remove(file.path)
+    
+    await file.delete()
 
 
 @router.get("/my_files", response_model=List[BaseFileOut], status_code=200)
@@ -120,10 +121,11 @@ async def delete_file(
     file = await FileModel.get_or_none(uuid=uuid)
     if not file:
         raise HTTPException(status_code=404, detail="The file with this uuid does not exist")
+    
+    if path.exists(file.path):
+        remove(file.path)
 
-    file = await FileModel.delete()
-
-    await file.save()
+    await file.delete()
 
 
 @router.post("/my_files/upload/{uuid}", status_code=200)
@@ -143,7 +145,7 @@ async def upload_file(
     media_type = ""
 
     for keys, values in settings.MEDIA_TYPES.items():
-        if file_fields in values:
+        if file_fields.type in values:
             media_type = keys
 
     if media_type == "": 
@@ -182,11 +184,11 @@ async def get_file(
     media_type = ""
 
     for keys, values in settings.MEDIA_TYPES.items():
-        if file_fields in values:
+        if file_fields.type in values:
             media_type = keys
 
     return FileResponse(
         file_fields.path,
         media_type=media_type,
-        filename=f"{file_fields.title}/{file_fields.type}"
+        filename=f"{file_fields.title}.{file_fields.type}"
     )
