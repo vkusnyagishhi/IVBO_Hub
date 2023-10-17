@@ -31,3 +31,6 @@ class Homework(BaseModel):
         model = cls(**homework_dict)
         await model.save()
         return model
+    
+
+    

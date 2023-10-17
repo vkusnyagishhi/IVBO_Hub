@@ -17,11 +17,9 @@ class BaseHomework(BaseProperties):
 
 class BaseHomeworkCreate(BaseProperties):
     text: str
-    user: UUID4
     discipline: UUID4
     picture: Optional[UUID4] = None
     date_deadline: date
-
 
     class Config:
         schemas_extra = {
@@ -38,6 +36,8 @@ class BaseHomeworkCreate(BaseProperties):
 class BaseHomeworkUpdate(BaseProperties):
     text: Optional[str] = None
     file: Optional[UUID4] = None
+    date_deadline: date
+    picture: Optional[UUID4] = None
 
 
 class BaseHomeworkDB(BaseHomework):

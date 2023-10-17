@@ -17,6 +17,7 @@ class File(BaseModel):
     user: fields.ForeignKeyRelation["User"] = fields.ForeignKeyField(
         "models.User", related_name="file", to_field="uuid", on_delete=fields.CASCADE
     )
+    is_private: fields.BooleanField(default=True)
 
     @classmethod
     async def get_by_title(cls, title: str) -> Optional["File"]:
