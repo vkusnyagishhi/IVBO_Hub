@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, date
-from typing import List
+from typing import List, Optional
 
 from pydantic import UUID4
 
@@ -24,7 +24,7 @@ router = APIRouter()
 
 @router.get("/", response_model=List[BaseHomeworkOut], status_code=200)
 async def read_homeworks_by_date(
-    date: date,
+    date: date = date.today() + timedelta(days=1),
     skip: int = 0,
     limit: int = 100
 ):
@@ -39,7 +39,11 @@ async def create_homework(
     current_user: User = Depends(get_current_user)
 ):
     db_homework = BaseHomeworkCreate(**homework_in.model_dump())
-    created_homework = await Homework.create(db_homework, user=current_user)
+    if db_homework.picture != "":
+        created_homework = await Homework.create(db_homework, user=current_user)
+    else:
+        db_homework = BaseHomeworkCreate(**homework_in.model_dump(exclude=["picture"]), picture=None)
+        created_homework = await Homework.create(db_homework, user=current_user)
     return created_homework
 
 @router.patch("/", response_model=BaseHomeworkOut, status_code=200)

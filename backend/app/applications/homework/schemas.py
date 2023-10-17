@@ -17,18 +17,17 @@ class BaseHomework(BaseProperties):
 
 class BaseHomeworkCreate(BaseProperties):
     text: str
+    date_deadline: date
     discipline: UUID4
     picture: Optional[UUID4] = None
-    date_deadline: date
 
     class Config:
         schemas_extra = {
             "example": {
                 "text": "string",
-                "discipline": "d3ff7b06-5d72-45a8-8d5d-710ea474e62d", 
-                "user": "d3ff7b06-5d72-45a8-8d5d-710ea474e62d",
-                "file": "d3ff7b06-5d72-45a8-8d5d-710ea474e62d",
                 "date_deadline": "date",
+                "discipline": "d3ff7b06-5d72-45a8-8d5d-710ea474e62d", 
+                "picture": "d3ff7b06-5d72-45a8-8d5d-710ea474e62d",
             }
         }
 
