@@ -26,8 +26,7 @@ router = APIRouter()
 async def read_homeworks_by_date(
     date: date,
     skip: int = 0,
-    limit: int = 100,
-    current_user: User = Depends(get_current_user)
+    limit: int = 100
 ):
     homeworks = await Homework.filter(date_deadline=date).limit(limit=limit).offset(skip)
     return homeworks
@@ -44,7 +43,7 @@ async def create_homework(
     return created_homework
 
 @router.patch("/", response_model=BaseHomeworkOut, status_code=200)
-async def update_homework_by_uuid(
+async def update_homework(
     uuid: UUID4,
     homework_in: BaseHomeworkUpdate,
     current_user: User = Depends(get_current_user)
@@ -60,5 +59,21 @@ async def update_homework_by_uuid(
 
     await homework.save()
     return homework
+
+
+@router.delete("/", status_code=204)
+async def delete_homework(
+    uuid: UUID4,
+    current_user: User = Depends(get_current_user)
+):
+    homework = await Homework.get_or_none(uuid=uuid)
+
+    if not homework:
+        raise HTTPException(status_code=404, detail="The homework with this uuid does not exist")
+    
+    await homework.delete()
+
+
+
 
 

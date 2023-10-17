@@ -13,7 +13,6 @@ from app.core.base.base_models import BaseModel
 
 class Discipline(BaseModel):
     title: fields.CharField(max_length=64)
-    datetime_edited: fields.DatetimeField(auto_now_add=True)
     homework: fields.ManyToManyRelation["Homework"] = fields.ManyToManyField(
         "models.Homework", related_name="homework_list", to_field="uuid", through="Homework_list", on_delete=fields.CASCADE
     )

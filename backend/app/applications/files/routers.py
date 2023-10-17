@@ -33,7 +33,6 @@ async def read_files_info(
     current_user: User = Depends(get_current_admin)
 ):
     files = await FileModel.all().limit(limit=limit).offset(skip)
-    print(files)
     return files
 
 
