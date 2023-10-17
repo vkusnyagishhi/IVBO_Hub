@@ -63,7 +63,7 @@ async def update_my_file_by_uuid(
     if file.user_id != current_user.uuid:
         raise HTTPException(status_code=400, detail="Not enough permissions to edit this file")
     
-    file = await FileModel.update_from_dict(file_in)
+    file.update_from_dict(file_in)
     file.modifying_datetime = datetime.utcnow() + timedelta(hours=3)
 
     await file.save()
@@ -92,7 +92,7 @@ async def delete_my_file(
 async def read_my_files(
     current_user: User = Depends(get_current_user),
 ):
-    files = await FileModel.filter(user=current_user)
+    files = await FileModel.filter(user=current_user, is_private=True)
     return files
 
 

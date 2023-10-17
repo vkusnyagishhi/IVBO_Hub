@@ -39,4 +39,26 @@ async def create_homework(
     homework_in: BaseHomeworkCreate,
     current_user: User = Depends(get_current_user)
 ):
-    pass
+    db_homework = BaseHomeworkCreate(**homework_in.model_dump())
+    created_homework = await Homework.create(db_homework, user=current_user)
+    return created_homework
+
+@router.patch("/", response_model=BaseHomeworkOut, status_code=200)
+async def update_homework_by_uuid(
+    uuid: UUID4,
+    homework_in: BaseHomeworkUpdate,
+    current_user: User = Depends(get_current_user)
+):
+    homework = await Homework.get_or_none(uuid=uuid)
+    
+    if not homework:
+        raise HTTPException(status_code=404, detail="The homework with this uuid does not exist")
+    
+    homework.update_from_dict(homework_in)
+    homework.datetime_edited = datetime.utcnow() + datetime(hours=3)
+    homework.user = current_user
+
+    await homework.save()
+    return homework
+
+
