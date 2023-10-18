@@ -14,10 +14,10 @@ class File(BaseModel):
     type = fields.CharField(max_length=32)
     modifying_datetime = fields.DatetimeField(auto_now_add=True)
     path = fields.CharField(max_length=256, null=True)
+    is_private = fields.BooleanField(default=True)
     user: fields.ForeignKeyRelation["User"] = fields.ForeignKeyField(
         "models.User", related_name="file", to_field="uuid", on_delete=fields.CASCADE
     )
-    is_private: fields.BooleanField(default=True)
 
     @classmethod
     async def get_by_title(cls, title: str) -> Optional["File"]:

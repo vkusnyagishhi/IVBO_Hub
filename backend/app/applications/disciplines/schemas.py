@@ -11,7 +11,7 @@ class BaseProperties(BaseModel):
     def default_hashed_id(cls, v):
         return v or uuid.uuid4()
 
-class BaseDisciplice(BaseProperties):
+class BaseDiscipline(BaseProperties):
     uuid: Optional[UUID4] = None
 
 
@@ -23,7 +23,7 @@ class BaseDisciplineUpdate(BaseProperties):
     title: Optional[str] = None
 
 
-class BaseDisciplineDB(BaseModel):
+class BaseDisciplineDB(BaseDiscipline):
     title: str
 
     class Config:
@@ -34,7 +34,7 @@ class BaseDisciplineDB(BaseModel):
             }
         }
 
-class BaseDisciplineOut(BaseModel):
+class BaseDisciplineOut(BaseDiscipline):
     title: str
     homework: List[BaseHomeworkOut]
 
@@ -63,7 +63,7 @@ class BaseDisciplineOut(BaseModel):
         }
 
 
-class BaseDisciplineOutForList(BaseModel):
+class BaseDisciplineOutForList(BaseDiscipline):
     title: str
     
     class Config:

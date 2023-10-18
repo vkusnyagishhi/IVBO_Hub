@@ -17,6 +17,8 @@ from app.core.auth.utils.password import get_password_hash
 from app.core.auth.routers.login import router as login_router
 from app.applications.users.routers import router as users_router
 from app.applications.files.routers import router as files_router
+from app.applications.homework.routers import router as homework_router
+from app.applications.disciplines.routers import router as disciplines_router
 
 from aerich import Command
 
@@ -99,3 +101,5 @@ def register_routers(app: FastAPI):
     app.include_router(login_router, prefix="/api/auth/login", tags=["login"])
     app.include_router(users_router, prefix="/api/auth/users", tags=["users"])
     app.include_router(files_router, prefix="/api/files", tags=["files"])
+    app.include_router(homework_router, prefix="/api/homework", tags=["homework"])
+    app.include_router(disciplines_router, prefix="/api/discipline", tags=["disciplines"])

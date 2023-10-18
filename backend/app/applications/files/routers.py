@@ -44,7 +44,7 @@ async def create_file(
 ):
     db_file = BaseFileCreate(**file_in.model_dump())
     created_file = await FileModel.create(db_file, user=current_user)
-    
+
     return created_file
 
 
@@ -148,7 +148,7 @@ async def upload_file(
             media_type = keys
 
     if media_type == "": 
-        raise HTTPException(status_code=422, detail="This file type is not writable yet")
+        media_type = "application"
 
     try:
         file_directory = f"data"
@@ -185,6 +185,9 @@ async def get_file(
     for keys, values in settings.MEDIA_TYPES.items():
         if file_fields.type in values:
             media_type = keys
+
+    if media_type == "":
+        media_type = "application"
 
     return FileResponse(
         file_fields.path,

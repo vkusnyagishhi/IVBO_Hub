@@ -29,3 +29,13 @@ async def read_disciplines(
 ):
     disciplines = await Discipline.all().limit(limit=limit).offset(skip)
     return disciplines
+
+
+@router.post("/", response_model=BaseDisciplineOutForList, status_code=201)
+async def create_discipline(
+    *,
+    discipline_in: BaseDisciplineCreate,
+):
+    created_discipline = await Discipline.create(discipline_in)
+    return created_discipline
+
