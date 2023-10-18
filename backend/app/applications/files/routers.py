@@ -44,7 +44,7 @@ async def create_file(
 ):
     db_file = BaseFileCreate(**file_in.model_dump())
     created_file = await FileModel.create(db_file, user=current_user)
-    
+
     return created_file
 
 

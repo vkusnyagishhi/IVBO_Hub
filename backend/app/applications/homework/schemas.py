@@ -18,16 +18,16 @@ class BaseHomework(BaseProperties):
 class BaseHomeworkCreate(BaseProperties):
     text: str
     date_deadline: date
-    discipline: UUID4
-    picture: Optional[UUID4] = None
+    discipline_id: UUID4
+    picture_id: Optional[UUID4] = None
 
     class Config:
         schemas_extra = {
             "example": {
                 "text": "string",
                 "date_deadline": "date",
-                "discipline": "d3ff7b06-5d72-45a8-8d5d-710ea474e62d", 
-                "picture": "d3ff7b06-5d72-45a8-8d5d-710ea474e62d",
+                "discipline_id": "d3ff7b06-5d72-45a8-8d5d-710ea474e62d", 
+                "picture_id": "d3ff7b06-5d72-45a8-8d5d-710ea474e62d",
             }
         }
 
@@ -51,8 +51,9 @@ class BaseHomeworkDB(BaseHomework):
 
 class BaseHomeworkOut(BaseHomework):
     text: str
-    user: UUID4
-    file: Optional[UUID4] = None
+    user_id: UUID4
+    picture_id: Optional[UUID4] = None
+    discipline_id: UUID4
     datetime_edited: datetime
 
     class Config:
@@ -62,6 +63,7 @@ class BaseHomeworkOut(BaseHomework):
                 "text": "string",
                 "user": "d3ff7b06-5d72-45a8-8d5d-710ea474e62d",
                 "file": "d3ff7b06-5d72-45a8-8d5d-710ea474e62d",
-                "datetime_edited": "2023-10-16T08:40:47.885Z"
+                "datetime_edited": "2023-10-16T08:40:47.885Z",
+                "discipline": "d3ff7b06-5d72-45a8-8d5d-710ea474e62d"
             }
         }

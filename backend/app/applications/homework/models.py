@@ -19,9 +19,9 @@ class Homework(BaseModel):
     date_deadline = fields.DateField()
     datetime_edited = fields.DatetimeField(auto_now_add=True)
     picture: fields.ForeignKeyNullableRelation["File"] = fields.ForeignKeyField(
-        "models.File", related_name="homework_picture", to_field="uuid", on_delete=fields.CASCADE
+        "models.File", related_name="homework_picture", to_field="uuid", on_delete=fields.CASCADE, null=True
     )
-    user: fields.ForeignKeyNullableRelation["User"] = fields.ForeignKeyField(
+    user: fields.ForeignKeyRelation["User"] = fields.ForeignKeyField(
         "models.User", related_name="homework_user", to_field="uuid", on_delete=fields.CASCADE
     )
     discipline: fields.ForeignKeyRelation["Discipline"] = fields.ForeignKeyField(
