@@ -21,6 +21,7 @@ class Settings:
         "files",
         "homework",
         "disciplines",
+        "endpoint",
     ]
 
     PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
@@ -68,6 +69,21 @@ class Settings:
         "image": ["gif", "jpeg", "pjpeg", "png", "svg", "tiff", "webp"],
         "text": ["cmd", "css", "csv", "html", "js", "plain", "php", "xml", "cpp", "h", "py", "java"],
         "video": ["mpeg", "mp4", "ogg", "webm"]
+    }
+
+    MONTHS_COUNT = {
+        "1": 31,
+        "2": 28,
+        "3": 31,
+        "4": 30,
+        "5": 31,
+        "6": 30,
+        "7": 31,
+        "8": 31,
+        "9": 30,
+        "10": 31,
+        "11": 30,
+        "12": 31,
     }
 
 
