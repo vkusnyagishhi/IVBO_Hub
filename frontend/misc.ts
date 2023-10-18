@@ -1,6 +1,6 @@
 import { MdLibraryBooks } from "react-icons/md";
 import { BiEdit } from "react-icons/bi";
-import { BsFillFileEarmarkEaselFill } from "react-icons/bs";
+import { BsFillCalendarRangeFill, BsFillFileEarmarkEaselFill } from "react-icons/bs";
 
 export interface IHomework {
     subject: string;
@@ -53,9 +53,9 @@ export const headerLinks = [
         title: 'Домашка'
     },
     {
-        pathname: '/admin',
-        icon: BiEdit,
-        title: 'Записать ДЗ'
+        pathname: '/calendar',
+        icon: BsFillCalendarRangeFill,
+        title: 'Календарь'
     },
     {
         pathname: '/upload',

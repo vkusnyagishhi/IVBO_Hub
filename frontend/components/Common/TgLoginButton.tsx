@@ -1,9 +1,9 @@
 import TelegramLoginButton, { TelegramUser } from "telegram-login-button";
-import api from "@/api";
 import { toasts } from "@/misc";
 import { setAuthData } from "@/redux/authSlice";
 import { useToast } from "@chakra-ui/react";
 import { useDispatch } from "@/redux/hooks";
+import axios from "axios";
 
 export function TgLoginButton() {
     const toast = useToast();
@@ -14,7 +14,7 @@ export function TgLoginButton() {
         cornerRadius={20}
         usePic={true}
         dataOnauth={(data: TelegramUser) => {
-            api.post('/login', data).then(res => {
+            axios.post('https://api.twodev.cc/ivbo/login', data).then(res => {
                 if (res.data === 500) {
                     if (!toast.isActive('error-toast')) toast(toasts.error('Вы не состоите в группе ИВБО-11-23!'));
                 } else {
