@@ -1,6 +1,5 @@
 import { MdLibraryBooks } from "react-icons/md";
-import { BiEdit } from "react-icons/bi";
-import { BsFillCalendarRangeFill, BsFillFileEarmarkEaselFill } from "react-icons/bs";
+import { BsFillCalendarWeekFill, BsFillFileEarmarkEaselFill } from "react-icons/bs";
 
 export interface IHomework {
     subject: string;
@@ -12,6 +11,36 @@ export interface IHomework {
 export interface IUser {
     tg_username: string;
     trusted: string[];
+}
+
+export enum LessonTypes {
+    'пр' = 'П',
+    'лек' = 'Л'
+}
+
+export enum HWTypes {
+    'Иностранный язык' = 'Англ',
+    'Математический анализ' = 'МатАн',
+    'Основы российской государственности' = 'ОРГ',
+    'Физика' = 'Физика',
+    'История России' = 'История',
+    'Линейная алгебра и аналитическая геометрия' = 'ЛинАл'
+}
+
+// export const HWTypes = {
+//     'Англ': 'Иностранный язык',
+//     'МатАн': 'Математический анализ',
+//     'ОРГ': 'Основы российской государственности',
+//     'Физика': 'Физика',
+//     'История': 'История России',
+//     'ЛинАл': 'Линейная алгебра и аналитическая геометрия'
+// }
+
+export interface ILesson {
+    PROPERTY_DISCIPLINE_NAME: string;
+    PROPERTY_LESSON_TYPE: LessonTypes;
+    PROPERTY_LECTOR: string;
+    PROPERTY_PLACE: string;
 }
 
 export const ease = [0.410, 0.030, 0.000, 0.995];
@@ -54,7 +83,7 @@ export const headerLinks = [
     },
     {
         pathname: '/calendar',
-        icon: BsFillCalendarRangeFill,
+        icon: BsFillCalendarWeekFill,
         title: 'Календарь'
     },
     {
