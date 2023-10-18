@@ -43,7 +43,7 @@ async def create_homework(
 
     return created_homework
 
-@router.patch("/", response_model=BaseHomeworkOut, status_code=200)
+@router.patch("/{uuid}", response_model=BaseHomeworkOut, status_code=200)
 async def update_homework(
     uuid: UUID4,
     homework_in: BaseHomeworkUpdate,
@@ -62,7 +62,7 @@ async def update_homework(
     return homework
 
 
-@router.delete("/", status_code=204)
+@router.delete("/{uuid}", status_code=204)
 async def delete_homework(
     uuid: UUID4,
     current_user: User = Depends(get_current_user)
