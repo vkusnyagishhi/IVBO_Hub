@@ -26,6 +26,7 @@ app = FastAPI(
     version=settings.VERSION,
     debug=settings.DEBUG,
     swagger_ui_parameters={"persistAuthorization": True},
+    openapi_url="ivbo_fastapi/openapi.json"
 )
 
 @app.on_event("startup")
