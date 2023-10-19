@@ -20,9 +20,10 @@ class BaseFile(BaseProperties):
 class BaseFileCreate(BaseProperties):
     title: str
     type: str
+    is_private: bool = True
 
     class Config:
-        schemas_extra = {"example": {"title": "string", "type": "string"}}
+        schemas_extra = {"example": {"title": "string", "type": "string", "is_private": True}}
 
 
 class BaseFileUpdate(BaseProperties):
@@ -35,6 +36,7 @@ class BaseFileDB(BaseFile):
     title: str
     type: str
     modifying_datetime: datetime
+    is_private: bool
 
     class Config:
         from_attributes = True
@@ -46,6 +48,7 @@ class BaseFileOut(BaseFile):
     type: str
     modifying_datetime: datetime
     user_id: UUID4
+    is_private: bool
 
     class Config:
         from_attributes = True
@@ -57,5 +60,6 @@ class BaseFileOut(BaseFile):
                 "type": "string",
                 "user_id": "b3b4c5d6-e7f8-g9h0-i1j2-k3l4m5n6o7p8",
                 "modifying_datetime": "2023-10-15T19:09:05.479219Z",
+                "is_private": True
             }
         }

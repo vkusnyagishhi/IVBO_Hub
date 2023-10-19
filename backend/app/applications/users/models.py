@@ -15,8 +15,8 @@ class User(BaseModel):
     password_hash = fields.CharField(max_length=128, null=True)
     is_admin = fields.BooleanField(default=False)
     tg_id = fields.BigIntField(null=True)
-    # tg_username = fields.CharField(max_length=64)
-    # tg_hash = fields.CharField(max_length=128, null=True)
+    tg_username = fields.CharField(max_length=64, null=True)
+    tg_hash = fields.CharField(max_length=128, null=True)
 
     @classmethod
     async def get_by_email(cls, email: str) -> Optional["User"]:

@@ -54,8 +54,8 @@ async def update_homework(
     if not homework:
         raise HTTPException(status_code=404, detail="The homework with this uuid does not exist")
     
-    homework.update_from_dict(homework_in)
-    homework.datetime_edited = datetime.utcnow() + datetime(hours=3)
+    homework.update_from_dict(homework_in.model_dump())
+    homework.datetime_edited = datetime.utcnow() + timedelta(hours=3)
     homework.user = current_user
 
     await homework.save()

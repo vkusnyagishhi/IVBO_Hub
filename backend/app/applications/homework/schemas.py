@@ -34,7 +34,6 @@ class BaseHomeworkCreate(BaseProperties):
 
 class BaseHomeworkUpdate(BaseProperties):
     text: Optional[str] = None
-    file: Optional[UUID4] = None
     date_deadline: date
     picture: Optional[UUID4] = None
 
