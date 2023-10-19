@@ -34,7 +34,7 @@ class Settings:
     DB_HOST = config("DB_HOST")
     DB_PORT = config("DB_PORT")
 
-    ROOT_ADMIN_EMAIL = config("ROOT_ADMIN_EMAIL")
+    ROOT_ADMIN_TG_USERNAME = config("ROOT_ADMIN_TG_USERNAME")
     ROOT_ADMIN_PASSWORD = config("ROOT_ADMIN_PASSWORD")
 
     DB_URL = f"postgres://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"

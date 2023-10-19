@@ -11,17 +11,17 @@ from app.core.base.base_models import BaseModel
 
 
 class User(BaseModel):
-    email = fields.CharField(max_length=255, unique=True)
+    # email = fields.CharField(max_length=255, unique=True)
+    tg_username = fields.CharField(max_length=128)
     password_hash = fields.CharField(max_length=128, null=True)
     is_admin = fields.BooleanField(default=False)
     tg_id = fields.BigIntField(null=True)
-    tg_username = fields.CharField(max_length=64, null=True)
     tg_hash = fields.CharField(max_length=128, null=True)
 
     @classmethod
-    async def get_by_email(cls, email: str) -> Optional["User"]:
+    async def get_by_tg_username(cls, tg_username: str) -> Optional["User"]:
         try:
-            query = cls.get_or_none(email=email)
+            query = cls.get_or_none(tg_username=tg_username)
             user = await query
             return user
         except DoesNotExist:

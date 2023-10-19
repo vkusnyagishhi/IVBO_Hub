@@ -41,11 +41,11 @@ async def create_user(
     *,
     user_in: BaseUserCreate
 ):
-    user = await User.get_by_email(email=user_in.email)
+    user = await User.get_by_tg_username(tg_username=user_in.tg_username)
     if user:
         raise HTTPException(
             status_code=400,
-            detail="The user with this email alredady exists",
+            detail="The user with this telegram username alredady exists",
         )
     
     hashed_password = get_password_hash(password=user_in.password)
@@ -59,8 +59,8 @@ async def update_user_me(user_in: BaseUserUpdate, current_user: User = Depends(g
     if user_in.password is not None:
         hashed_password = get_password_hash(user_in.password)
         current_user.password_hash = hashed_password
-    if user_in.email is not None:
-        current_user.email = user_in.email
+    if user_in.tg_username is not None:
+        current_user.tg_username = user_in.tg_username
     
     await current_user.save()
     return current_user

@@ -12,21 +12,21 @@ class BaseProperties(BaseModel):
 
 class BaseUser(BaseProperties):
     uuid: Optional[UUID4] = None
-    email: Optional[EmailStr] = None
+    tg_username: Optional[str] = None
     is_admin: Optional[bool] = False
 
 
 class BaseUserCreate(BaseProperties):
-    email: EmailStr
+    tg_username: str
     password: str
 
     class Config:
-        schemas_extra = {"example": {"email": "my_email@gmail.com", "password": "qwerty"}}
+        schemas_extra = {"example": {"tg_id": "cherry4xo", "password": "qwerty"}}
 
 
 class BaseUserUpdate(BaseProperties):
     password: Optional[str]
-    email: Optional[EmailStr]
+    tg_username: Optional[str]
 
 
 class BaseUserDB(BaseUser):
@@ -47,7 +47,7 @@ class BaseUserOut(BaseUser):
         schemas_extra = {
             "example": {
                 "uuid": "b3b4c5d6-e7f8-g9h0-i1j2-k3l4m5n6o7p8",
-                "email": "my_email@gmail.com",
+                "tg_username": "cherry4xo",
                 "is_admin": False,
                 "tg_id": "372203395",
             }

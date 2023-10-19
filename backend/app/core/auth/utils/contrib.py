@@ -42,8 +42,8 @@ async def get_current_admin(current_user: User = Security(get_current_user)):
 
 
 async def authenticate(credentials: CredentialSchema) -> Optional[User]:
-    if credentials.email:
-        user = await User.get_by_email(email=credentials.email)
+    if credentials.tg_username:
+        user = await User.get_by_tg_username(tg_username=credentials.tg_username)
     else:
         return None
     
