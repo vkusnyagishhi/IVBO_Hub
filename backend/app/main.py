@@ -25,7 +25,8 @@ app = FastAPI(
     description=settings.APP_DESCRIPTION,
     version=settings.VERSION,
     debug=settings.DEBUG,
-    swagger_ui_parameters={"persistAuthorization": True}
+    swagger_ui_parameters={"persistAuthorization": True},
+    root_path="/dev/"
 )
 
 @app.on_event("startup")
