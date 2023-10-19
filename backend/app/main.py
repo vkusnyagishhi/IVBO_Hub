@@ -3,6 +3,8 @@ from os import environ
 from time import tzset
 
 from fastapi import FastAPI
+from fastapi import Request
+from fastapi.responses import HTMLResponse
 from app.core.exceptions import SettingNotFound
 from app.core.init_app import (
     # configure_logging,
@@ -26,7 +28,6 @@ app = FastAPI(
     version=settings.VERSION,
     debug=settings.DEBUG,
     swagger_ui_parameters={"persistAuthorization": True},
-    openapi_url="/ivbo_fastapi/openapi.json"
 )
 
 @app.on_event("startup")
