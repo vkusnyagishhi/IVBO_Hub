@@ -23,7 +23,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Header />
 
             <main style={{ width: '100%', minHeight: '96vh', padding: '50px 0px 160px 0px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                <Text fontSize='14px' color='white' opacity={0.5} pos='fixed' top={2} right={3} zIndex={10}>v1.1.1</Text>
                 {children}
             </main>
     </Providers>

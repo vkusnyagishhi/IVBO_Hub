@@ -6,12 +6,14 @@ interface MiscState {
     isLaptop: boolean;
     hw: IHomework[];
     table: any[];
+    version: string;
 }
 
 const initialState: MiscState = {
     isLaptop: false,
     hw: [],
-    table: []
+    table: [],
+    version: 'v0.0.0-unknown'
 };
 
 export const miscSlice = createSlice({
