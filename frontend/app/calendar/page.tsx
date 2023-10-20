@@ -41,7 +41,7 @@ export default function Calendar() {
                         const cellColor = isEmpty
                             ? 'rgba(255,255,255,.3)'
                             : weekIndex === i && weekDayIndex === j
-                                ? 'red.300'
+                                ? 'purple.300'
                                 : now.getDate() === day && now.getMonth() === month
                                     ? 'purple.500'
                                     : 'none';
@@ -78,7 +78,7 @@ export default function Calendar() {
 
                                 return <VStack key={i} color='white' w='100%' spacing='14px' p='10px' border='2px dotted blue' borderRadius='20px'>
                                     <HStack w='100%' justify='space-between'>
-                                        <HStack spacing='10px'>
+                                        <HStack w='100%' spacing='10px'>
                                             <Text w='30px' h='30px' borderRadius='full' bg={PROPERTY_LESSON_TYPE === LessonTypes['пр'] ? 'blue.400' : 'purple.500'} align='center' pt='3px'>{i + 1}</Text>
                                             <Text w='80%'>{PROPERTY_DISCIPLINE_NAME}</Text>
                                         </HStack>

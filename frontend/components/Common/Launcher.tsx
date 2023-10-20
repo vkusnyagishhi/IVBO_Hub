@@ -1,12 +1,14 @@
 'use client';
 import { setData, setIsLaptop } from "@/redux/miscSlice";
 import { useEffect } from "react";
-import { useDispatch } from '@/redux/hooks';
+import { useDispatch, useSelector } from '@/redux/hooks';
 import { setAuthData } from "@/redux/authSlice";
 import axios from "axios";
+import { Text } from "@chakra-ui/react";
 
 export function Launcher() {
     const dispatch = useDispatch();
+    const { version } = useSelector(state => state.misc);
 
     useEffect(() => {
         dispatch(setIsLaptop(!window.matchMedia("(max-width: 600px)").matches));
@@ -18,5 +20,7 @@ export function Launcher() {
         });
     }, [dispatch]);
 
-    return <></>
+    return <>
+        <Text fontSize='14px' color='white' opacity={0.5} pos='fixed' top={2} right={3} zIndex={10}>{version}</Text>
+    </>
 }
