@@ -12,16 +12,17 @@ from app.core.base.base_models import BaseModel
 
 class User(BaseModel):
     # email = fields.CharField(max_length=255, unique=True)
-    tg_username = fields.CharField(max_length=128)
-    password_hash = fields.CharField(max_length=128, null=True)
+    first_name = fields.CharField(max_length=128, null=True)
+    last_name = fields.CharField(max_length=128, null=True)
+    username = fields.CharField(max_length=128)
     is_admin = fields.BooleanField(default=False)
-    tg_id = fields.BigIntField(null=True)
-    tg_hash = fields.CharField(max_length=128, null=True)
+    id = fields.BigIntField(null=True)
+    hash = fields.CharField(max_length=128, null=True)
 
     @classmethod
-    async def get_by_tg_username(cls, tg_username: str) -> Optional["User"]:
+    async def get_by_tg_username(cls, username: str) -> Optional["User"]:
         try:
-            query = cls.get_or_none(tg_username=tg_username)
+            query = cls.get_or_none(username=username)
             user = await query
             return user
         except DoesNotExist:
@@ -30,8 +31,8 @@ class User(BaseModel):
     @classmethod
     async def create(cls, user: BaseUserCreate) -> "User":
         user_dict = user.model_dump()
-        password_hash = password.get_password_hash(password=user.password)
-        model = cls(**user_dict, password_hash=password_hash)
+        # password_hash = password.get_password_hash(password=user.password)
+        model = cls(**user_dict)
         await model.save()
         return model
     

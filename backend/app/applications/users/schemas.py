@@ -12,26 +12,34 @@ class BaseProperties(BaseModel):
 
 class BaseUser(BaseProperties):
     uuid: Optional[UUID4] = None
-    tg_username: Optional[str] = None
+    username: Optional[str] = None
+    first_name: Optional[str]
+    last_name: Optional[str] = None
     is_admin: Optional[bool] = False
+    id: Optional[str] = None
 
 
 class BaseUserCreate(BaseProperties):
-    tg_username: str
-    password: str
+    username: str
+    id: int
+    hash: str
+    first_name: str
+    last_name: Optional[str] = None
+
 
     class Config:
-        schemas_extra = {"example": {"tg_id": "cherry4xo", "password": "qwerty"}}
+        schemas_extra = {"example": {"username": "cherry4xo", "id": 0, "hash": "string", "first_name": "string", "last_name": "string"}}
 
 
 class BaseUserUpdate(BaseProperties):
-    password: Optional[str]
-    tg_username: Optional[str]
+    first_name: Optional[str]
+    last_name: Optional[str]
+    hash: Optional[str]
+    username: Optional[str]
 
 
 class BaseUserDB(BaseUser):
     uuid: UUID4
-    password_hash: str
 
     class Config:
         from_attributes = True
@@ -39,7 +47,9 @@ class BaseUserDB(BaseUser):
 
 class BaseUserOut(BaseUser):
     uuid: UUID4
-    tg_id: Optional[str]
+    id: int
+    username: str
+    is_admin: bool
 
     class Config:
         from_attributes = True
@@ -47,9 +57,9 @@ class BaseUserOut(BaseUser):
         schemas_extra = {
             "example": {
                 "uuid": "b3b4c5d6-e7f8-g9h0-i1j2-k3l4m5n6o7p8",
-                "tg_username": "cherry4xo",
-                "is_admin": False,
-                "tg_id": "372203395",
+                "username": "cherry4xo",
+                "admin": False,
+                "id": "372203395",
             }
         }
 
@@ -63,4 +73,4 @@ class TgTokenWithId(BaseProperties):
     id: int
 
     class Config:
-        schemas_extra = {"example": {"token": "SbjpvnBzMIpPEexbjwFPNEQkxEigXxaF", "tg_id": "372203395"}}
+        schemas_extra = {"example": {"token": "SbjpvnBzMIpPEexbjwFPNEQkxEigXxaF", "id": "372203395"}}

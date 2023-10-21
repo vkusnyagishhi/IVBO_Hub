@@ -12,12 +12,12 @@ router = APIRouter()
 
 
 @router.post("/access-token", response_model=JWTToken)
-async def login_access_token(credentials: OAuth2PasswordRequestForm = Depends()):
-    credentials = CredentialSchema(tg_username=credentials.username, password=credentials.password)
+async def login_access_token(credentials: CredentialSchema):
+    # credentials = CredentialSchema(tg_username=credentials.username, password=credentials.password)
     user = await authenticate(credentials)
 
     if not user:
-        raise HTTPException(status_code=400, detail="Incorrect telegram username or password")
+        raise HTTPException(status_code=400, detail="Incorrect telegram username or hash")
     access_token_expires = timedelta(minutes=settings.JWT_ACCESS_TOKEN_EXPIRE_MINUTES)
 
     return {

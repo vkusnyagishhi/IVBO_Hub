@@ -37,6 +37,8 @@ class Settings:
     ROOT_ADMIN_TG_USERNAME = config("ROOT_ADMIN_TG_USERNAME")
     ROOT_ADMIN_PASSWORD = config("ROOT_ADMIN_PASSWORD")
 
+    BOT_TOKEN = config("BOT_TOKEN")
+
     DB_URL = f"postgres://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     DB_CONNECTIONS = {
         "default": DB_URL,

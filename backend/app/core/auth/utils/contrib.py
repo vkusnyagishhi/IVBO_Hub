@@ -1,4 +1,6 @@
 import logging
+import hmac
+import hashlib
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Optional
@@ -12,6 +14,7 @@ from fastapi.encoders import jsonable_encoder
 from starlette.status import HTTP_403_FORBIDDEN
 
 from app.applications.users.models import User
+from app.applications.users.schemas import BaseUserCreate
 from app.core.auth.schemas import JWTTokenPayload, CredentialSchema
 from app.core.auth.utils import password
 from app.core.auth.utils.jwt import ALGORITHM
@@ -42,21 +45,37 @@ async def get_current_admin(current_user: User = Security(get_current_user)):
 
 
 async def authenticate(credentials: CredentialSchema) -> Optional[User]:
-    if credentials.tg_username:
-        user = await User.get_by_tg_username(tg_username=credentials.tg_username)
+    if credentials.username:
+        user = await User.get_by_tg_username(username=credentials.username)
     else:
         return None
     
     if user is None:
-        return None
+        user = await User.create(credentials)
     
-    verified, updated_password_hash = password.verify_and_update_password(credentials.password, user.password_hash)
+    credentials_dict = (credentials.model_dump())
+    print(credentials_dict)
+    if credentials_dict["last_name"] is None:
+        credentials_dict.pop("last_name")
+    hash_cred = credentials_dict.pop("hash")
+    credentials_dict = sorted(credentials_dict.items())
+    value = "\n".join([f"{key}={value}" for key, value in credentials_dict])
+    print(value)
+    secret_key = hmac.new("WebAppData".encode(), settings.BOT_TOKEN.encode(), hashlib.sha256).digest()
+    calculated_hash = hmac.new(secret_key, value.encode(), hashlib.sha256).hexdigest()
 
-    if not verified:
+    print(calculated_hash, hash_cred, sep='\n')
+
+    if calculated_hash != hash_cred:
         return None
+
+    # verified, updated_password_hash = password.verify_and_update_password(credentials.password, user.password_hash)
+
+    # if not verified:
+    #     return None
     
-    if updated_password_hash is not None:
-        user.password_hash = updated_password_hash
-        await user.save()
+    # if updated_password_hash is not None:
+    #     user.password_hash = updated_password_hash
+    #     await user.save()
 
     return user

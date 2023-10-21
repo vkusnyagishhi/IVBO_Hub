@@ -60,15 +60,12 @@ TORTOISE_ORM = get_tortoise_config()
 
 async def create_default_admin_user():
     await sleep(3)
-    user = await User.get_by_tg_username(tg_username=settings.ROOT_ADMIN_TG_USERNAME)
+    user = await User.get_by_tg_username(username=settings.ROOT_ADMIN_TG_USERNAME)
     if user:
         return
-    
-    hashed_password = get_password_hash(settings.ROOT_ADMIN_PASSWORD)
 
     admin_user = User()
-    admin_user.tg_username = settings.ROOT_ADMIN_TG_USERNAME
-    admin_user.password_hash = hashed_password
+    admin_user.username = settings.ROOT_ADMIN_TG_USERNAME
     admin_user.is_admin = True
     await admin_user.save()
     return admin_user
