@@ -23,7 +23,7 @@ The application provides group member to:
 - Store his file in the storage and get acces to their any moment
 ## Authentication
 The application do not need any private information except for Telegram username and id\
-We use industry-standard OAuth 2.0 protocol for authorization so your private files in the storage is in safety 
+We use industry-standard OAuth 2.0 protocol for authorization so your private files in the storage are safe
 ## 🔗 Links
 #### Application website
 
@@ -31,5 +31,5 @@ We use industry-standard OAuth 2.0 protocol for authorization so your private fi
 
 
 #### Telegram
-- [@cherry4xo](https://github.com/cherry4xo)
-- [@mkrkru](https://github.com/mkrkru)
+- [@cherry4xo](https://t.me/cherry4xo)
+- [@mkrkru](https://t.me/mkrkru)
