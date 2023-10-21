@@ -66,6 +66,9 @@ async def create_default_admin_user():
 
     admin_user = User()
     admin_user.username = settings.ROOT_ADMIN_TG_USERNAME
+    admin_user.first_name = settings.ROOT_ADMIN_TG_FIRST_NAME
+    admin_user.last_name = settings.ROOT_ADMIN_TG_LAST_NAME
+    admin_user.id = settings.ROOT_ADMIN_TG_ID
     admin_user.is_admin = True
     await admin_user.save()
     return admin_user
