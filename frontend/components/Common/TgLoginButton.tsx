@@ -15,6 +15,8 @@ export function TgLoginButton() {
         usePic={true}
         // dataAuthUrl='http://127.0.0.1/test'
         dataOnauth={(data: TelegramUser) => {
+            console.log(data);
+
             axios.post('https://api.twodev.cc/ivbo/login', data).then(res => {
                 if (res.data === 500) {
                     if (!toast.isActive('error-toast')) toast(toasts.error('Вы не состоите в группе ИВБО-11-23!'));
