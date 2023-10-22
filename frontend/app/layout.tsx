@@ -1,7 +1,6 @@
 import './globals.css';
 import { Providers } from "./providers";
-import { Text } from "@chakra-ui/react";
-import { Header, Launcher } from "@/components/Common";
+import { ActionButton, Launcher } from "@/components/Common";
 import type { Metadata as RawMetadata } from "next";
 
 interface Metadata extends RawMetadata {
@@ -9,22 +8,22 @@ interface Metadata extends RawMetadata {
 }
 
 export const metadata: Metadata = {
-    title: 'IVBO-11-23 Hub',
-    description: 'на описание фантазии не хватило, сори',
     'application-name': 'IVBO-11-23 Hub',
-    manifest: '/manifest.json'
+    description: 'на описание фантазии не хватило, сори',
+    manifest: '/manifest.json',
+    title: 'IVBO-11-23 Hub'
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return <html lang='en'>
     <body>
     <Providers>
-            <Launcher />
-            <Header />
+        <Launcher />
+        <ActionButton />
 
-            <main style={{ width: '100%', minHeight: '96vh', padding: '50px 0px 160px 0px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                {children}
-            </main>
+        <main style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '100vh', width: '100%' }}>
+            {children}
+        </main>
     </Providers>
     </body>
     </html>

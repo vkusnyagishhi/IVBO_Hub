@@ -1,3 +1,3 @@
 export * from './Launcher';
-export * from './Header';
+export * from './ActionButton';
 export * from './TgLoginButton';

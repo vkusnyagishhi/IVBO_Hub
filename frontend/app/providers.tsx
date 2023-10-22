@@ -9,8 +9,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <CacheProvider>
                 <ChakraProvider theme={extendTheme({
                     fonts: {
-                        heading: `'Inter Variable', sans-serif`,
                         body: `'Inter Variable', sans-serif`,
+                        heading: `'Inter Variable', sans-serif`,
                     }
                 })}>
                     {children}

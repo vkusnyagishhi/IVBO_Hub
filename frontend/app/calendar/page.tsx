@@ -1,27 +1,20 @@
 'use client';
-import { HStack, Text, VStack, Spinner, Icon, Box, IconButton, useDisclosure, Modal, ModalBody, ModalCloseButton, ModalHeader, ModalContent, ModalOverlay, OrderedList, ListItem } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useDispatch, useSelector } from "@/redux/hooks";
-import { setTable } from "@/redux/miscSlice";
+import { Box, HStack, Icon, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, OrderedList, Spinner, Text, useDisclosure, VStack } from "@chakra-ui/react";
+import { useState } from "react";
+import { useSelector } from "@/redux/hooks";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaBook, FaHouse } from "react-icons/fa6";
 import { HWTypes, IHomework, ILesson, LessonTypes } from "@/misc";
 
 export default function Calendar() {
-    const dispatch = useDispatch();
-    const { table: data, hw } = useSelector(state => state.misc);
+    const { hw, isLaptop, table: data } = useSelector(state => state.misc);
     const [[weekIndex, weekDayIndex], setSelected] = useState([0, 6]);
     const [modalContent, setModalContent] = useState<IHomework>();
-    const { isOpen, onOpen, onClose } = useDisclosure();
-
-    useEffect(() => {
-        axios.get('https://api.twodev.cc/ivbo/data').then(res => dispatch(setTable(res.data)));
-    }, [dispatch]);
+    const { isOpen, onClose, onOpen } = useDisclosure();
 
     return <>
         <VStack w='85%'>
-            <HStack w='95%' justify='space-between' color='gray.500'>
+            <HStack spacing='32px' color='gray.500'>
                 {['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'].map(d => <Text key={d}>{d}</Text>)}
             </HStack>
 
@@ -63,20 +56,20 @@ export default function Calendar() {
                 : <Spinner size='xl' color='blue.500' emptyColor='gray.400' />}
 
             <AnimatePresence mode='wait'>
-                <motion.div style={{ width: '100%', minHeight: '40vh', marginTop: '20px' }} initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -10, opacity: 0 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex}>
+                <motion.div style={{ marginTop: '20px', minHeight: '40vh', width: isLaptop ? '50%' : '100%' }} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex}>
                     {data[weekIndex] && data[weekIndex][weekDayIndex] && Object.keys(data[weekIndex][weekDayIndex]).length > 0
                         && <VStack key={weekIndex + weekDayIndex}>
                             {Object.keys(data[weekIndex][weekDayIndex]).map((lesson: string, i) => {
                                 const theLesson: ILesson | null = data[weekIndex][weekDayIndex][lesson];
                                 if (!theLesson) return <></>; // <Text color='white'>{i + 1}. [ОКНО]</Text>;
 
-                                const { PROPERTY_DISCIPLINE_NAME, PROPERTY_LESSON_TYPE, PROPERTY_PLACE, PROPERTY_LECTOR } = theLesson;
+                                const { PROPERTY_DISCIPLINE_NAME, PROPERTY_LECTOR, PROPERTY_LESSON_TYPE, PROPERTY_PLACE } = theLesson;
                                 const HW = hw.find((h: IHomework) =>
                                     h.subject.split(' ')[1] === HWTypes[PROPERTY_DISCIPLINE_NAME as keyof typeof HWTypes] &&
                                     (h.content.length > 0 || h.image)
                                 );
 
-                                return <VStack key={i} color='white' w='100%' spacing='14px' p='10px' border='2px dotted blue' borderRadius='20px'>
+                                return <VStack key={i} color='white' w='100%' spacing='14px' p='10px' border='2px dotted #1e88d3' borderRadius='20px'>
                                     <HStack w='100%' justify='space-between'>
                                         <HStack w='100%' spacing='10px'>
                                             <Text w='30px' h='30px' borderRadius='full' bg={PROPERTY_LESSON_TYPE === LessonTypes['пр'] ? 'blue.400' : 'purple.500'} align='center' pt='3px'>{i + 1}</Text>
@@ -86,9 +79,9 @@ export default function Calendar() {
                                         {HW && <HStack borderRadius='20px' bg='blue.700' p='3px 10px' onClick={() => {
                                             setModalContent(HW);
                                             onOpen();
-                                        }}>
+                                        }} _hover={{ cursor: 'pointer' }}>
                                             <Icon as={FaBook} />
-                                            <Text>ДЗ</Text>
+                                            <Text userSelect='none'>ДЗ</Text>
                                         </HStack>}
                                     </HStack>
 

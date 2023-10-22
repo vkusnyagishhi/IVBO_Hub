@@ -13,6 +13,7 @@ export function TgLoginButton() {
         botName={process.env.NODE_ENV === 'development' ? 'twodev_helper_bot' : 'ivbo1123bot'}
         cornerRadius={20}
         usePic={true}
+        // dataAuthUrl='http://127.0.0.1/test'
         dataOnauth={(data: TelegramUser) => {
             axios.post('https://api.twodev.cc/ivbo/login', data).then(res => {
                 if (res.data === 500) {
