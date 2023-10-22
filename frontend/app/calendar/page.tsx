@@ -13,47 +13,49 @@ export default function Calendar() {
     const { isOpen, onClose, onOpen } = useDisclosure();
 
     return <>
-        <VStack w='85%'>
-            <HStack spacing='32px' color='gray.500'>
-                {['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'].map(d => <Text key={d}>{d}</Text>)}
-            </HStack>
+        <VStack w='85%' minH='100vh' pt='10px' spacing='20px'>
+            <VStack minH='38vh' justify='end'>
+                <HStack spacing='32px' color='gray.500'>
+                    {['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'].map(d => <Text key={d}>{d}</Text>)}
+                </HStack>
 
-            {data.length > 0
-                ? data.map((week: object[], i) => <HStack key={i} color='white' spacing='10px'>
-                    {week.map((dayTable: any, j) => {
-                        const isEmpty = dayTable.every((l: any) => !l);
-                        const now = new Date();
-                        let day = 7 * i + j + 2;
-                        let month = 9;
+                {data.length > 0
+                    ? data.map((week: object[], i) => <HStack key={i} color='white' spacing='10px'>
+                        {week.map((dayTable: any, j) => {
+                            const isEmpty = dayTable.every((l: any) => !l);
+                            const now = new Date();
+                            let day = 7 * i + j + 2;
+                            let month = 9;
 
-                        if (day > 31) {
-                            day -= 31;
-                            month = 10;
-                        }
+                            if (day > 31) {
+                                day -= 31;
+                                month = 10;
+                            }
 
-                        const cellColor = isEmpty
-                            ? 'rgba(255,255,255,.3)'
-                            : weekIndex === i && weekDayIndex === j
-                                ? 'purple.300'
-                                : now.getDate() === day && now.getMonth() === month
-                                    ? 'purple.500'
-                                    : 'none';
+                            const cellColor = isEmpty
+                                ? 'rgba(255,255,255,.3)'
+                                : weekIndex === i && weekDayIndex === j
+                                    ? 'purple.300'
+                                    : now.getDate() === day && now.getMonth() === month
+                                        ? 'purple.500'
+                                        : 'none';
 
-                        return <VStack w='40px' h='40px' color='white' key={j} _hover={{ cursor: 'pointer' }} transition='0.2s' onClick={() => {
-                            if (!isEmpty) setSelected([i, j]);
-                        }} pos='relative'>
-                            {day > 0 && <Text userSelect='none' pt='8px' zIndex={1}>{day}</Text>}
+                            return <VStack w='40px' h='40px' color='white' key={j} _hover={{ cursor: 'pointer' }} transition='0.2s' onClick={() => {
+                                if (!isEmpty) setSelected([i, j]);
+                            }} pos='relative'>
+                                {day > 0 && <Text userSelect='none' pt='8px' zIndex={1}>{day}</Text>}
 
-                            <Box w='75%' h='75%' borderRadius='200px' bg={cellColor} pos='absolute' top='5.5px' left='5px' />
+                                <Box w='75%' h='75%' borderRadius='200px' bg={cellColor} pos='absolute' top='5.5px' left='5px' />
 
-                            <HStack pos='absolute' bottom='-5px' spacing='2px'>
-                                {data[i][j].filter((x: ILesson | null) => x?.PROPERTY_LESSON_TYPE).map((x: any, i: number) =>
-                                    <Box key={i} w='6px' h='6px' bg={x.PROPERTY_LESSON_TYPE === 'П' ? 'blue.400' : 'purple.500'} borderRadius='200px' />)}
-                            </HStack>
-                        </VStack>;
-                    })}
-                </HStack>)
-                : <Spinner size='xl' color='blue.500' emptyColor='gray.400' />}
+                                <HStack pos='absolute' bottom='-5px' spacing='2px'>
+                                    {data[i][j].filter((x: ILesson | null) => x?.PROPERTY_LESSON_TYPE).map((x: any, i: number) =>
+                                        <Box key={i} w='6px' h='6px' bg={x.PROPERTY_LESSON_TYPE === 'П' ? 'blue.400' : 'purple.500'} borderRadius='200px' />)}
+                                </HStack>
+                            </VStack>;
+                        })}
+                    </HStack>)
+                    : <Spinner size='xl' color='blue.500' emptyColor='gray.400' />}
+            </VStack>
 
             <AnimatePresence mode='wait'>
                 <motion.div style={{ marginTop: '20px', minHeight: '40vh', width: isLaptop ? '50%' : '100%' }} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex}>

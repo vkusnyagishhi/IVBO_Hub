@@ -20,11 +20,10 @@ export const miscSlice = createSlice({
     name: 'misc',
     initialState,
     reducers: {
-        setTable: (state, action: PayloadAction<object[]>) => {
-            state.table = action.payload;
-        },
-        setData: (state, action: PayloadAction<object>) => {
-            Object.assign(state, action.payload);
+        setData: (state, action: PayloadAction<any>) => {
+            Object.assign(state.hw, action.payload.hw);
+            Object.assign(state.table, action.payload.table);
+            state.version = action.payload.version;
         },
         setIsLaptop: (state, action: PayloadAction<boolean>) => {
             state.isLaptop = action.payload;
@@ -47,5 +46,5 @@ export const miscSlice = createSlice({
     }
 })
 
-export const { setData, setIsLaptop, editHW, addHWField, removeHWField, deletePhoto, setTable } = miscSlice.actions;
+export const { setData, setIsLaptop, editHW, addHWField, removeHWField, deletePhoto } = miscSlice.actions;
 export default miscSlice.reducer;
