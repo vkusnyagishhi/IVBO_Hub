@@ -1,31 +1,16 @@
 from typing import Optional
+import uuid
 
-from pydantic import BaseModel, UUID4
+from pydantic import BaseModel, UUID4, validator
 
 
-# class CredentialSchema(BaseModel):
-#     id: int
-#     first_name: str
-#     last_name: Optional[str] = None
-#     username: str
-#     photo_url: str
-#     auth_date: int
-#     hash: str
+class BaseProperties(BaseModel):
+    @validator("uuid", pre=True, always=True, check_fields=False)
+    def default_hashed_id(cls, v):
+        return v or uuid.uuid4()
 
-#     class Config:
-#         schemas_extra = {
-#         "example": 
-#             {
-#                 "id": 0,
-#                 "first_name": "cherry4xo",
-#                 "username": "cherry4xo",
-#                 "photo_url": "url",
-#                 "auth_date": 0,
-#                 "hash": "string"
-#             }
-#         }
 
-class TelegramLoginData(BaseModel):
+class TelegramLoginData(BaseProperties):
     id: int
     first_name: str
     last_name: str | None = None
@@ -33,6 +18,19 @@ class TelegramLoginData(BaseModel):
     photo_url: str | None = None
     auth_date: int
     hash: str
+
+    class Config:
+        schemas_extra = {
+            "example": {
+                "id": 0,
+                "first_name": "никита",
+                "last_name": "нулифаер",
+                "username": "cherry4xo",
+                "photo_url": "url",
+                "auth_date": 0,
+                "hash": "string"
+            }
+        }
 
 
 class JWTToken(BaseModel):
