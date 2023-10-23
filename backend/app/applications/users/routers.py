@@ -41,26 +41,22 @@ async def create_user(
     *,
     user_in: BaseUserCreate
 ):
-    user = await User.get_by_tg_username(tg_username=user_in.tg_username)
+    user = await User.get_by_tg_username(username=user_in.username)
     if user:
         raise HTTPException(
             status_code=400,
             detail="The user with this telegram username alredady exists",
         )
     
-    hashed_password = get_password_hash(password=user_in.password)
-    db_user = BaseUserCreate(**user_in.model_dump(), hashed_password=hashed_password)
+    db_user = BaseUserCreate(**user_in.model_dump())
     created_user = await User.create(db_user)
     return created_user
 
 
 @router.patch("/me", response_model=BaseUserOut, status_code=200)
 async def update_user_me(user_in: BaseUserUpdate, current_user: User = Depends(get_current_user)):
-    if user_in.password is not None:
-        hashed_password = get_password_hash(user_in.password)
-        current_user.password_hash = hashed_password
-    if user_in.tg_username is not None:
-        current_user.tg_username = user_in.tg_username
+    if user_in.username is not None:
+        current_user.username = user_in.username
     
     await current_user.save()
     return current_user
@@ -68,7 +64,7 @@ async def update_user_me(user_in: BaseUserUpdate, current_user: User = Depends(g
 
 @router.delete("/me/tg_id", response_model=BaseUserOut, status_code=200)
 async def delete_user_me_tg_id(current_user: User = Depends(get_current_user)):
-    current_user.tg_id = None
+    current_user.id = None
     current_user.save()
     return current_user
 

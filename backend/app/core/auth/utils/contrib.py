@@ -15,7 +15,6 @@ from fastapi.encoders import jsonable_encoder
 from starlette.status import HTTP_403_FORBIDDEN
 
 from app.applications.users.models import User
-from app.applications.users.schemas import BaseUserCreate
 from app.core.auth.schemas import JWTTokenPayload, TelegramLoginData
 from app.core.auth.utils import password
 from app.core.auth.utils.jwt import ALGORITHM
@@ -71,7 +70,7 @@ async def authenticate(credentials: TelegramLoginData) -> Optional[User]:
         user = await User.get_by_tg_username(username=credentials.username)
     else:
         return None
-    
+
     if user is None:
         user = await User.create(credentials)
 
@@ -80,32 +79,3 @@ async def authenticate(credentials: TelegramLoginData) -> Optional[User]:
     if verified:
         return user
     return None
-
-    # print(credentials_dict)
-    # for key, value in credentials_dict.items():
-    #     if value is None:
-    #         credentials_dict.pop(key)
-    # hash_cred = credentials_dict.pop("hash")
-    # credentials_dict = sorted(credentials_dict.items())
-    # init_data = "\n".join([f"{key}={value}" for key, value in credentials_dict])
-    # print("init_data:", init_data)
-    # secret_key = hmac.new("WebAppData".encode(), settings.BOT_TOKEN.encode(), hashlib.sha256).digest()
-    # print("secret_key: ", secret_key)
-    # calculated_hash = hmac.new(secret_key, init_data.encode(), hashlib.sha256).hexdigest()
-
-    # print(calculated_hash, hash_cred, sep='\n')
-
-    # if calculated_hash != hash_cred:
-    #     return None
-    # return user
-
-    # verified, updated_password_hash = password.verify_and_update_password(credentials.password, user.password_hash)
-
-    # if not verified:
-    #     return None
-    
-    # if updated_password_hash is not None:
-    #     user.password_hash = updated_password_hash
-    #     await user.save()
-
-    # return user

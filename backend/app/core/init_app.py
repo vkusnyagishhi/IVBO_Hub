@@ -99,9 +99,9 @@ def register_exceptions(app: FastAPI):
 
 
 def register_routers(app: FastAPI):
-    app.include_router(login_router, prefix="/api/auth/login", tags=["login"])
-    app.include_router(users_router, prefix="/api/auth/users", tags=["users"])
-    app.include_router(files_router, prefix="/api/files", tags=["files"])
-    app.include_router(homework_router, prefix="/api/homework", tags=["homework"])
-    app.include_router(disciplines_router, prefix="/api/discipline", tags=["disciplines"])
-    app.include_router(endpoint_router, prefix="/api/endpoint", tags=["endpoint"])
+    app.include_router(login_router, prefix="/auth/login", tags=["login"])
+    app.include_router(users_router, prefix="/auth/users", tags=["users"])
+    app.include_router(files_router, prefix="/files", tags=["files"])
+    app.include_router(homework_router, prefix="/homework", tags=["homework"])
+    app.include_router(disciplines_router, prefix="/discipline", tags=["disciplines"])
+    app.include_router(endpoint_router, prefix="/endpoint", tags=["endpoint"])
