@@ -13,7 +13,7 @@ const initialState: MiscState = {
     isLaptop: false,
     hw: [],
     table: [],
-    version: 'v0.0.0-unknown'
+    version: 'fetching data...'
 };
 
 export const miscSlice = createSlice({

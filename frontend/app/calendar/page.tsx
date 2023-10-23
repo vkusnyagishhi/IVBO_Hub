@@ -1,6 +1,6 @@
 'use client';
 import { Box, HStack, Icon, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, OrderedList, Spinner, Text, useDisclosure, VStack } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "@/redux/hooks";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaBook, FaHouse } from "react-icons/fa6";
@@ -12,9 +12,14 @@ export default function Calendar() {
     const [modalContent, setModalContent] = useState<IHomework>();
     const { isOpen, onClose, onOpen } = useDisclosure();
 
+    useEffect(() => {
+        const today = new Date().getDate() + 1;
+        setSelected([Math.floor(today / 4) - 2, Math.floor(today / 7) - 3]);
+    }, []);
+
     return <>
         <VStack w='85%' minH='100vh' pt='10px' spacing='20px'>
-            <VStack minH='38vh' justify='end'>
+            <VStack minH='30vh' justify='end'>
                 <HStack spacing='32px' color='gray.500'>
                     {['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'].map(d => <Text key={d}>{d}</Text>)}
                 </HStack>

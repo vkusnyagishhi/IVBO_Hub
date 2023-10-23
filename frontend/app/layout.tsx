@@ -1,6 +1,6 @@
 import './globals.css';
 import { Providers } from "./providers";
-import { ActionButton, Launcher } from "@/components/Common";
+import { Header, Launcher } from "@/components/Common";
 import type { Metadata as RawMetadata } from "next";
 
 interface Metadata extends RawMetadata {
@@ -19,9 +19,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <body>
     <Providers>
         <Launcher />
-        <ActionButton />
+        <Header />
 
-        <main style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '100vh', width: '100%' }}>
+        <main style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', padding: '110px 0px', justifyContent: 'center', minHeight: '100vh', width: '100%' }}>
             {children}
         </main>
     </Providers>

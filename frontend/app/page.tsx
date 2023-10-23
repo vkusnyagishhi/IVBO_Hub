@@ -9,7 +9,7 @@ export default function Home() {
     const router = useRouter();
 
     return <VStack spacing='30px'>
-        <Heading color='white'>IVBO Hub</Heading>
+        <Heading color='white'>IVBO-11-23 Hub</Heading>
 
         <SimpleGrid columns={2} spacing='10px'>
             {headerLinks.map((link, i) => <VStack key={i} bg='blue.800' p='20px' borderRadius='20px' color='white' spacing='12px' onClick={() => router.push(link.pathname)} transition='0.2s' _hover={isLaptop ? { cursor: 'pointer', color: 'blue.200' } : {}} _active={{ color: 'gray.500' }}>
