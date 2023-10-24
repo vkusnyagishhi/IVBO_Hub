@@ -1,6 +1,6 @@
 'use client';
 import { Box, Button, HStack, Icon, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, OrderedList, Spinner, Text, useDisclosure, VStack } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "@/redux/hooks";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaBook, FaHouse } from "react-icons/fa6";
@@ -14,10 +14,10 @@ export default function Calendar() {
     const { isOpen, onClose, onOpen } = useDisclosure();
     const router = useRouter();
 
-    useEffect(() => {
-        const today = new Date().getDate() + 1;
-        setSelected([Math.floor(today / 4) - 2, Math.floor(today / 7) - 3]);
-    }, []);
+    // useEffect(() => {
+    //     const today = new Date().getDate() + 1;
+    //     setSelected([Math.floor(today / 4) - 2, Math.floor(today / 7) - 3]);
+    // }, []);
 
     return <>
         <VStack w='90%' minH='100vh' spacing='30px'>
@@ -39,17 +39,13 @@ export default function Calendar() {
                                 month = 10;
                             }
 
-                            const cellColor = isEmpty
-                                ? 'rgba(255,255,255,.3)'
-                                : weekIndex === i && weekDayIndex === j
-                                    ? 'purple.300'
-                                    : now.getDate() === day && now.getMonth() === month
-                                        ? 'purple.500'
-                                        : 'none';
+                            const cellColor = weekIndex === i && weekDayIndex === j
+                                ? 'linear-gradient(150deg, rgba(69,112,209,1) 0%, rgba(88,15,112,1) 100%)'
+                                : now.getDate() === day && now.getMonth() === month
+                                    ? 'green.600'
+                                    : 'none';
 
-                            return <VStack w='40px' h='40px' color='white' key={j} _hover={{ cursor: 'pointer' }} transition='0.2s' onClick={() => {
-                                if (!isEmpty) setSelected([i, j]);
-                            }} pos='relative'>
+                            return <VStack w='40px' h='40px' color='white' key={j} _hover={{ cursor: 'pointer' }} transition='0.2s' onClick={() => setSelected([i, j])} pos='relative'>
                                 {day > 0 && <Text userSelect='none' pt='8px' zIndex={1}>{day}</Text>}
 
                                 <Box w='75%' h='75%' borderRadius='200px' bg={cellColor} pos='absolute' top='5.5px' left='5px' />
@@ -67,7 +63,7 @@ export default function Calendar() {
             <AnimatePresence mode='wait'>
                 <motion.div style={{ marginTop: '20px', minHeight: '40vh', width: isLaptop ? '50%' : '100%' }} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex}>
                     {data[weekIndex] && data[weekIndex][weekDayIndex] && Object.keys(data[weekIndex][weekDayIndex]).length > 0
-                        && <VStack key={weekIndex + weekDayIndex} spacing='10px'>
+                        ? <VStack key={weekIndex + weekDayIndex} spacing='10px'>
                             {Object.keys(data[weekIndex][weekDayIndex]).map((lesson: string, i) => {
                                 const theLesson: ILesson | null = data[weekIndex][weekDayIndex][lesson];
                                 if (!theLesson) return <VStack key={i} color='white' w='100%' spacing='14px' p='10px' bg='blue.1000' borderRadius='20px' boxShadow='0px 4px 20px 10px rgba(34, 60, 80, 0.5)'>
@@ -85,7 +81,7 @@ export default function Calendar() {
                                     <HStack w='100%' justify='space-between' align='end'>
                                         <Text h='30px' color='gray.400' fontSize='14px' fontWeight={600} pt='5px' pl='4px'>{lessonIntervals[i]}</Text>
 
-                                        <HStack spacing='8px'>
+                                        <HStack spacing='8px' fontWeight={500}>
                                             <Text align='center' fontSize='14px' p='4px 10px' borderRadius='20px' bg='green.500'>чилл</Text>
 
                                             <HStack bg='red.400' p='4px 10px' borderRadius='20px'>
@@ -125,7 +121,7 @@ export default function Calendar() {
                                     <HStack w='100%' justify='space-between' align='end'>
                                         <Text h='30px' color='gray.400' fontSize='14px' fontWeight={600} pt='5px' pl='4px'>{lessonIntervals[i]}</Text>
 
-                                        <HStack spacing='8px'>
+                                        <HStack spacing='8px' fontWeight={500}>
                                             <Text align='center' fontSize='14px' p='4px 10px' borderRadius='20px' bg={PROPERTY_LESSON_TYPE === LessonTypes['пр'] ? 'blue.500' : 'purple.700'}>{PROPERTY_LESSON_TYPE === 'П' ? 'пр' : 'лек'}</Text>
 
                                             <HStack bg='red.400' p='4px 10px' borderRadius='20px'>
@@ -136,7 +132,8 @@ export default function Calendar() {
                                     </HStack>
                                 </VStack>;
                             })}
-                        </VStack>}
+                        </VStack>
+                        : <Text align='center' color='white'>{weekDayIndex === 6 ? 'нахер ты на воскресенье нажал' : 'Пар нет!'}</Text>}
                 </motion.div>
             </AnimatePresence>
         </VStack>
