@@ -1,7 +1,7 @@
 'use client';
 import { useSelector } from "@/redux/hooks";
-import { Image, Text, ListItem, OrderedList, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, Spinner, VStack, HStack, Icon, SimpleGrid, Flex } from "@chakra-ui/react";
-import { headerLinks, IHomework } from "@/misc";
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, HStack, Icon, Image, ListItem, OrderedList, Spinner, Text, VStack } from "@chakra-ui/react";
+import { IHomework } from "@/misc";
 import Link from "next/link";
 import { BiEdit } from "react-icons/bi";
 import { useRouter } from "next/navigation";
@@ -25,12 +25,12 @@ export default function Home() {
             <Accordion w='100%' color='white' allowToggle>
                 {[...hw.filter(x => x.content.length > 0 || x.image), ...hw.filter(x => x.content.length <= 0 && !x.image)].map((x: IHomework, i) => <AccordionItem key={i}>
                     {x.content.length > 0 || x.image
-                        ? <AccordionButton fontSize='18px' w='100%'>
+                        ? <AccordionButton fontSize='16px' w='100%' justifyContent='end'>
                             <Text w='90%'>{x.subject}<br />Обновлено: {x.updatedAt}</Text>
                             <AccordionIcon />
                         </AccordionButton>
-                        : <AccordionButton fontSize='18px' w='100%' opacity={0.5}>
-                            <Text w='90%'>{x.subject}<br />Нет ДЗ</Text>
+                        : <AccordionButton fontSize='16px' w='100%' opacity={0.5}>
+                            <Text w='100%'>{x.subject}<br />Нет ДЗ</Text>
                         </AccordionButton>}
 
                     {(x.content.length > 0 || x.image) && <AccordionPanel fontSize='16px'>
