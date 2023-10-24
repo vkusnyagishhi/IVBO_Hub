@@ -21,6 +21,7 @@ class Settings:
         "files",
         "homework",
         "disciplines",
+        "posts",
         "endpoint",
     ]
 

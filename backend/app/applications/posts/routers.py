@@ -25,6 +25,16 @@ async def read_posts(
     posts = await Post.all().limit(limit=limit).offset(skip)
     return posts
 
+
+@router.get("/my_posts", response_model=List[BasePostOut], status_code=200)
+async def read_posts_me(
+    current_user: User = Depends(get_current_user)
+):
+    posts = await Post.filter(user=current_user)
+
+    return posts
+
+
 @router.post("/", response_model=BasePostOut, status_code=201)
 async def create_post(
     *,

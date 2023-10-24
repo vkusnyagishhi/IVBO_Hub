@@ -19,6 +19,7 @@ from app.applications.users.routers import router as users_router
 from app.applications.files.routers import router as files_router
 from app.applications.homework.routers import router as homework_router
 from app.applications.disciplines.routers import router as disciplines_router
+from app.applications.posts.routers import router as posts_router
 from app.applications.endpoint.routers import router as endpoint_router
 
 from aerich import Command
@@ -104,4 +105,5 @@ def register_routers(app: FastAPI):
     app.include_router(files_router, prefix="/files", tags=["files"])
     app.include_router(homework_router, prefix="/homework", tags=["homework"])
     app.include_router(disciplines_router, prefix="/discipline", tags=["disciplines"])
+    app.include_router(posts_router, prefix="/posts", tags=["posts"])
     app.include_router(endpoint_router, prefix="/endpoint", tags=["endpoint"])
