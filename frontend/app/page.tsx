@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 
 export default function Calendar() {
     const { hw, isLaptop, table: data } = useSelector(state => state.misc);
-    const [[weekIndex, weekDayIndex], setSelected] = useState([0, 6]);
+    const [[weekIndex, weekDayIndex], setSelected] = useState([0, 7]);
     const [modalContent, setModalContent] = useState<IHomework>();
     const { isOpen, onClose, onOpen } = useDisclosure();
     const router = useRouter();
@@ -133,7 +133,7 @@ export default function Calendar() {
                                 </VStack>;
                             })}
                         </VStack>
-                        : <Text align='center' color='white'>{weekDayIndex === 6 ? 'нахер ты на воскресенье нажал' : 'Пар нет!'}</Text>}
+                        : (weekDayIndex < 7 && <Text align='center' color='white'>{weekDayIndex === 6 ? 'нахер ты на воскресенье нажал' : 'Пар нет!'}</Text>)}
                 </motion.div>
             </AnimatePresence>
         </VStack>
