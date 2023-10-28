@@ -31,12 +31,12 @@ export default function Calendar() {
                         {week.map((dayTable: any, j) => {
                             const isEmpty = dayTable.every((l: any) => !l);
                             const now = new Date();
-                            let day = 7 * i + j + 2;
-                            let month = 9;
+                            let day = 7 * i + j + 23;
+                            let month = 10;
 
                             if (day > 31) {
                                 day -= 31;
-                                month = 10;
+                                month = 11;
                             }
 
                             const cellColor = weekIndex === i && weekDayIndex === j
@@ -86,7 +86,7 @@ export default function Calendar() {
 
                                             <HStack bg='red.400' p='4px 10px' borderRadius='20px'>
                                                 <Icon as={FaHouse} mt='-2px' />
-                                                <Text fontSize='14px'>дома</Text>
+                                                <Text fontSize='14px'>{i > 0 ? 'не дома :(' : 'дома :)'}</Text>
                                             </HStack>
                                         </HStack>
                                     </HStack>
