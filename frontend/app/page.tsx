@@ -32,11 +32,11 @@ export default function Calendar() {
                             const isEmpty = dayTable.every((l: any) => !l);
                             const now = new Date();
                             let day = 7 * i + j + 23;
-                            let month = 10;
+                            let month = 9;
 
                             if (day > 31) {
                                 day -= 31;
-                                month = 11;
+                                month = 10;
                             }
 
                             const cellColor = weekIndex === i && weekDayIndex === j
