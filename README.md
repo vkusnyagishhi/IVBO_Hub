@@ -14,16 +14,20 @@
 - Tortoise orm
 - PostgreSQL
 #### Used stack for frontend
-- TypeScript as main language
-- React 
+- React.js (TypeScript)
+- Next.js framework
+- Chakra UI as a components library
+- ESLint
 ## What can this thing do
-The application provides group member to:
+The application provides the group member to:
 - Get access to check schedule of his group for any day
 - View, create and edit homework from any day
 - Store his file in the storage and get acces to their any moment
 ## Authentication
-The application do not need any private information except for Telegram username and id\
+The application doesn't request/store any private information except for Telegram username and id\
 We use industry-standard OAuth 2.0 protocol for authorization so your private files in the storage are safe
+## Info sources
+We are using our self-hosted database and official [MIREA Ninja's Timetable API](https://timetable.mirea.ru/docs)
 ## 🔗 Links
 #### Application website
 
