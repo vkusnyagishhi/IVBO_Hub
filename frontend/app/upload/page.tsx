@@ -1,5 +1,5 @@
 'use client';
-import { Button, Divider, Heading, HStack, IconButton, Input, Link as ChakraLink, Text, Tooltip, useToast, VStack } from "@chakra-ui/react";
+import { Button, Divider, Heading, HStack, IconButton, Input, Link as ChakraLink, Popover, PopoverBody, PopoverCloseButton, PopoverContent, PopoverTrigger, Text, Tooltip, useToast, VStack } from "@chakra-ui/react";
 import axios from "axios";
 import { ChangeEvent, useRef, useState } from "react";
 import { iconButtonStyles, toasts } from "@/utils/misc";
@@ -105,24 +105,41 @@ export default function Files() {
                                     }} {...iconButtonStyles} />
                                 </Tooltip>
 
-                                <Tooltip label='Удалить файл' hasArrow placement='top'>
-                                    <IconButton aria-label='delete' icon={<BiSolidTrashAlt />} onClick={() => {
-                                        axios
-                                            .post(
-                                                'https://api.twodev.cc/ivbo/delete',
-                                                { file: f },
-                                                { headers: { 'x-access-token': localStorage.getItem('hash') } }
-                                            )
-                                            .then(res => {
-                                                if (res.data === 200) {
-                                                    dispatch(deleteFile(f));
-                                                    if (!toast.isActive('success-toast')) toast(toasts.success('Файл удалён!'));
-                                                } else {
-                                                    if (!toast.isActive('error-toast')) toast(toasts.error());
-                                                }
-                                            });
-                                    }} {...iconButtonStyles} />
-                                </Tooltip>
+                                <Popover>
+                                    <PopoverTrigger>
+                                        {/*<Tooltip label='Удалить файл' hasArrow placement='top'>*/}
+                                        <IconButton aria-label='delete' icon={<BiSolidTrashAlt />} {...iconButtonStyles} />
+                                        {/*</Tooltip>*/}
+                                    </PopoverTrigger>
+
+                                    <PopoverContent bg='blue.900' border='none'>
+                                        {/*<PopoverArrow bg='black' />*/}
+                                        <PopoverCloseButton />
+                                        <PopoverBody fontSize='16px'>
+                                            <VStack>
+                                                <Text align='center'>Вы уверены, что хотите удалить файл <b>{f}</b>?</Text>
+                                                <HStack>
+                                                    <Button onClick={() => {
+                                                        axios
+                                                            .post(
+                                                                'https://api.twodev.cc/ivbo/delete',
+                                                                { file: f },
+                                                                { headers: { 'x-access-token': localStorage.getItem('hash') } }
+                                                            )
+                                                            .then(res => {
+                                                                if (res.data === 200) {
+                                                                    dispatch(deleteFile(f));
+                                                                    if (!toast.isActive('success-toast')) toast(toasts.success('Файл удалён!'));
+                                                                } else {
+                                                                    if (!toast.isActive('error-toast')) toast(toasts.error());
+                                                                }
+                                                            });
+                                                    }}>Да</Button>
+                                                </HStack>
+                                            </VStack>
+                                        </PopoverBody>
+                                    </PopoverContent>
+                                </Popover>
                             </HStack>
                         </HStack>)}
                     </VStack>

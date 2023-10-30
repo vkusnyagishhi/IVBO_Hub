@@ -17,7 +17,8 @@ export interface IUser {
 
 export enum LessonTypes {
     'пр' = 'П',
-    'лек' = 'Л'
+    'лек' = 'Л',
+    'лаб' = 'ЛБ'
 }
 
 export enum HWTypes {

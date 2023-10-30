@@ -1,23 +1,37 @@
 'use client';
 import { Box, Button, HStack, Icon, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, OrderedList, Spinner, Text, useDisclosure, VStack } from "@chakra-ui/react";
 import { useState } from "react";
-import { useSelector } from "@/redux/hooks";
+import { useDispatch, useSelector } from "@/redux/hooks";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaBook, FaHouse } from "react-icons/fa6";
 import { HWTypes, IHomework, ILesson, lessonIntervals, LessonTypes } from "@/utils/misc";
 import { useRouter } from "next/navigation";
+import { setSelected, swipe } from "@/redux/miscSlice";
 
 export default function Calendar() {
-    const { hw, isLaptop, table: data } = useSelector(state => state.misc);
-    const [[weekIndex, weekDayIndex], setSelected] = useState([0, 7]);
+    const { hw, isLaptop, table: data, calendarSelected: [weekIndex, weekDayIndex] } = useSelector(state => state.misc);
     const [modalContent, setModalContent] = useState<IHomework>();
     const { isOpen, onClose, onOpen } = useDisclosure();
     const router = useRouter();
+    const dispatch = useDispatch();
 
-    // useEffect(() => {
-    //     const today = new Date().getDate() + 1;
-    //     setSelected([Math.floor(today / 4) - 2, Math.floor(today / 7) - 3]);
-    // }, []);
+    const [touchStart, setTouchStart] = useState(null);
+    const [touchEnd, setTouchEnd] = useState(null);
+    const [rightDir, setRightDir] = useState(true);
+
+    const minSwipeDistance = 50;
+    const onTouchStart = (e: any) => {
+        setTouchEnd(null);
+        setTouchStart(e.targetTouches[0].clientX);
+    }
+    const onTouchMove = (e: any) => setTouchEnd(e.targetTouches[0].clientX);
+    const onTouchEnd = () => {
+        if (!touchStart || !touchEnd) return;
+        const distance = touchStart - touchEnd;
+        const isLeftSwipe = distance > minSwipeDistance;
+        const isRightSwipe = distance < -minSwipeDistance;
+        if (isLeftSwipe || isRightSwipe) dispatch(swipe(isLeftSwipe ? 1 : -1));
+    }
 
     return <>
         <VStack w='90%' minH='100vh' spacing='30px'>
@@ -44,14 +58,14 @@ export default function Calendar() {
                                     ? 'green.600'
                                     : 'none';
 
-                            return <VStack w='40px' h='40px' color='white' key={j} _hover={{ cursor: 'pointer' }} transition='0.2s' onClick={() => setSelected([i, j])} pos='relative'>
+                            return <VStack w='40px' h='40px' color='white' key={j} _hover={{ cursor: 'pointer' }} transition='0.2s' onClick={() => dispatch(setSelected([i, j]))} pos='relative'>
                                 {day > 0 && <Text userSelect='none' pt='8px' zIndex={1}>{day}</Text>}
 
                                 <Box w='75%' h='75%' borderRadius='200px' bg={cellColor} pos='absolute' top='5.5px' left='5px' />
 
                                 <HStack pos='absolute' bottom='-5px' spacing='2px'>
                                     {data[i][j].filter((x: ILesson | null) => x?.PROPERTY_LESSON_TYPE).map((x: any, i: number) =>
-                                        <Box key={i} w='6px' h='6px' bg={x.PROPERTY_LESSON_TYPE === 'П' ? 'blue.400' : 'purple.500'} borderRadius='200px' />)}
+                                        <Box key={i} w='6px' h='6px' bg={x.PROPERTY_LESSON_TYPE === 'П' ? 'blue.400' : (x.PROPERTY_LESSON_TYPE === 'ЛБ' ? 'red.300' : 'purple.500')} borderRadius='200px' />)}
                                 </HStack>
                             </VStack>;
                         })}
@@ -60,7 +74,7 @@ export default function Calendar() {
             </VStack>
 
             <AnimatePresence mode='wait'>
-                <motion.div style={{ marginTop: '20px', minHeight: '40vh', width: isLaptop ? '50%' : '100%' }} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex}>
+                <motion.div onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} style={{ marginTop: '20px', minHeight: '40vh', width: isLaptop ? '50%' : '100%' }} initial={{ opacity: 0, x: rightDir ? 10 : -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: rightDir ? -10 : 10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex}>
                     {data[weekIndex] && data[weekIndex][weekDayIndex] && Object.keys(data[weekIndex][weekDayIndex]).length > 0
                         ? <VStack key={weekIndex + weekDayIndex} spacing='10px'>
                             {Object.keys(data[weekIndex][weekDayIndex]).map((lesson: string, i) => {
@@ -100,7 +114,7 @@ export default function Calendar() {
                                 return <VStack key={i} color='white' w='100%' spacing='14px' p='10px' bg='blue.1000' borderRadius='20px' boxShadow='0px 4px 20px 10px rgba(34, 60, 80, 0.5)'>
                                     <HStack w='100%' justify='space-between'>
                                         <HStack w='100%' spacing='10px'>
-                                            <Text w='30px' h='30px' fontWeight={600} borderRadius='full' bg={PROPERTY_LESSON_TYPE === LessonTypes['пр'] ? 'blue.400' : 'purple.500'} align='center' pt='3px'>{i + 1}</Text>
+                                            <Text w='30px' h='30px' fontWeight={600} borderRadius='full' bg={PROPERTY_LESSON_TYPE === LessonTypes['пр'] ? 'blue.400' : (PROPERTY_LESSON_TYPE === LessonTypes['лаб'] ? 'red.300' : 'purple.500')} align='center' pt='3px'>{i + 1}</Text>
 
                                             <VStack w='calc(100% - 30px)' align='start' spacing='2px'>
                                                 <Text fontWeight={500}>{PROPERTY_DISCIPLINE_NAME}</Text>
@@ -121,7 +135,7 @@ export default function Calendar() {
                                         <Text h='30px' color='gray.400' fontSize='14px' fontWeight={600} pt='5px' pl='4px'>{lessonIntervals[i]}</Text>
 
                                         <HStack spacing='8px' fontWeight={500}>
-                                            <Text align='center' fontSize='14px' p='4px 10px' borderRadius='20px' bg={PROPERTY_LESSON_TYPE === LessonTypes['пр'] ? 'blue.500' : 'purple.700'}>{PROPERTY_LESSON_TYPE === 'П' ? 'пр' : 'лек'}</Text>
+                                            <Text align='center' fontSize='14px' p='4px 10px' borderRadius='20px' bg={PROPERTY_LESSON_TYPE === LessonTypes['пр'] ? 'blue.500' : (PROPERTY_LESSON_TYPE === LessonTypes['лаб'] ? 'red.300' : 'purple.700')}>{PROPERTY_LESSON_TYPE === 'П' ? 'пр' : (PROPERTY_LESSON_TYPE === LessonTypes['лаб'] ? 'лаб' : 'лек')}</Text>
 
                                             <HStack bg='red.400' p='4px 10px' borderRadius='20px'>
                                                 <Icon as={FaHouse} mt='-2px' />

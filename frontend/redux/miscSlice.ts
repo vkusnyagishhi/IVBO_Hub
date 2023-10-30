@@ -7,6 +7,7 @@ interface MiscState {
     hw: IHomework[];
     table: any[];
     version: string;
+    calendarSelected: number[];
     editingHWs: string[];
 }
 
@@ -15,6 +16,7 @@ const initialState: MiscState = {
     hw: [],
     table: [],
     version: 'fetching data...',
+    calendarSelected: [0, 7],
     editingHWs: []
 };
 
@@ -26,6 +28,7 @@ export const miscSlice = createSlice({
             Object.assign(state.hw, action.payload.hw);
             Object.assign(state.table, action.payload.table);
             state.version = action.payload.version;
+            if (new Date().getDay() !== 7) state.calendarSelected = [action.payload.currentWeek, new Date().getDay() - 1];
         },
         setIsLaptop: (state, action: PayloadAction<boolean>) => {
             state.isLaptop = action.payload;
@@ -50,9 +53,20 @@ export const miscSlice = createSlice({
         },
         removeEditingHW: (state, action: PayloadAction<string>) => {
             state.editingHWs = state.editingHWs.filter((hw: string) => hw !== action.payload);
+        },
+        setSelected: (state, action: PayloadAction<number[]>) => {
+            state.calendarSelected = action.payload;
+        },
+        swipe: (state, action: PayloadAction<number>) => {
+            const weekIndex = state.calendarSelected[0];
+            const dayIndex = state.calendarSelected[1] + action.payload;
+
+            if (dayIndex > 5) state.calendarSelected = [weekIndex + 1, 0];
+            else if (dayIndex < 0) state.calendarSelected = [weekIndex - 1, 5];
+            else state.calendarSelected = [weekIndex, dayIndex];
         }
     }
 })
 
-export const { setData, setIsLaptop, editHW, addHWField, removeHWField, deletePhoto, addEditingHW, removeEditingHW } = miscSlice.actions;
+export const { setData, setIsLaptop, editHW, addHWField, removeHWField, deletePhoto, addEditingHW, removeEditingHW, setSelected, swipe } = miscSlice.actions;
 export default miscSlice.reducer;
