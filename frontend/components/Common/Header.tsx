@@ -2,7 +2,7 @@
 import { HStack, Icon, Text } from "@chakra-ui/react";
 import { usePathname, useRouter } from 'next/navigation';
 import { useSelector } from "@/redux/hooks";
-import { headerLinks } from "@/misc";
+import { headerLinks } from "@/utils/misc";
 
 export function Header() {
     const router = useRouter();

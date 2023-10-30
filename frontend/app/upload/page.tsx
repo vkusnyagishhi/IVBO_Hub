@@ -2,7 +2,7 @@
 import { Button, Divider, Heading, HStack, IconButton, Input, Link as ChakraLink, Text, Tooltip, useToast, VStack } from "@chakra-ui/react";
 import axios from "axios";
 import { ChangeEvent, useRef, useState } from "react";
-import { iconButtonStyles, toasts } from "@/misc";
+import { iconButtonStyles, toasts } from "@/utils/misc";
 import { TgLoginButton } from "@/components/Common";
 import { useDispatch, useSelector } from "@/redux/hooks";
 import { addFile, addTrusted, deleteFile, removeTrusted } from "@/redux/authSlice";

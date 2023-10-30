@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useSelector } from "@/redux/hooks";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaBook, FaHouse } from "react-icons/fa6";
-import { HWTypes, IHomework, ILesson, lessonIntervals, LessonTypes } from "@/misc";
+import { HWTypes, IHomework, ILesson, lessonIntervals, LessonTypes } from "@/utils/misc";
 import { useRouter } from "next/navigation";
 
 export default function Calendar() {
@@ -29,7 +29,6 @@ export default function Calendar() {
                 {data.length > 0
                     ? data.map((week: object[], i) => <HStack key={i} color='white' spacing='10px'>
                         {week.map((dayTable: any, j) => {
-                            const isEmpty = dayTable.every((l: any) => !l);
                             const now = new Date();
                             let day = 7 * i + j + 23;
                             let month = 9;

@@ -1,7 +1,7 @@
 'use client';
 import { useSelector } from "@/redux/hooks";
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, HStack, Icon, Image, ListItem, OrderedList, Spinner, Text, VStack } from "@chakra-ui/react";
-import { IHomework } from "@/misc";
+import { IHomework } from "@/utils/misc";
 import Link from "next/link";
 import { BiEdit } from "react-icons/bi";
 import { useRouter } from "next/navigation";

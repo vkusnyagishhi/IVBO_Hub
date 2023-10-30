@@ -11,6 +11,7 @@ export interface IHomework {
 
 export interface IUser {
     tg_username: string;
+    tg_id: number;
     trusted: string[];
 }
 

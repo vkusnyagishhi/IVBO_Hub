@@ -1,19 +1,21 @@
-import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { IHomework } from "@/misc";
+import { createSlice } from '@reduxjs/toolkit';
+import { IHomework } from "@/utils/misc";
 
 interface MiscState {
     isLaptop: boolean;
     hw: IHomework[];
     table: any[];
     version: string;
+    editingHWs: string[];
 }
 
 const initialState: MiscState = {
     isLaptop: false,
     hw: [],
     table: [],
-    version: 'fetching data...'
+    version: 'fetching data...',
+    editingHWs: []
 };
 
 export const miscSlice = createSlice({
@@ -42,9 +44,15 @@ export const miscSlice = createSlice({
         },
         deletePhoto: (state, action: PayloadAction<any>) => {
             state.hw[action.payload].image = null;
+        },
+        addEditingHW: (state, action: PayloadAction<string>) => {
+            state.editingHWs.push(action.payload);
+        },
+        removeEditingHW: (state, action: PayloadAction<string>) => {
+            state.editingHWs = state.editingHWs.filter((hw: string) => hw !== action.payload);
         }
     }
 })
 
-export const { setData, setIsLaptop, editHW, addHWField, removeHWField, deletePhoto } = miscSlice.actions;
+export const { setData, setIsLaptop, editHW, addHWField, removeHWField, deletePhoto, addEditingHW, removeEditingHW } = miscSlice.actions;
 export default miscSlice.reducer;

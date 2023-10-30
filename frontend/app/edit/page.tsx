@@ -1,15 +1,15 @@
 'use client';
 import { useDispatch, useSelector } from "@/redux/hooks";
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Button, HStack, Icon, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Textarea, useDisclosure, useToast, VStack } from "@chakra-ui/react";
-import { IHomework, toasts } from "@/misc";
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Button, HStack, Icon, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Textarea, useDisclosure, useToast, VStack } from "@chakra-ui/react";
+import { IHomework, toasts } from "@/utils/misc";
 import { ChangeEvent, useRef, useState } from "react";
-import { editHW, addHWField, removeHWField, deletePhoto } from "@/redux/miscSlice";
+import { addHWField, deletePhoto, editHW, removeHWField } from "@/redux/miscSlice";
 import axios from "axios";
 import { TgLoginButton } from "@/components/Common";
 import { AiFillBulb } from "react-icons/ai";
 
 export default function Admin() {
-    const { isOpen, onOpen, onClose: onCloseRaw } = useDisclosure();
+    const { isOpen, onOpen: onOpenRaw, onClose: onCloseRaw } = useDisclosure();
     const dispatch = useDispatch();
     const toast = useToast();
     const [activated, setActivated] = useState(['']);
@@ -17,18 +17,25 @@ export default function Admin() {
     const [selected, setSelected] = useState(0);
     const [uploaded, setUploaded] = useState(false);
     const file = useRef(new FormData());
-    const { hw, isLaptop } = useSelector(state => state.misc);
+    const { hw, isLaptop, editingHWs } = useSelector(state => state.misc);
     const { user } = useSelector(state => state.auth);
+
+    function onOpen() {
+        dispatch({ type: 'socket/send', payload: { action: 'opened', subject: hw[selected].subject } });
+        onOpenRaw();
+    }
 
     function onClose() {
         setSelected(0);
+        dispatch({ type: 'socket/send', payload: { action: 'closed', subject: hw[selected].subject } });
         onCloseRaw();
     }
 
     return user && hw.length > 0
         ? <>
             <VStack spacing='20px' w={isLaptop ? '30%' : '50%'}>
-                {hw.map((x: IHomework, i) => <Button w='100%' h='50px' fontSize='20px' key={i} bg='gray.600' _hover={{ bg: 'gray.500' }} _active={{ bg: 'gray.400' }} color='white' onClick={() => {
+                {hw.map((x: IHomework, i) => <Button opacity={editingHWs.includes(x.subject) ? 0.5 : 1} w='100%' h='50px' fontSize='20px' key={i} bg='gray.600' _hover={{ bg: 'gray.500' }} _active={{ bg: 'gray.400' }} color='white' onClick={() => {
+                    if (editingHWs.includes(x.subject)) return;
                     setSelected(i);
                     onOpen();
                 }}>{x.subject}</Button>)}
@@ -76,9 +83,7 @@ export default function Admin() {
                                                 setLoading(true);
                                                 axios.post(
                                                     'https://api.twodev.cc/ivbo/hw/unupload',
-                                                    {
-                                                        subject: hw[selected].subject.split(' ')[1]
-                                                    },
+                                                    { subject: hw[selected].subject.split(' ')[1] },
                                                     { headers: { 'x-access-token': localStorage.getItem('hash') } }
                                                 ).then(res => {
                                                     setLoading(false);

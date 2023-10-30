@@ -1,5 +1,5 @@
 import TelegramLoginButton, { TelegramUser } from "telegram-login-button";
-import { toasts } from "@/misc";
+import { toasts } from "@/utils/misc";
 import { setAuthData } from "@/redux/authSlice";
 import { useToast } from "@chakra-ui/react";
 import { useDispatch } from "@/redux/hooks";

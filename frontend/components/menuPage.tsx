@@ -1,7 +1,7 @@
 'use client';
 import { useSelector } from "@/redux/hooks";
-import { Text, VStack, Icon, SimpleGrid, Heading } from "@chakra-ui/react";
-import { headerLinks } from "@/misc";
+import { Heading, Icon, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import { headerLinks } from "@/utils/misc";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
