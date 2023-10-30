@@ -19,7 +19,7 @@ export default function Calendar() {
     const [touchEnd, setTouchEnd] = useState(null);
     const [rightDir, setRightDir] = useState(true);
 
-    const minSwipeDistance = 50;
+    const minSwipeDistance = 30;
     const onTouchStart = (e: any) => {
         setTouchEnd(null);
         setTouchStart(e.targetTouches[0].clientX);
@@ -74,7 +74,7 @@ export default function Calendar() {
             </VStack>
 
             <AnimatePresence mode='wait'>
-                <motion.div onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} style={{ marginTop: '20px', minHeight: '40vh', width: isLaptop ? '50%' : '100%' }} initial={{ opacity: 0, x: rightDir ? 10 : -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: rightDir ? -10 : 10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex}>
+                <motion.div onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} style={{ marginTop: '20px', minHeight: '40vh', width: isLaptop ? '50%' : '100%' }} initial={{ opacity: 0, x: rightDir ? 10 : -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: rightDir ? -10 : 10 }} transition={{ duration: 0.1 }} key={weekIndex + weekDayIndex}>
                     {data[weekIndex] && data[weekIndex][weekDayIndex] && Object.keys(data[weekIndex][weekDayIndex]).length > 0
                         ? <VStack key={weekIndex + weekDayIndex} spacing='10px'>
                             {Object.keys(data[weekIndex][weekDayIndex]).map((lesson: string, i) => {
