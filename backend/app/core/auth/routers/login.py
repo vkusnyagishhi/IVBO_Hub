@@ -24,7 +24,7 @@ async def login_access_token(credentials: OAuth2PasswordRequestForm = Depends())
     user = await authenticate(credentials)
 
     if not user:
-        raise HTTPException(status_code=400, detail="Incorrect telegram username or data")
+        raise HTTPException(status_code=400, detail="Incorrect telegram data or hash")
     access_token_expires = timedelta(minutes=settings.JWT_ACCESS_TOKEN_EXPIRE_MINUTES)
 
     return {

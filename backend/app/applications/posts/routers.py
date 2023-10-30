@@ -20,7 +20,7 @@ router = APIRouter()
 @router.get("/", response_model=List[BasePostOut], status_code=200)
 async def read_posts(
     skip: int = 0,
-    limit: int = 0,
+    limit: int = 100,
 ):
     posts = await Post.all().limit(limit=limit).offset(skip)
     return posts
