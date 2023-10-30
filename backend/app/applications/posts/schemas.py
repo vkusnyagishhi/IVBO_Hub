@@ -1,6 +1,6 @@
 import uuid
 from typing import Optional
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from pydantic import BaseModel, UUID4, validator
 

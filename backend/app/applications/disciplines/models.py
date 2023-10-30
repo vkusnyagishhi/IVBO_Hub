@@ -1,7 +1,6 @@
 from typing import Optional
 
 from tortoise import fields
-from tortoise.exceptions import DoesNotExist
 
 from app.applications.disciplines.schemas import BaseDisciplineCreate
 
