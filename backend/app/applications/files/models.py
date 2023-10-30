@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional
 
 from tortoise import fields
 from tortoise.exceptions import DoesNotExist

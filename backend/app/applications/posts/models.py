@@ -1,7 +1,4 @@
-from typing import Optional
-
 from tortoise import fields
-from tortoise.exceptions import DoesNotExist
 
 from app.applications.users.models import User
 from app.applications.files.models import File

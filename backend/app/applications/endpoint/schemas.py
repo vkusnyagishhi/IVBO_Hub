@@ -2,9 +2,9 @@ import uuid
 from typing import Optional, List
 from datetime import date, datetime
 
-from pydantic import BaseModel, UUID4, validator
+from pydantic import BaseModel
 
-from app.applications.disciplines.schemas import BaseDisciplineOutForList
+# from app.applications.disciplines.schemas import BaseDisciplineOutForList
 from app.applications.homework.schemas import BaseHomeworkOut
 
 

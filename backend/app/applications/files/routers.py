@@ -17,11 +17,8 @@ from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from fastapi import File
-from fastapi.encoders import jsonable_encoder
 from fastapi.responses import FileResponse
 from fastapi.concurrency import run_in_threadpool
-
-import string
 
 router = APIRouter()
 

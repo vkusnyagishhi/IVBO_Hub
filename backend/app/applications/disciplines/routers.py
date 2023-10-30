@@ -1,7 +1,4 @@
-from datetime import datetime, timedelta
 from typing import List
-
-from pydantic import UUID4
 
 from app.core.auth.utils.contrib import get_current_admin, get_current_user
 from app.applications.disciplines.models import Discipline
@@ -14,10 +11,7 @@ from app.applications.disciplines.schemas import (
 
 from app.settings.config import settings
 
-from fastapi import APIRouter, Depends, HTTPException
-from fastapi.encoders import jsonable_encoder
-
-import string
+from fastapi import APIRouter
 
 router = APIRouter()
 

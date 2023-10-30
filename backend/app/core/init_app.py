@@ -6,7 +6,7 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from tortoise.contrib.fastapi import register_tortoise
 
-from app.core.exceptions import APIException, on_api_exception
+from app.core.exceptions import APIException
 from app.settings.log import DEFAULT_LOGGING
 from app.settings.config import settings
 from app.core.auth.utils.contrib import get_current_admin, get_current_user

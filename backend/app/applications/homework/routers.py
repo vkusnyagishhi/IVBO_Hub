@@ -1,23 +1,16 @@
 from datetime import datetime, timedelta, date
-from typing import List, Optional
+from typing import List
 
 from pydantic import UUID4
 
 from app.applications.homework.models import Homework
 from app.applications.users.models import User
 from app.core.auth.utils.contrib import get_current_admin, get_current_user
-from app.applications.files.models import File
-from app.applications.disciplines.models import Discipline
 from app.applications.homework.schemas import BaseHomeworkCreate, BaseHomeworkDB, BaseHomeworkOut, BaseHomeworkUpdate
 
 from app.settings.config import settings
 
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi import File
-from fastapi.encoders import jsonable_encoder
-from fastapi.responses import FileResponse
-
-import string
 
 router = APIRouter()
 

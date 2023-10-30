@@ -1,17 +1,12 @@
 import logging
 import hmac
 import hashlib
-import json
-from datetime import datetime, timedelta
-from pathlib import Path
 from typing import Optional
 
 import jwt
-from fastapi import HTTPException, Security, Request
+from fastapi import HTTPException, Security
 from fastapi.security import OAuth2PasswordBearer
-from fastapi.encoders import jsonable_encoder
-# from jwt import PyJWTError
-# from jwt.exceptions import InvalidTokenError
+
 from starlette.status import HTTP_403_FORBIDDEN
 
 from app.applications.users.models import User, ShortTgToken

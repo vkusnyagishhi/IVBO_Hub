@@ -1,5 +1,4 @@
-from datetime import datetime, timedelta
-from typing import List, Optional
+from typing import List
 
 from pydantic import UUID4
 
@@ -12,7 +11,6 @@ from app.applications.posts.schemas import BasePostCreate, BasePostDB, BasePostO
 from app.settings.config import settings
 
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.encoders import jsonable_encoder
 
 router = APIRouter()
 
