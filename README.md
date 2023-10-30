@@ -14,8 +14,8 @@
 - Tortoise orm
 - PostgreSQL
 #### Used stack for frontend
-- React.js (TypeScript)
-- Next.js framework
+- TypeScript as main language
+- React.js + Next.js framework
 - Chakra UI as a components library
 - ESLint
 ## What can this thing do
