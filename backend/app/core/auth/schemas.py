@@ -8,6 +8,16 @@ class BaseProperties(BaseModel):
     @validator("uuid", pre=True, always=True, check_fields=False)
     def default_hashed_id(cls, v):
         return v or uuid.uuid4()
+    
+
+class CredentialSchema(BaseModel):
+    username: str
+    token: str
+
+    class Config:
+        schemas_extra = {
+            "example": {"username": "cherry4xo", "token": "SbjpvnBzMIpPEexbjwFPNEQkxEigXxaF"}
+        }
 
 
 class TelegramLoginData(BaseProperties):
@@ -44,6 +54,11 @@ class JWTTokenData(BaseModel):
 
 class JWTTokenPayload(BaseModel):
     user_uuid: UUID4 = None
+
+
+class TgToken(BaseModel):
+    username: str
+    short_token: str
 
 
 class Msg:

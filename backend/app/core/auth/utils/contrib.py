@@ -14,13 +14,13 @@ from fastapi.encoders import jsonable_encoder
 # from jwt.exceptions import InvalidTokenError
 from starlette.status import HTTP_403_FORBIDDEN
 
-from app.applications.users.models import User
-from app.core.auth.schemas import JWTTokenPayload, TelegramLoginData
+from app.applications.users.models import User, ShortTgToken
+from app.core.auth.schemas import JWTTokenPayload, TelegramLoginData, CredentialSchema
 from app.core.auth.utils import password
 from app.core.auth.utils.jwt import ALGORITHM
 from app.settings.config import settings
 
-reusable_oauth2 = OAuth2PasswordBearer(tokenUrl="/api/auth/login/access-token")
+reusable_oauth2 = OAuth2PasswordBearer(tokenUrl="/auth/login/access-token")
 
 
 async def get_current_user(token: str = Security(reusable_oauth2)) -> Optional[User]:
@@ -44,6 +44,28 @@ async def get_current_admin(current_user: User = Security(get_current_user)):
     return current_user
 
 
+async def authenticate(credentials: CredentialSchema) -> Optional["User"]:
+    if credentials.username:
+        user = await User.get_by_tg_username(username=credentials.username)
+        token = await ShortTgToken.get_or_none(user=user)
+    else:
+        return None
+    
+    if user is None or token is None:
+        return None
+    
+    verified, updated_token = password.verify_and_update_password(credentials.token, token.value)
+
+    if not verified:
+        return None
+    
+    if updated_token is not None:
+        token.value = updated_token
+        await token.save()
+
+    return user
+
+
 def validate(data: TelegramLoginData, secret_key: str) -> bool:
     telegram_data = data.dict(
         exclude_unset=True,
@@ -65,7 +87,7 @@ def validate(data: TelegramLoginData, secret_key: str) -> bool:
     return data.hash == calculated_hash
 
 
-async def authenticate(credentials: TelegramLoginData) -> Optional[User]:
+async def authenticate_tg(credentials: TelegramLoginData) -> Optional[User]:
     if credentials.username:
         user = await User.get_by_tg_username(username=credentials.username)
     else:

@@ -41,7 +41,7 @@ class User(BaseModel):
 
 
 class ShortTgToken(BaseModel):
-    value = fields.CharField(max_length=32, unique=True)
+    value = fields.CharField(max_length=60, unique=True)
     date = fields.DatetimeField(auto_now_add=True)
     user: fields.ForeignKeyRelation["User"] = fields.ForeignKeyField(
         "models.User", related_name="tg_auth", to_field="uuid", on_delete=fields.CASCADE

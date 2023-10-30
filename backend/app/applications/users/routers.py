@@ -62,13 +62,6 @@ async def update_user_me(user_in: BaseUserUpdate, current_user: User = Depends(g
     return current_user
 
 
-@router.delete("/me/tg_id", response_model=BaseUserOut, status_code=200)
-async def delete_user_me_tg_id(current_user: User = Depends(get_current_user)):
-    current_user.id = None
-    current_user.save()
-    return current_user
-
-
 @router.get("/me", response_model=BaseUserOut, status_code=200)
 def read_user_me(current_user: User = Depends(get_current_user)):
         return current_user
@@ -119,27 +112,27 @@ async def generate_token(
      return TgToken(token=token)
 
 
-@router.post("/telegram/get_jwt", response_model=JWTToken, status_code=200)
-async def generate_jwt_by_short_token(tg_token_in: TgTokenWithId):
-    tg_token = await ShortTgToken.filter(value=tg_token_in.token).prefetch_related("user").first()
+# @router.post("/telegram/get_jwt", response_model=JWTToken, status_code=200)
+# async def generate_jwt_by_short_token(tg_token_in: TgTokenWithId):
+#     tg_token = await ShortTgToken.filter(value=tg_token_in.token).prefetch_related("user").first()
 
-    if tg_token is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Wrong token",
-        )
+#     if tg_token is None:
+#         raise HTTPException(
+#             status_code=404,
+#             detail="Wrong token",
+#         )
      
-    user = tg_token.user
+#     user = tg_token.user
     
-    access_token_expires = timedelta(minutes=settings.JWT_ACCESS_TOKEN_EXPIRE_MINUTES)
+#     access_token_expires = timedelta(minutes=settings.JWT_ACCESS_TOKEN_EXPIRE_MINUTES)
 
-    user.tg_id = tg_token_in.id
-    await user.save()
+#     user.tg_id = tg_token_in.id
+#     await user.save()
 
-    await tg_token.delete()
+#     await tg_token.delete()
 
-    return {
-        "access_token": create_access_token(data={"user_id": str(user.uuid)}, expires_delta=access_token_expires),
-        "token_type": "bearer",
-    }
+#     return {
+#         "access_token": create_access_token(data={"user_id": str(user.uuid)}, expires_delta=access_token_expires),
+#         "token_type": "bearer",
+#     }
      
