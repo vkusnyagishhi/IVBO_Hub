@@ -36,11 +36,12 @@ async def read_posts_me(
 @router.post("/", response_model=BasePostOut, status_code=201)
 async def create_post(
     *,
-    post_in: BasePostCreate
+    post_in: BasePostCreate,
+    current_user: User = Depends(get_current_user)
 ):
     db_post = BasePostCreate(**post_in.model_dump())
-    created_post = await Post.create(db_post)
-    return create_post
+    created_post = await Post.create(db_post, user=current_user)
+    return created_post
 
 
 @router.patch("/my_posts/{uuid}", response_model=BasePostOut, status_code=201)
@@ -56,14 +57,17 @@ async def update_post_me(
             status_code=404, 
             detail="The post with this uuid does not exist"
         )
-    
-    if post.user != current_user:
+
+    if post.user_id != current_user.uuid:
         raise HTTPException(
             status_code=403, 
             detail="Not enough privileges: current user is not an admin or a creator of this post"
         )
     
-    post = await Post.update_from_dict(post_in)
+    post.update_from_dict(post_in.model_dump(exclude=["file_id"]))
+
+    if post_in.file_id is not None:
+        post.file_id = post_in.file_id
 
     await post.save()
     return post
@@ -105,7 +109,10 @@ async def update_post(
             detail="The post with this uuid does not exist"
         )
     
-    post = await Post.update_from_dict(post_in)
+    post.update_from_dict(post_in.model_dump(exclude=["file_id"]))
+
+    if post_in.file_id is not None:
+        post.file_id = post_in.file_id
 
     await post.save()
     return post

@@ -35,13 +35,13 @@ class BaseHomeworkCreate(BaseProperties):
 class BaseHomeworkUpdate(BaseProperties):
     text: Optional[str] = None
     date_deadline: date
-    picture: Optional[UUID4] = None
+    picture_id: Optional[UUID4] = None
 
 
 class BaseHomeworkDB(BaseHomework):
     text: str
-    user: UUID4
-    file: Optional[UUID4] = None
+    user_id: UUID4
+    picture_id: Optional[UUID4] = None
     datetime_edited: datetime
 
     class Config:
