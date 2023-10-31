@@ -8,9 +8,9 @@ import random
 
 class Settings:
     VERSION = "0.1.0"
-    APP_TITLE = "mirea_filedrop"
-    PROJECT_NAME = "mirea_filedrop"
-    APP_DESCRIPTION = "mirea_filedrop"
+    APP_TITLE = "IVBO_hub"
+    PROJECT_NAME = "IVBO_hub"
+    APP_DESCRIPTION = "IVBO_hub"
 
     SERVER_HOST = "localhost"
 

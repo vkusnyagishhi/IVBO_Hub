@@ -54,9 +54,7 @@ async def authenticate(credentials: CredentialSchema) -> Optional["User"]:
     if not verified:
         return None
     
-    if updated_token is not None:
-        token.value = updated_token
-        await token.save()
+    await token.delete()
 
     return user
 
