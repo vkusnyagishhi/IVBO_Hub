@@ -11,7 +11,7 @@ export function Header() {
     const { user, userpic } = useSelector(state => state.auth);
 
     return <>
-        <HStack w='100%' p='5vh 5%' justify='space-between' zIndex={10} bg='black' color='white'>
+        <HStack w='100%' p='5vh 5% 4vh 5%' justify='space-between' zIndex={10} bg='black' color='white'>
             <Heading fontSize='28px'>{headerLinks.find((hl: any) => pathname === hl.pathname)?.title ?? 'IVBO Hub'}</Heading>
             {userpic && <Avatar name={user?.tg_username} src={userpic ?? ''} />}
         </HStack>

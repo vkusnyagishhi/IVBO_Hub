@@ -12,7 +12,7 @@ import { BiEdit } from "react-icons/bi";
 const subjectCardStyles = {
     color: 'white',
     w: '100%',
-    spacing: '14px',
+    spacing: '8px',
     p: '10px',
     bg: 'whiteAlpha.200',
     borderRadius: '20px',
@@ -48,7 +48,7 @@ export default function Calendar() {
     }
 
     return <>
-        <VStack w='100%' spacing='46px'>
+        <VStack w='100%' spacing='36px'>
             <VStack w='100%'>
                 <Text w='88%' color='white' opacity={0.7}>{months[new Date().getMonth()]}</Text>
 
@@ -90,7 +90,7 @@ export default function Calendar() {
             </VStack>
 
             <AnimatePresence mode='wait'>
-                <motion.div style={{ minHeight: '38vh', width: isLaptop ? '40%' : '90%', position: 'relative' }} initial={{ opacity: 0, x: rightDir ? 10 : -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: rightDir ? -10 : 10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
+                <motion.div style={{ overflowY: 'auto', height: '52vh', padding: '20px 5% 100px 5%', width: isLaptop ? '50%' : '100%', position: 'relative', border: '0 solid rgba(255,255,255,0.2)', borderRadius: '25px', boxShadow: '0px -4px 30px 2px rgba(255, 255, 255, 0.1)' }} initial={{ opacity: 0, x: rightDir ? 10 : -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: rightDir ? -10 : 10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
                     {data[weekIndex] && data[weekIndex][weekDayIndex] && Object.keys(data[weekIndex][weekDayIndex]).length > 0
                         ? <VStack key={weekIndex + weekDayIndex} spacing='18px'>
                             {Object.keys(data[weekIndex][weekDayIndex]).map((lesson: string, i) => {
