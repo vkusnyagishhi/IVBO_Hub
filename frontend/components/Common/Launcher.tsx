@@ -2,7 +2,7 @@
 import { setData, setIsLaptop } from "@/redux/miscSlice";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from '@/redux/hooks';
-import { setAuthData } from "@/redux/authSlice";
+import { setAuthData, setUserpic } from "@/redux/authSlice";
 import axios from "axios";
 import { Text } from "@chakra-ui/react";
 
@@ -17,6 +17,7 @@ export function Launcher() {
             dispatch(setData(JSON.parse(localStorage.getItem('ivbo_data') ?? '{}')));
             axios.get('https://api.twodev.cc/ivbo/data').then(res => localStorage.setItem('ivbo_data', JSON.stringify(res.data)));
         } else */
+        if (localStorage.getItem('tg_userpic')) dispatch(setUserpic(localStorage.getItem('tg_userpic') ?? ''));
         axios.get('https://api.twodev.cc/ivbo/data').then(res => dispatch(setData(res.data)));
 
         if (localStorage.getItem('hash') && !user) axios.post('https://api.twodev.cc/ivbo/login', { hash: localStorage.getItem('hash') }).then(res => {

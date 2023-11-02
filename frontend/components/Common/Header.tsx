@@ -8,12 +8,12 @@ export function Header() {
     const router = useRouter();
     const pathname = usePathname();
     const { isLaptop } = useSelector(state => state.misc);
-    const { user } = useSelector(state => state.auth);
+    const { user, userpic } = useSelector(state => state.auth);
 
     return <>
         <HStack w='100%' p='5vh 5%' justify='space-between' zIndex={10} bg='black' color='white'>
             <Heading fontSize='28px'>{headerLinks.find((hl: any) => pathname === hl.pathname)?.title ?? 'IVBO Hub'}</Heading>
-            {user && <Avatar name={user.tg_username} src={user.tg_userpic ?? ''} />}
+            {userpic && <Avatar name={user?.tg_username} src={userpic ?? ''} />}
         </HStack>
 
         {/*<HStack w='100%' borderRadius='25px 25px 0px 0px' h='80px' bg='#02203f' pos='fixed' bottom={0} justify='space-evenly' zIndex={10} spacing={0}>*/}

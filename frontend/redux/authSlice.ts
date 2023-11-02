@@ -4,11 +4,13 @@ import { IUser } from "@/utils/misc";
 
 interface AuthState {
     user: IUser | null;
+    userpic: string | null;
     files: any;
 }
 
 const initialState: AuthState = {
     user: null,
+    userpic: null,
     files: {}
 };
 
@@ -16,6 +18,9 @@ export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
+        setUserpic: (state, action: PayloadAction<string>) => {
+            state.userpic = action.payload;
+        },
         setAuthData: (state, action: PayloadAction<object>) => {
             Object.assign(state, action.payload);
         },
@@ -39,5 +44,5 @@ export const authSlice = createSlice({
     }
 });
 
-export const { setAuthData, addFile, addTrusted, removeTrusted, deleteFile } = authSlice.actions;
+export const { setAuthData, addFile, addTrusted, removeTrusted, deleteFile, setUserpic } = authSlice.actions;
 export default authSlice.reducer;
