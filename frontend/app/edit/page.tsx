@@ -1,17 +1,19 @@
 'use client';
 import { useDispatch, useSelector } from "@/redux/hooks";
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Button, HStack, Icon, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Textarea, useDisclosure, useToast, VStack } from "@chakra-ui/react";
-import { IHomework, toasts } from "@/utils/misc";
-import { ChangeEvent, useRef, useState } from "react";
+import { HWTypes, IHomework, toasts } from "@/utils/misc";
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { addHWField, deletePhoto, editHW, removeHWField } from "@/redux/miscSlice";
 import axios from "axios";
 import { TgLoginButton } from "@/components/Common";
 import { AiFillBulb } from "react-icons/ai";
+import { useRouter } from "next/navigation";
 
 export default function Admin() {
     const { isOpen, onOpen: onOpenRaw, onClose: onCloseRaw } = useDisclosure();
     const dispatch = useDispatch();
     const toast = useToast();
+    const router = useRouter();
     const [activated, setActivated] = useState(['']);
     const [loading, setLoading] = useState(false);
     const [selected, setSelected] = useState(0);
@@ -19,17 +21,28 @@ export default function Admin() {
     const file = useRef(new FormData());
     const { hw, isLaptop, editingHWs } = useSelector(state => state.misc);
     const { user } = useSelector(state => state.auth);
+    const [openQuery, setOpenQuery] = useState(false);
 
-    function onOpen() {
-        dispatch({ type: 'socket/send', payload: { action: 'opened', subject: hw[selected].subject } });
+    const onOpen = useCallback(() => {
+        // dispatch({ type: 'socket/send', payload: { action: 'opened', subject: hw[selected].subject } });
         onOpenRaw();
-    }
+    }, [onOpenRaw]);
 
     function onClose() {
-        setSelected(0);
-        dispatch({ type: 'socket/send', payload: { action: 'closed', subject: hw[selected].subject } });
+        if (openQuery) router.push('/');
+        else setSelected(0);
+        // dispatch({ type: 'socket/send', payload: { action: 'closed', subject: hw[selected].subject } });
         onCloseRaw();
     }
+
+    useEffect(() => {
+        const open = new URL(window.location.href).searchParams.get('open');
+        if (open && !editingHWs.includes(HWTypes[open as keyof typeof HWTypes])) {
+            setOpenQuery(true);
+            setSelected(hw.findIndex((h: IHomework) => h.subject.includes(HWTypes[open as keyof typeof HWTypes])));
+            onOpen();
+        }
+    }, [editingHWs, hw, onOpen]);
 
     return user && hw.length > 0
         ? <>

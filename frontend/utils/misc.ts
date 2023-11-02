@@ -1,4 +1,3 @@
-import { MdLibraryBooks } from "react-icons/md";
 import { BsFillCalendarWeekFill, BsFillFileEarmarkEaselFill } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
 
@@ -81,11 +80,11 @@ export const toasts = {
 };
 
 export const headerLinks = [
-    {
-        pathname: '/hw',
-        icon: MdLibraryBooks,
-        title: 'Домашка'
-    },
+    // {
+    //     pathname: '/hw',
+    //     icon: MdLibraryBooks,
+    //     title: 'Домашка'
+    // },
     {
         pathname: '/edit',
         icon: BiEdit,

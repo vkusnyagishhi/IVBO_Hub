@@ -1,5 +1,5 @@
 'use client';
-import { Box, Button, HStack, Icon, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, OrderedList, Spinner, Text, useDisclosure, VStack } from "@chakra-ui/react";
+import { Box, Button, HStack, Icon, Image, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, OrderedList, Spinner, Text, useDisclosure, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "@/redux/hooks";
 import { AnimatePresence, motion } from "framer-motion";
@@ -7,6 +7,7 @@ import { FaBook, FaHouse } from "react-icons/fa6";
 import { HWTypes, IHomework, ILesson, lessonIntervals, LessonTypes } from "@/utils/misc";
 import { useRouter } from "next/navigation";
 import { setSelected, swipe } from "@/redux/miscSlice";
+import { BiEdit } from "react-icons/bi";
 
 export default function Calendar() {
     const { hw, isLaptop, table: data, calendarSelected: [weekIndex, weekDayIndex] } = useSelector(state => state.misc);
@@ -55,16 +56,16 @@ export default function Calendar() {
                                 month = 10;
                             }
 
-                            const cellColor = weekIndex === i && weekDayIndex === j
-                                ? 'linear-gradient(150deg, rgba(69,112,209,1) 0%, rgba(88,15,112,1) 100%)'
-                                : now.getDate() === day && now.getMonth() === month
-                                    ? 'green.600'
-                                    : 'none';
+                            const isSelected = weekIndex === i && weekDayIndex === j;
 
-                            return <VStack w='40px' h='40px' color='white' key={j} _hover={{ cursor: 'pointer' }} transition='0.2s' onClick={() => dispatch(setSelected([i, j]))} pos='relative'>
-                                {day > 0 && <Text userSelect='none' pt='8px' zIndex={1}>{day}</Text>}
+                            return <VStack w='40px' h='40px' color='white' key={j} _hover={{ cursor: 'pointer' }} onClick={() => {
+                                setRightDir(true);
+                                dispatch(setSelected([i, j]));
+                            }} pos='relative'>
+                                {day > 0 && <Text userSelect='none' pt='8px' zIndex={2}>{day}</Text>}
 
-                                <Box w='75%' h='75%' borderRadius='200px' bg={cellColor} pos='absolute' top='5.5px' left='5px' />
+                                <Box zIndex={1} w='75%' h='75%' borderRadius='200px' bg={isSelected ? 'linear-gradient(150deg, rgba(69,112,209,1) 0%, rgba(88,15,112,1) 100%)' : 'none'} opacity={isSelected ? 1 : 0} pos='absolute' transition='0.15s' top='5.5px' left='5px' />
+                                {now.getDate() === day && now.getMonth() === month && <Box w='75%' h='75%' borderRadius='200px' bg='green.600' pos='absolute' top='5.5px' left='5px' />}
 
                                 <HStack pos='absolute' bottom='-5px' spacing='2px'>
                                     {data[i][j].filter((x: ILesson | null) => x?.PROPERTY_LESSON_TYPE).map((x: any, i: number) =>
@@ -77,7 +78,7 @@ export default function Calendar() {
             </VStack>
 
             <AnimatePresence mode='wait'>
-                <motion.div onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} style={{ marginTop: '20px', minHeight: '40vh', width: isLaptop ? '50%' : '100%' }} initial={{ opacity: 0, x: rightDir ? 10 : -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: rightDir ? -10 : 10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex}>
+                <motion.div onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} style={{ marginTop: '20px', minHeight: '40vh', width: isLaptop ? '50%' : '100%', position: 'relative' }} initial={{ opacity: 0, x: rightDir ? 10 : -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: rightDir ? -10 : 10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex}>
                     {data[weekIndex] && data[weekIndex][weekDayIndex] && Object.keys(data[weekIndex][weekDayIndex]).length > 0
                         ? <VStack key={weekIndex + weekDayIndex} spacing='10px'>
                             {Object.keys(data[weekIndex][weekDayIndex]).map((lesson: string, i) => {
@@ -115,7 +116,7 @@ export default function Calendar() {
                                 );
 
                                 return <VStack key={i} color='white' w='100%' spacing='14px' p='10px' bg='blue.1000' borderRadius='20px' boxShadow='0px 4px 20px 10px rgba(34, 60, 80, 0.5)'>
-                                    <HStack w='100%' justify='space-between'>
+                                    <HStack w='100%' justify='space-between' align='start'>
                                         <HStack w='100%' spacing='10px'>
                                             <Text w='30px' h='30px' fontWeight={600} borderRadius='full' bg={PROPERTY_LESSON_TYPE === LessonTypes['пр'] ? 'blue.400' : (PROPERTY_LESSON_TYPE === LessonTypes['лаб'] ? 'red.300' : 'purple.500')} align='center' pt='3px'>{i + 1}</Text>
 
@@ -125,11 +126,13 @@ export default function Calendar() {
                                             </VStack>
                                         </HStack>
 
-                                        {HW && <HStack borderRadius='20px' bg='blue.700' p='3px 10px' onClick={() => {
-                                            setModalContent(HW);
-                                            onOpen();
+                                        {Object.keys(HWTypes).includes(PROPERTY_DISCIPLINE_NAME) && PROPERTY_LESSON_TYPE === LessonTypes['пр'] && <HStack borderRadius='20px' bg={HW ? 'blue.500' : 'blue.600'} p='4px 18px' spacing='5px' boxShadow='0px 4px 20px 6px rgba(34, 60, 80, 0.6)' onClick={() => {
+                                            if (HW) {
+                                                setModalContent(HW);
+                                                onOpen();
+                                            } else router.push('/edit?open=' + PROPERTY_DISCIPLINE_NAME);
                                         }} _hover={{ cursor: 'pointer' }}>
-                                            <Icon as={FaBook} />
+                                            <Icon as={HW ? FaBook : BiEdit} boxSize='20px' pt='2px' />
                                             <Text userSelect='none' fontWeight={500}>ДЗ</Text>
                                         </HStack>}
                                     </HStack>
@@ -150,22 +153,31 @@ export default function Calendar() {
                             })}
                         </VStack>
                         : (weekDayIndex < 7 && <Text align='center' color='white'>{weekDayIndex === 6 ? 'нахер ты на воскресенье нажал' : 'Пар нет!'}</Text>)}
+
+                    {/*<HStack w='100%' pos='absolute' bottom='-20px' px='26px' color='white' opacity={0.5} spacing='14px'>*/}
+                    {/*    <Icon as={FaHandPointDown} boxSize='30px' />*/}
+                    {/*    <Text fontSize='16px'>Изменение ДЗ - по кнопке</Text>*/}
+                    {/*</HStack>*/}
                 </motion.div>
             </AnimatePresence>
         </VStack>
 
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
             <ModalOverlay />
-            <ModalContent w='90vw'>
+            <ModalContent w='90vw' boxShadow='0px 4px 20px 10px rgba(40, 60, 80, 0.3)'>
                 <ModalHeader color='white'>{modalContent?.subject}</ModalHeader>
                 <ModalCloseButton color='white' />
                 <ModalBody bg='blue.900' py='20px'>
-                    <OrderedList color='white'>
-                        {modalContent?.content && modalContent.content.map((c: string, i: number) => <ListItem key={i}>{c}</ListItem>)}
-                    </OrderedList>
+                    {modalContent?.content && <OrderedList color='white' spacing='10px'>
+                        {modalContent.content.map((c: string, i: number) => <ListItem key={i} fontSize='15px'>{c}</ListItem>)}
+                    </OrderedList>}
+                    {modalContent?.image && <Image src={modalContent.image} alt='' maxH='250px' />}
                 </ModalBody>
                 <ModalFooter>
-                    <Button colorScheme='blue' onClick={() => router.push('/admin')}>Изменить</Button>
+                    <VStack spacing='10px' align='end'>
+                        <Text w='max-content' align='end' fontSize='13.5px' color='gray.500'>Обновлено: {modalContent?.updatedAt ?? 'unknown'}</Text>
+                        <Button colorScheme='blue' onClick={() => router.push('/edit?open=' + Object.keys(HWTypes)[Object.values(HWTypes).findIndex((ht: string) => modalContent?.subject.toString().includes(ht))] ?? '')}>Изменить</Button>
+                    </VStack>
                 </ModalFooter>
             </ModalContent>
         </Modal>
