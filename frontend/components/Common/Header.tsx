@@ -1,5 +1,5 @@
 'use client';
-import { HStack, Icon, Text, Tooltip } from "@chakra-ui/react";
+import { HStack, Icon, Text } from "@chakra-ui/react";
 import { usePathname, useRouter } from 'next/navigation';
 import { useSelector } from "@/redux/hooks";
 import { headerLinks } from "@/utils/misc";
@@ -17,11 +17,13 @@ export function Header() {
                 {pathname === link.pathname && <Text w='max-content' userSelect='none' fontSize='16px'>{link.title}</Text>}
             </HStack>;
 
-            return (i === 0 && !localStorage.getItem('tooltip_shown') && false
-                ? <Tooltip label='Записать ДЗ' placement='top' bg='green.600' borderRadius='25px' p='4px 8px 2px 8px' hasArrow defaultIsOpen>
-                    {TheStack}
-                </Tooltip>
-                : TheStack) as ReactNode;
+            return TheStack as ReactNode;
+
+            // return (i === 0 && !localStorage.getItem('tooltip_shown') && false
+            //     ? <Tooltip label='Записать ДЗ' placement='top' bg='green.600' borderRadius='25px' p='4px 8px 2px 8px' hasArrow defaultIsOpen>
+            //         {TheStack}
+            //     </Tooltip>
+            //     : TheStack) as ReactNode;
         })}
     </HStack>
 }
