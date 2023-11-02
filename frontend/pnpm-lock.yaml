@@ -23,6 +23,9 @@ dependencies:
   '@fontsource-variable/inter':
     specifier: ^5.0.13
     version: 5.0.13
+  '@fontsource-variable/manrope':
+    specifier: ^5.0.17
+    version: 5.0.17
   '@jridgewell/sourcemap-codec':
     specifier: ^1.4.15
     version: 1.4.15
@@ -2542,6 +2545,10 @@ packages:
 
   /@fontsource-variable/inter@5.0.13:
     resolution: {integrity: sha512-mb2WyZ2rHeqIG8aqGJIvLBOmo4sg2x7SHlsE6PUhwxbOicVzO59EZwSGtzNO3FmchuDPFVAxzcXYcR5B6jE6Qw==}
+    dev: false
+
+  /@fontsource-variable/manrope@5.0.17:
+    resolution: {integrity: sha512-oE1dCsaV6uZ2XnibphEAQF0/gnYEls79KH4Y+UI7qItv/M0bRq67AgFz/YvU7QTVQpyH07Vfs2NproMzjmNNaw==}
     dev: false
 
   /@humanwhocodes/config-array@0.11.11:

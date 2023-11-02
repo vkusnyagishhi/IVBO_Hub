@@ -1,18 +1,18 @@
 * {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
 }
 
 ::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
 html, body {
-  max-width: 100vw;
-  overflow-x: hidden;
+    max-width: 100vw;
+    overflow-x: hidden;
 }
 
 html, main, header, footer {
-  background: #0c1b28;
+    background: black;
 }

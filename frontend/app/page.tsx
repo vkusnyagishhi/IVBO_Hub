@@ -4,10 +4,20 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "@/redux/hooks";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaBook, FaHouse } from "react-icons/fa6";
-import { HWTypes, IHomework, ILesson, lessonIntervals, LessonTypes } from "@/utils/misc";
+import { HWTypes, IHomework, ILesson, lessonIntervals, LessonTypes, months } from "@/utils/misc";
 import { useRouter } from "next/navigation";
 import { setSelected, swipe } from "@/redux/miscSlice";
 import { BiEdit } from "react-icons/bi";
+
+const subjectCardStyles = {
+    color: 'white',
+    w: '100%',
+    spacing: '14px',
+    p: '10px',
+    bg: 'whiteAlpha.200',
+    borderRadius: '20px',
+    boxShadow: '0px 0px 14px 0px rgba(255, 255, 255, 0.2)'
+};
 
 export default function Calendar() {
     const { hw, isLaptop, table: data, calendarSelected: [weekIndex, weekDayIndex] } = useSelector(state => state.misc);
@@ -20,7 +30,7 @@ export default function Calendar() {
     const [touchEnd, setTouchEnd] = useState(null);
     const [rightDir, setRightDir] = useState(true);
 
-    const minSwipeDistance = 30;
+    const minSwipeDistance = 40;
     const onTouchStart = (e: any) => {
         setTouchEnd(null);
         setTouchStart(e.targetTouches[0].clientX);
@@ -38,8 +48,10 @@ export default function Calendar() {
     }
 
     return <>
-        <VStack w='90%' minH='100vh' spacing='30px'>
-            <VStack minH='40vh' justify='end'>
+        <VStack w='100%' minH='100vh' spacing='24px'>
+            <VStack w='100%' pt='10px' pb='24px'>
+                <Text w='88%' color='white' opacity={0.7}>{months[new Date().getMonth()]}</Text>
+
                 <HStack spacing='32px' color='gray.500'>
                     {['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'].map(d => <Text key={d}>{d}</Text>)}
                 </HStack>
@@ -48,7 +60,7 @@ export default function Calendar() {
                     ? data.map((week: object[], i) => <HStack key={i} color='white' spacing='10px'>
                         {week.map((dayTable: any, j) => {
                             const now = new Date();
-                            let day = 7 * i + j + 23;
+                            let day = 7 * i + j + 30;
                             let month = 9;
 
                             if (day > 31) {
@@ -74,16 +86,16 @@ export default function Calendar() {
                             </VStack>;
                         })}
                     </HStack>)
-                    : <Spinner size='xl' color='blue.500' emptyColor='gray.400' />}
+                    : <Spinner size='xl' speed='0.4s' thickness='3px' mt='30px' color='white' />}
             </VStack>
 
             <AnimatePresence mode='wait'>
-                <motion.div onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} style={{ marginTop: '20px', minHeight: '40vh', width: isLaptop ? '50%' : '100%', position: 'relative' }} initial={{ opacity: 0, x: rightDir ? 10 : -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: rightDir ? -10 : 10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex}>
+                <motion.div style={{ minHeight: '40vh', width: isLaptop ? '40%' : '90%', position: 'relative' }} initial={{ opacity: 0, x: rightDir ? 10 : -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: rightDir ? -10 : 10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
                     {data[weekIndex] && data[weekIndex][weekDayIndex] && Object.keys(data[weekIndex][weekDayIndex]).length > 0
-                        ? <VStack key={weekIndex + weekDayIndex} spacing='10px'>
+                        ? <VStack key={weekIndex + weekDayIndex} spacing='18px'>
                             {Object.keys(data[weekIndex][weekDayIndex]).map((lesson: string, i) => {
                                 const theLesson: ILesson | null = data[weekIndex][weekDayIndex][lesson];
-                                if (!theLesson) return <VStack key={i} color='white' w='100%' spacing='14px' p='10px' bg='blue.1000' borderRadius='20px' boxShadow='0px 4px 20px 10px rgba(34, 60, 80, 0.5)'>
+                                if (!theLesson) return <VStack key={i} {...subjectCardStyles}>
                                     <HStack w='100%' justify='space-between'>
                                         <HStack w='100%' spacing='10px'>
                                             <Text w='30px' h='30px' fontWeight={600} borderRadius='full' bg='gray.500' align='center' pt='3px'>{i + 1}</Text>
@@ -115,7 +127,7 @@ export default function Calendar() {
                                     (h.content.length > 0 || h.image)
                                 );
 
-                                return <VStack key={i} color='white' w='100%' spacing='14px' p='10px' bg='blue.1000' borderRadius='20px' boxShadow='0px 4px 20px 10px rgba(34, 60, 80, 0.5)'>
+                                return <VStack key={i} {...subjectCardStyles}>
                                     <HStack w='100%' justify='space-between' align='start'>
                                         <HStack w='100%' spacing='10px'>
                                             <Text w='30px' h='30px' fontWeight={600} borderRadius='full' bg={PROPERTY_LESSON_TYPE === LessonTypes['пр'] ? 'blue.400' : (PROPERTY_LESSON_TYPE === LessonTypes['лаб'] ? 'red.300' : 'purple.500')} align='center' pt='3px'>{i + 1}</Text>
@@ -126,7 +138,7 @@ export default function Calendar() {
                                             </VStack>
                                         </HStack>
 
-                                        {Object.keys(HWTypes).includes(PROPERTY_DISCIPLINE_NAME) && PROPERTY_LESSON_TYPE === LessonTypes['пр'] && <HStack borderRadius='20px' bg={HW ? 'blue.500' : 'blue.600'} p='4px 18px' spacing='5px' boxShadow='0px 4px 20px 6px rgba(34, 60, 80, 0.6)' onClick={() => {
+                                        {Object.keys(HWTypes).includes(PROPERTY_DISCIPLINE_NAME) && PROPERTY_LESSON_TYPE === LessonTypes['пр'] && <HStack borderRadius='20px' bg={HW ? 'blue.500' : 'blue.600'} p='4px 18px' spacing='5px' boxShadow='0px 0px 10px 0px rgba(255, 255, 255, 0.35)' onClick={() => {
                                             if (HW) {
                                                 setModalContent(HW);
                                                 onOpen();

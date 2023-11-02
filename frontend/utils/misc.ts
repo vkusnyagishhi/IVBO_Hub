@@ -11,6 +11,7 @@ export interface IHomework {
 export interface IUser {
     tg_username: string;
     tg_id: number;
+    tg_userpic: string | null;
     trusted: string[];
 }
 
@@ -30,6 +31,7 @@ export enum HWTypes {
 }
 
 export const lessonIntervals = ['9:00 - 10:30', '10:40 - 12:10', '12:40 - 14:10', '14:20 - 15:50', '16:20 - 17:50', '18:00 - 19:30'];
+export const months = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
 
 // export const HWTypes = {
 //     'Англ': 'Иностранный язык',
@@ -49,7 +51,7 @@ export interface ILesson {
 
 export const ease = [0.410, 0.030, 0.000, 0.995];
 export const iconButtonStyles = {
-    boxSize: '50px',
+    boxSize: '40px',
     fontSize: '20px',
     color: 'white',
     bg: 'gray.700',
