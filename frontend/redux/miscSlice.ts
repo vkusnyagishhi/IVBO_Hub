@@ -9,6 +9,7 @@ interface MiscState {
     version: string;
     calendarSelected: number[];
     editingHWs: string[];
+    weeksDisplayCount: number;
 }
 
 const initialState: MiscState = {
@@ -17,13 +18,17 @@ const initialState: MiscState = {
     table: [],
     version: 'fetching data...',
     calendarSelected: [0, 7],
-    editingHWs: []
+    editingHWs: [],
+    weeksDisplayCount: 4
 };
 
 export const miscSlice = createSlice({
     name: 'misc',
     initialState,
     reducers: {
+        setWeeksDisplayCount: (state, action: PayloadAction<number>) => {
+            state.weeksDisplayCount = action.payload;
+        },
         setData: (state, action: PayloadAction<any>) => {
             Object.assign(state.hw, action.payload.hw);
             Object.assign(state.table, action.payload.table);
@@ -68,5 +73,5 @@ export const miscSlice = createSlice({
     }
 })
 
-export const { setData, setIsLaptop, editHW, addHWField, removeHWField, deletePhoto, addEditingHW, removeEditingHW, setSelected, swipe } = miscSlice.actions;
+export const { setData, setIsLaptop, editHW, addHWField, removeHWField, deletePhoto, addEditingHW, removeEditingHW, setSelected, swipe, setWeeksDisplayCount } = miscSlice.actions;
 export default miscSlice.reducer;

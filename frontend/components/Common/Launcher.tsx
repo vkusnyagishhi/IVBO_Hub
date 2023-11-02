@@ -13,11 +13,11 @@ export function Launcher() {
 
     useEffect(() => {
         dispatch(setIsLaptop(!window.matchMedia("(max-width: 600px)").matches));
-        /* if (localStorage.getItem('ivbo_data')) {
-            dispatch(setData(JSON.parse(localStorage.getItem('ivbo_data') ?? '{}')));
-            axios.get('https://api.twodev.cc/ivbo/data').then(res => localStorage.setItem('ivbo_data', JSON.stringify(res.data)));
-        } else */
         if (localStorage.getItem('tg_userpic')) dispatch(setUserpic(localStorage.getItem('tg_userpic') ?? ''));
+
+        // if (!localStorage.getItem('weeksDisplayCount')) localStorage.setItem('weeksDisplayCount', '4');
+        // else dispatch(setWeeksDisplayCount(parseInt(localStorage.getItem('weeksDisplayCount') ?? '4')));
+
         axios.get('https://api.twodev.cc/ivbo/data').then(res => dispatch(setData(res.data)));
 
         if (localStorage.getItem('hash') && !user) axios.post('https://api.twodev.cc/ivbo/login', { hash: localStorage.getItem('hash') }).then(res => {

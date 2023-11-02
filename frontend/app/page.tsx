@@ -20,7 +20,7 @@ const subjectCardStyles = {
 };
 
 export default function Calendar() {
-    const { hw, isLaptop, table: data, calendarSelected: [weekIndex, weekDayIndex] } = useSelector(state => state.misc);
+    const { hw, isLaptop, table: data, calendarSelected: [weekIndex, weekDayIndex], weeksDisplayCount } = useSelector(state => state.misc);
     const [modalContent, setModalContent] = useState<IHomework>();
     const { isOpen, onClose, onOpen } = useDisclosure();
     const router = useRouter();
@@ -48,16 +48,35 @@ export default function Calendar() {
     }
 
     return <>
-        <VStack w='100%' spacing='36px'>
-            <VStack w='100%'>
-                <Text w='88%' color='white' opacity={0.7}>{months[new Date().getMonth()]}</Text>
+        <VStack w='100%' spacing='36px' pos='relative'>
+            <Text pos='absolute' color='white' opacity={0.7} top='-4vh' left='5%'>{months[new Date().getMonth()]}</Text>
 
+            {/*<HStack pos='absolute' top='-8.3vh' left='50%'>*/}
+            {/*    <Flex opacity={weeksDisplayCount < data.length - 2 ? 1 : 0.5} onClick={() => {*/}
+            {/*        if (weeksDisplayCount < data.length - 2) {*/}
+            {/*            dispatch(setWeeksDisplayCount(weeksDisplayCount + 1));*/}
+            {/*            localStorage.setItem('weeksDisplayCount', `${weeksDisplayCount + 1}`);*/}
+            {/*        }*/}
+            {/*    }} border='2px solid white' borderRadius='25px 0 0 25px' color='white' p='4px'>*/}
+            {/*        <Icon as={AiOutlineMinus} boxSize='18px' />*/}
+            {/*    </Flex>*/}
+            {/*    <Flex opacity={weeksDisplayCount > 1 ? 1 : 0.5} onClick={() => {*/}
+            {/*        if (weeksDisplayCount > 1) {*/}
+            {/*            dispatch(setWeeksDisplayCount(weeksDisplayCount - 1));*/}
+            {/*            localStorage.setItem('weeksDisplayCount', `${weeksDisplayCount - 1}`);*/}
+            {/*        }*/}
+            {/*    }} border='2px solid white' borderRadius='0 25px 25px 0' color='white' p='4px'>*/}
+            {/*        <Icon as={AiOutlinePlus} boxSize='18px' />*/}
+            {/*    </Flex>*/}
+            {/*</HStack>*/}
+
+            <VStack w='100%'>
                 <HStack spacing='32px' color='gray.500'>
                     {['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'].map(d => <Text key={d}>{d}</Text>)}
                 </HStack>
 
                 {data.length > 0
-                    ? data.map((week: object[], i) => <HStack key={i} color='white' spacing='10px'>
+                    ? data.slice(0, -1 * weeksDisplayCount).map((week: object[], i) => <HStack key={i} color='white' spacing='10px'>
                         {week.map((dayTable: any, j) => {
                             const now = new Date();
                             let day = 7 * i + j + 30;
@@ -90,7 +109,7 @@ export default function Calendar() {
             </VStack>
 
             <AnimatePresence mode='wait'>
-                <motion.div style={{ overflowY: 'auto', height: '52vh', padding: '20px 5% 100px 5%', width: isLaptop ? '50%' : '100%', position: 'relative', border: '0 solid rgba(255,255,255,0.2)', borderRadius: '25px', boxShadow: '0px -4px 30px 2px rgba(255, 255, 255, 0.1)' }} initial={{ opacity: 0, x: rightDir ? 10 : -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: rightDir ? -10 : 10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
+                <motion.div style={{ overflowY: 'auto', height: '50vh', padding: '20px 5% 100px 5%', width: isLaptop ? '50%' : '100%', position: 'relative', border: '0 solid rgba(255,255,255,0.2)', borderRadius: '25px', boxShadow: '0px -4px 30px 2px rgba(255, 255, 255, 0.1)' }} initial={{ opacity: 0, x: rightDir ? 10 : -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: rightDir ? -10 : 10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
                     {data[weekIndex] && data[weekIndex][weekDayIndex] && Object.keys(data[weekIndex][weekDayIndex]).length > 0
                         ? <VStack key={weekIndex + weekDayIndex} spacing='18px'>
                             {Object.keys(data[weekIndex][weekDayIndex]).map((lesson: string, i) => {
