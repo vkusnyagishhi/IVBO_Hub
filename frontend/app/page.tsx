@@ -48,8 +48,8 @@ export default function Calendar() {
     }
 
     return <>
-        <VStack w='100%' minH='94vh' spacing='24px'>
-            <VStack w='100%' pb='24px'>
+        <VStack w='100%' spacing='46px'>
+            <VStack w='100%'>
                 <Text w='88%' color='white' opacity={0.7}>{months[new Date().getMonth()]}</Text>
 
                 <HStack spacing='32px' color='gray.500'>
@@ -90,7 +90,7 @@ export default function Calendar() {
             </VStack>
 
             <AnimatePresence mode='wait'>
-                <motion.div style={{ minHeight: '40vh', width: isLaptop ? '40%' : '90%', position: 'relative' }} initial={{ opacity: 0, x: rightDir ? 10 : -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: rightDir ? -10 : 10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
+                <motion.div style={{ minHeight: '38vh', width: isLaptop ? '40%' : '90%', position: 'relative' }} initial={{ opacity: 0, x: rightDir ? 10 : -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: rightDir ? -10 : 10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
                     {data[weekIndex] && data[weekIndex][weekDayIndex] && Object.keys(data[weekIndex][weekDayIndex]).length > 0
                         ? <VStack key={weekIndex + weekDayIndex} spacing='18px'>
                             {Object.keys(data[weekIndex][weekDayIndex]).map((lesson: string, i) => {
