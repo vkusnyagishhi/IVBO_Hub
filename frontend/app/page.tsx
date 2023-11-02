@@ -48,8 +48,8 @@ export default function Calendar() {
     }
 
     return <>
-        <VStack w='100%' minH='100vh' spacing='24px'>
-            <VStack w='100%' pt='10px' pb='24px'>
+        <VStack w='100%' minH='94vh' spacing='24px'>
+            <VStack w='100%' pb='24px'>
                 <Text w='88%' color='white' opacity={0.7}>{months[new Date().getMonth()]}</Text>
 
                 <HStack spacing='32px' color='gray.500'>
