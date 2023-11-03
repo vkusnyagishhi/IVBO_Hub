@@ -1,6 +1,7 @@
 from typing import Optional
 
 from tortoise import fields
+from tortoise.exceptions import DoesNotExist
 
 from app.applications.disciplines.schemas import BaseDisciplineCreate
 
@@ -16,6 +17,15 @@ class Discipline(BaseModel):
         model = cls(**discipline_dict)
         await model.save()
         return model
+    
+    @classmethod
+    async def get_by_title(cls, title: str) -> "Discipline":
+        try:
+            query = cls.get_or_none(title=title)
+            discipline = await query
+            return discipline
+        except DoesNotExist:
+            return None
     
     class Meta:
         table = "disciplines"
