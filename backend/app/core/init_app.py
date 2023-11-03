@@ -15,6 +15,7 @@ from app.applications.users.schemas import BaseUserCreate
 from app.core.auth.utils.password import get_password_hash
 
 from app.core.auth.routers.login import router as login_router
+from app.applications.admin.routers import router as admin_router
 from app.applications.users.routers import router as users_router
 from app.applications.files.routers import router as files_router
 from app.applications.homework.routers import router as homework_router
@@ -101,6 +102,7 @@ def register_exceptions(app: FastAPI):
 
 def register_routers(app: FastAPI):
     app.include_router(login_router, prefix="/auth/login", tags=["login"])
+    app.include_router(admin_router, prefix="/admin", tags=["admin"])
     app.include_router(users_router, prefix="/auth/users", tags=["users"])
     app.include_router(files_router, prefix="/files", tags=["files"])
     app.include_router(homework_router, prefix="/homework", tags=["homework"])

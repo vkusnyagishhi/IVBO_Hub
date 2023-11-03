@@ -32,6 +32,7 @@ async def read_disciplines(
 async def create_discipline(
     *,
     discipline_in: BaseDisciplineCreate,
+    current_user: User = Depends(get_current_admin)
 ):
     created_discipline = await Discipline.create(discipline_in)
     return created_discipline
