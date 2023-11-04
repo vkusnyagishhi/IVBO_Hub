@@ -11,7 +11,7 @@ export function Header() {
     const { user, userpic } = useSelector(state => state.auth);
 
     return <>
-        <HStack w='100%' p='5vh 5% 4vh 5%' justify='space-between' zIndex={10} bg='black' color='white'>
+        <HStack w='100%' p={isLaptop ? '5vh 25% 4vh 25%' : '5vh 5% 4vh 5%'} justify='space-between' zIndex={10} bg='black' color='white'>
             <Heading fontSize='28px'>{headerLinks.find((hl: any) => pathname === hl.pathname)?.title ?? 'IVBO Hub'}</Heading>
             {userpic && <Avatar name={user?.tg_username} src={userpic ?? ''} />}
         </HStack>
@@ -24,14 +24,14 @@ export function Header() {
         {/*</HStack>*/}
 
         <VStack>
-            <HStack w='90%' left='5%' borderRadius='200px' h='60px' bg='#050505' pos='fixed' bottom='20px' justify='space-evenly' zIndex={10} boxShadow='0px 0px 10px 0px rgba(0, 0, 0, 1)'>
+            <HStack w='90%' left='5%' borderRadius='200px' h='60px' bg='#050505' pos='fixed' bottom='20px' justify='space-evenly' zIndex={10} boxShadow='0px 4px 20px 0px rgba(255, 255, 255, 0.15)'>
                 {headerLinks.map((link, i) => <HStack key={i} color={pathname === link.pathname ? 'white' : 'gray.500'} p='10px 16px' borderRadius='full' spacing='12px' onClick={() => router.push(link.pathname)} transition='0.2s' _hover={isLaptop ? { cursor: 'pointer', color: 'blue.200' } : {}} _active={{ color: 'gray.500' }}>
                     <Icon as={link.icon} boxSize='30px' />
                     {pathname === link.pathname && <Text w='max-content' userSelect='none' fontSize='17px'>{link.title}</Text>}
                 </HStack>)}
             </HStack>
 
-            <Box w='100%' h='80px' bg='linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,1) 100%)' pos='fixed' bottom={0} zIndex={5} />
+            <Box w='100%' h='100px' bg='linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%)' pos='fixed' bottom={0} zIndex={5} />
         </VStack>
     </>
 }

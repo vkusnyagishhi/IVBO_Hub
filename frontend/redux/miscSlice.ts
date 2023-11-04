@@ -2,6 +2,13 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from '@reduxjs/toolkit';
 import { IHomework } from "@/utils/misc";
 
+interface IData {
+    table: any[];
+    hw: any[];
+    version: string;
+    currentWeek: number;
+}
+
 interface MiscState {
     isLaptop: boolean;
     hw: IHomework[];
@@ -29,7 +36,7 @@ export const miscSlice = createSlice({
         setWeeksDisplayCount: (state, action: PayloadAction<number>) => {
             state.weeksDisplayCount = action.payload;
         },
-        setData: (state, action: PayloadAction<any>) => {
+        setData: (state, action: PayloadAction<IData>) => {
             Object.assign(state.hw, action.payload.hw);
             Object.assign(state.table, action.payload.table);
             state.version = action.payload.version;

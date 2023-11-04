@@ -26,8 +26,8 @@ export const authSlice = createSlice({
         },
         addFile: (state, action: PayloadAction<string>) => {
             if (!state.user) return;
-            if (!state.files[state.user.tg_username].includes(action.payload)) state.files[state.user.tg_username].push(action.payload);
-            else state.files = [...state.files[state.user.tg_username].filter((f: string) => f !== action.payload), action.payload];
+            if (!state.files[state.user.tg_username].includes(action.payload)) state.files[state.user.tg_username].unshift(action.payload);
+            // else state.files = [...state.files[state.user.tg_username].filter((f: string) => f !== action.payload), action.payload];
         },
         deleteFile: (state, action: PayloadAction<string>) => {
             if (!state.user || !state.files[state.user.tg_username].includes(action.payload)) return;

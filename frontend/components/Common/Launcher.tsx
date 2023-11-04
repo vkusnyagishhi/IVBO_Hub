@@ -12,13 +12,12 @@ export function Launcher() {
     const { user } = useSelector(state => state.auth);
 
     useEffect(() => {
+        axios.get('https://api.twodev.cc/ivbo/data').then(res => dispatch(setData(res.data)));
         dispatch(setIsLaptop(!window.matchMedia("(max-width: 600px)").matches));
         if (localStorage.getItem('tg_userpic')) dispatch(setUserpic(localStorage.getItem('tg_userpic') ?? ''));
 
         // if (!localStorage.getItem('weeksDisplayCount')) localStorage.setItem('weeksDisplayCount', '4');
         // else dispatch(setWeeksDisplayCount(parseInt(localStorage.getItem('weeksDisplayCount') ?? '4')));
-
-        axios.get('https://api.twodev.cc/ivbo/data').then(res => dispatch(setData(res.data)));
 
         if (localStorage.getItem('hash') && !user) axios.post('https://api.twodev.cc/ivbo/login', { hash: localStorage.getItem('hash') }).then(res => {
             if (res.data === 500) {

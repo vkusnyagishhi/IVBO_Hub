@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "@/redux/hooks";
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Button, HStack, Icon, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Textarea, useDisclosure, useToast, VStack } from "@chakra-ui/react";
 import { HWTypes, IHomework, toasts } from "@/utils/misc";
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
-import { addHWField, deletePhoto, editHW, removeHWField } from "@/redux/miscSlice";
+import { addHWField, deletePhoto, editHW, removeHWField, setData } from "@/redux/miscSlice";
 import axios from "axios";
 import { TgLoginButton } from "@/components/Common";
 import { AiFillBulb } from "react-icons/ai";
@@ -136,6 +136,7 @@ export default function Admin() {
                                                         setUploaded(false);
                                                         if (res.data === 200) {
                                                             if (!toast.isActive('success-toast')) toast(toasts.success('Фото сохранено!\nОбновите страницу, чтобы увидеть изменения'));
+                                                            axios.get('https://api.twodev.cc/ivbo/data').then(res => dispatch(setData(res.data)));
                                                         } else {
                                                             if (!toast.isActive('error-toast')) toast(toasts.error());
                                                         }
@@ -166,6 +167,7 @@ export default function Admin() {
                                         setLoading(false);
                                         if (res.data === 200) {
                                             if (!toast.isActive('success-toast')) toast(toasts.success('Домашка сохранена!'));
+                                            axios.get('https://api.twodev.cc/ivbo/data').then(res => dispatch(setData(res.data)));
                                             onClose();
                                         } else {
                                             if (!toast.isActive('error-toast')) toast(toasts.error());

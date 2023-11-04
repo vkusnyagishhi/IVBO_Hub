@@ -49,7 +49,7 @@ export default function Calendar() {
 
     return <>
         <VStack w='100%' spacing='36px' pos='relative'>
-            <Text pos='absolute' color='white' opacity={0.7} top='-4vh' left='5%'>{months[new Date().getMonth()]}</Text>
+            <Text pos='absolute' color='white' opacity={0.7} top='-4vh' left={isLaptop ? '25%' : '5.5%'}>{months[new Date().getMonth()]}</Text>
 
             {/*<HStack pos='absolute' top='-8.3vh' left='50%'>*/}
             {/*    <Flex opacity={weeksDisplayCount < data.length - 2 ? 1 : 0.5} onClick={() => {*/}
@@ -109,7 +109,7 @@ export default function Calendar() {
             </VStack>
 
             <AnimatePresence mode='wait'>
-                <motion.div style={{ overflowY: 'auto', height: '50vh', padding: '20px 5% 100px 5%', width: isLaptop ? '50%' : '100%', position: 'relative', border: '0 solid rgba(255,255,255,0.2)', borderRadius: '25px', boxShadow: '0px -4px 30px 2px rgba(255, 255, 255, 0.1)' }} initial={{ opacity: 0, x: rightDir ? 10 : -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: rightDir ? -10 : 10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
+                <motion.div style={{ overflowY: 'auto', height: '50vh', padding: isLaptop ? '14px 1% 100px 1%' : '20px 5% 60px 5%', width: isLaptop ? '50%' : '100%', position: 'relative', border: '0 solid rgba(255,255,255,0.2)', borderRadius: '25px 25px 0 0', boxShadow: '0px -4px 30px 2px rgba(255, 255, 255, 0.1)' }} initial={{ opacity: 0, x: rightDir ? 10 : -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: rightDir ? -10 : 10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
                     {data[weekIndex] && data[weekIndex][weekDayIndex] && Object.keys(data[weekIndex][weekDayIndex]).length > 0
                         ? <VStack key={weekIndex + weekDayIndex} spacing='18px'>
                             {Object.keys(data[weekIndex][weekDayIndex]).map((lesson: string, i) => {
@@ -199,8 +199,8 @@ export default function Calendar() {
                 <ModalHeader color='white'>{modalContent?.subject}</ModalHeader>
                 <ModalCloseButton color='white' />
                 <ModalBody bg='blue.900' py='20px'>
-                    {modalContent?.content && <OrderedList color='white' spacing='10px'>
-                        {modalContent.content.map((c: string, i: number) => <ListItem key={i} fontSize='15px'>{c}</ListItem>)}
+                    {modalContent?.content && <OrderedList color='white' spacing='8px'>
+                        {modalContent.content.map((c: string, i: number) => <ListItem key={i} fontSize='16px'>{c}</ListItem>)}
                     </OrderedList>}
                     {modalContent?.image && <Image src={modalContent.image} alt='' maxH='250px' />}
                 </ModalBody>
