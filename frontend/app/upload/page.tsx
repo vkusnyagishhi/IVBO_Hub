@@ -202,6 +202,7 @@ export default function Files() {
                                     { headers: { 'x-access-token': localStorage.getItem('hash') } }
                                 )
                                 .then(res => {
+                                    onClose();
                                     if (res.data === 200) {
                                         dispatch(deleteFile(fileToDelete));
                                         if (!toast.isActive('success-toast')) toast(toasts.success('Файл удалён!'));
