@@ -40,7 +40,8 @@ export const miscSlice = createSlice({
             Object.assign(state.hw, action.payload.hw);
             Object.assign(state.table, action.payload.table);
             state.version = action.payload.version;
-            if (new Date().getDay() !== 7) state.calendarSelected = [action.payload.currentWeek, new Date().getDay() - 1];
+            if (new Date().getDay() !== 0) state.calendarSelected = [action.payload.currentWeek, new Date().getDay() - 1];
+            else state.calendarSelected = [action.payload.currentWeek, 0];
         },
         setIsLaptop: (state, action: PayloadAction<boolean>) => {
             state.isLaptop = action.payload;
@@ -72,6 +73,11 @@ export const miscSlice = createSlice({
         swipe: (state, action: PayloadAction<number>) => {
             const weekIndex = state.calendarSelected[0];
             const dayIndex = state.calendarSelected[1] + action.payload;
+
+            if (
+                (weekIndex <= 0 && dayIndex < 0) ||
+                (weekIndex === state.weeksDisplayCount - 1 && dayIndex >= 6)
+            ) return;
 
             if (dayIndex > 5) state.calendarSelected = [weekIndex + 1, 0];
             else if (dayIndex < 0) state.calendarSelected = [weekIndex - 1, 5];

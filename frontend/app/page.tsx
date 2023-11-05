@@ -19,6 +19,9 @@ const subjectCardStyles = {
     boxShadow: '0px 0px 14px 0px rgba(255, 255, 255, 0.2)'
 };
 
+const weekIncrement = 10;
+const firstDay = 30;
+
 export default function Calendar() {
     const { hw, isLaptop, table: data, calendarSelected: [weekIndex, weekDayIndex], weeksDisplayCount } = useSelector(state => state.misc);
     const [modalContent, setModalContent] = useState<IHomework>();
@@ -49,7 +52,7 @@ export default function Calendar() {
 
     return <>
         <VStack w='100%' spacing='36px' pos='relative'>
-            <Text pos='absolute' color='white' opacity={0.7} top='-4vh' left={isLaptop ? '25%' : '5.5%'}>{months[new Date().getMonth()]}</Text>
+            <Text pos='absolute' color='white' opacity={0.7} top='-4vh' left={isLaptop ? '25%' : '5%'}>{months[new Date().getMonth()]}, {weekIncrement + weekIndex} неделя</Text>
 
             {/*<HStack pos='absolute' top='-8.3vh' left='50%'>*/}
             {/*    <Flex opacity={weeksDisplayCount < data.length - 2 ? 1 : 0.5} onClick={() => {*/}
@@ -79,7 +82,7 @@ export default function Calendar() {
                     ? data.slice(0, -1 * weeksDisplayCount).map((week: object[], i) => <HStack key={i} color='white' spacing='10px'>
                         {week.map((dayTable: any, j) => {
                             const now = new Date();
-                            let day = 7 * i + j + 30;
+                            let day = 7 * i + j + firstDay;
                             let month = 9;
 
                             if (day > 31) {
@@ -130,7 +133,7 @@ export default function Calendar() {
                                         <Text h='30px' color='gray.400' fontSize='14px' fontWeight={600} pt='5px' pl='4px'>{lessonIntervals[i]}</Text>
 
                                         <HStack spacing='8px' fontWeight={500}>
-                                            <Text align='center' fontSize='14px' p='4px 10px' borderRadius='20px' bg='green.500'>чилл</Text>
+                                            <Text align='center' fontSize='14px' p='4px 10px' borderRadius='20px' bg='pink.500'>чилл</Text>
 
                                             <HStack bg='red.400' p='4px 10px' borderRadius='20px'>
                                                 <Icon as={FaHouse} mt='-2px' />
@@ -157,13 +160,13 @@ export default function Calendar() {
                                             </VStack>
                                         </HStack>
 
-                                        {Object.keys(HWTypes).includes(PROPERTY_DISCIPLINE_NAME) && PROPERTY_LESSON_TYPE === LessonTypes['пр'] && <HStack borderRadius='20px' bg={HW ? 'blue.500' : 'blue.600'} p='4px 18px' spacing='5px' boxShadow='0px 0px 10px 0px rgba(255, 255, 255, 0.35)' onClick={() => {
+                                        {Object.keys(HWTypes).includes(PROPERTY_DISCIPLINE_NAME) && PROPERTY_LESSON_TYPE === LessonTypes['пр'] && <HStack borderRadius='20px' bg={HW ? 'green.500' : 'orange.400'} p='4px 18px' spacing='5px' boxShadow='0px 0px 10px 0px rgba(255, 255, 255, 0.35)' onClick={() => {
                                             if (HW) {
                                                 setModalContent(HW);
                                                 onOpen();
                                             } else router.push('/edit?open=' + PROPERTY_DISCIPLINE_NAME);
                                         }} _hover={{ cursor: 'pointer' }}>
-                                            <Icon as={HW ? FaBook : BiEdit} boxSize='20px' pt='2px' />
+                                            <Icon as={HW ? FaBook : BiEdit} boxSize='20px' pt='-2px' />
                                             <Text userSelect='none' fontWeight={500}>ДЗ</Text>
                                         </HStack>}
                                     </HStack>
@@ -184,11 +187,6 @@ export default function Calendar() {
                             })}
                         </VStack>
                         : (weekDayIndex < 7 && <Text align='center' color='white'>{weekDayIndex === 6 ? 'нахер ты на воскресенье нажал' : 'Пар нет!'}</Text>)}
-
-                    {/*<HStack w='100%' pos='absolute' bottom='-20px' px='26px' color='white' opacity={0.5} spacing='14px'>*/}
-                    {/*    <Icon as={FaHandPointDown} boxSize='30px' />*/}
-                    {/*    <Text fontSize='16px'>Изменение ДЗ - по кнопке</Text>*/}
-                    {/*</HStack>*/}
                 </motion.div>
             </AnimatePresence>
         </VStack>

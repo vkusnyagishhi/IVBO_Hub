@@ -44,7 +44,7 @@ export default function Admin() {
         }
     }, [editingHWs, hw, onOpen]);
 
-    return user && hw.length > 0
+    return user
         ? <>
             <VStack spacing='20px' w={isLaptop ? '30%' : '50%'}>
                 {hw.map((x: IHomework, i) => <Button opacity={editingHWs.includes(x.subject) ? 0.5 : 1} w='100%' h='50px' fontSize='20px' key={i} bg='gray.600' _hover={{ bg: 'gray.500' }} _active={{ bg: 'gray.400' }} color='white' onClick={() => {
