@@ -1,5 +1,5 @@
 'use client';
-import { Box, Button, HStack, Icon, Image, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, OrderedList, Spinner, Text, useDisclosure, VStack } from "@chakra-ui/react";
+import { Box, Button, HStack, Icon, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Text, useDisclosure, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "@/redux/hooks";
 import { AnimatePresence, motion } from "framer-motion";
@@ -112,7 +112,7 @@ export default function Calendar() {
             </VStack>
 
             <AnimatePresence mode='wait'>
-                <motion.div style={{ overflowY: 'auto', height: '50vh', padding: isLaptop ? '14px 1% 100px 1%' : '20px 5% 60px 5%', width: isLaptop ? '50%' : '100%', position: 'relative', border: '0 solid rgba(255,255,255,0.2)', borderRadius: '25px 25px 0 0', boxShadow: '0px -4px 30px 2px rgba(255, 255, 255, 0.1)' }} initial={{ opacity: 0, x: rightDir ? 10 : -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: rightDir ? -10 : 10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
+                <motion.div style={{ overflowY: 'auto', maxHeight: '47vh', padding: isLaptop ? '14px 1% 100px 1%' : '20px 5% 60px 5%', width: isLaptop ? '50%' : '100%', position: 'relative', border: '0 solid rgba(255,255,255,0.2)', borderRadius: '25px 25px 0 0', boxShadow: '0px -4px 30px 2px rgba(255, 255, 255, 0.1)' }} initial={{ opacity: 0, x: rightDir ? 10 : -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: rightDir ? -10 : 10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
                     {data[weekIndex] && data[weekIndex][weekDayIndex] && Object.keys(data[weekIndex][weekDayIndex]).length > 0
                         ? <VStack key={weekIndex + weekDayIndex} spacing='18px'>
                             {Object.keys(data[weekIndex][weekDayIndex]).map((lesson: string, i) => {
@@ -146,7 +146,7 @@ export default function Calendar() {
                                 const { PROPERTY_DISCIPLINE_NAME, PROPERTY_LECTOR, PROPERTY_LESSON_TYPE, PROPERTY_PLACE } = theLesson;
                                 const HW = hw.find((h: IHomework) =>
                                     h.subject.split(' ')[1] === HWTypes[PROPERTY_DISCIPLINE_NAME as keyof typeof HWTypes] &&
-                                    (h.content.length > 0 || h.image)
+                                    (h.content || h.image)
                                 );
 
                                 return <VStack key={i} {...subjectCardStyles}>
@@ -197,9 +197,8 @@ export default function Calendar() {
                 <ModalHeader color='white'>{modalContent?.subject}</ModalHeader>
                 <ModalCloseButton color='white' />
                 <ModalBody bg='blue.900' py='20px'>
-                    {modalContent?.content && <OrderedList color='white' spacing='8px'>
-                        {modalContent.content.map((c: string, i: number) => <ListItem key={i} fontSize='16px'>{c}</ListItem>)}
-                    </OrderedList>}
+                    {/* @ts-ignore */}
+                    {modalContent?.content && modalContent.content.split('\n').map((c: string, i: number) => <Text fontSize='16px' color='white' key={i}>{c}</Text>)}
                     {modalContent?.image && <Image src={modalContent.image} alt='' maxH='250px' />}
                 </ModalBody>
                 <ModalFooter>

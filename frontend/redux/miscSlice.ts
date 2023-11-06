@@ -48,7 +48,7 @@ export const miscSlice = createSlice({
         },
         editHW: (state, action: PayloadAction<any>) => {
             const found: IHomework | any = state.hw.find((h: IHomework) => h.subject === action.payload.subject);
-            if (found) found.content[action.payload.contentNum] = action.payload.value;
+            if (found) found.content = action.payload.value;
         },
         addHWField: (state, action: PayloadAction<any>) => {
             const found: IHomework | any = state.hw.find((h: IHomework) => h.subject === action.payload);

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "@/redux/hooks";
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Button, HStack, Icon, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Textarea, useDisclosure, useToast, VStack } from "@chakra-ui/react";
 import { HWTypes, IHomework, toasts } from "@/utils/misc";
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
-import { addHWField, deletePhoto, editHW, removeHWField, setData } from "@/redux/miscSlice";
+import { deletePhoto, editHW, setData } from "@/redux/miscSlice";
 import axios from "axios";
 import { TgLoginButton } from "@/components/Common";
 import { AiFillBulb } from "react-icons/ai";
@@ -62,20 +62,25 @@ export default function Admin() {
 
                     <ModalBody bg='black' h='100%'>
                         <VStack w='100%' h='100%' color='white' spacing='14px'>
-                            {hw[selected].content.map((c, j) => <HStack key={j} w='100%'>
-                                {/* @ts-ignore */}
-                                <Textarea value={hw[selected].content[j]} minH='120px' resize='vertical' onChange={e => {
-                                    if (!activated.includes(hw[selected].subject)) setActivated(s => [...s, hw[selected].subject]);
-                                    dispatch(editHW({ subject: hw[selected].subject, contentNum: j, value: e.target.value }));
-                                }} />
+                            {/*{hw[selected].content.map((c, j) => <HStack key={j} w='100%'>*/}
+                            {/*    /!* @ts-ignore *!/*/}
+                            {/*    <Textarea value={hw[selected].content[j]} minH='120px' resize='vertical' onChange={e => {*/}
+                            {/*        if (!activated.includes(hw[selected].subject)) setActivated(s => [...s, hw[selected].subject]);*/}
+                            {/*        dispatch(editHW({ subject: hw[selected].subject, contentNum: j, value: e.target.value }));*/}
+                            {/*    }} />*/}
 
-                                <Button fontSize='26px' onClick={() => {
-                                    if (!activated.includes(hw[selected].subject)) setActivated(s => [...s, hw[selected].subject]);
-                                    dispatch(removeHWField([hw[selected].subject, j]));
-                                }}>-</Button>
-                            </HStack>)}
+                            {/*    <Button fontSize='26px' onClick={() => {*/}
+                            {/*        if (!activated.includes(hw[selected].subject)) setActivated(s => [...s, hw[selected].subject]);*/}
+                            {/*        dispatch(removeHWField([hw[selected].subject, j]));*/}
+                            {/*    }}>-</Button>*/}
+                            {/*</HStack>)}*/}
 
-                            {(hw[selected].content.length === 0 || hw[selected].content.filter((x: string) => x.length < 1).length === 0) && <Button fontSize='26px' onClick={() => dispatch(addHWField(hw[selected].subject))}>+</Button>}
+                            <Textarea value={hw[selected].content} minH='200px' resize='vertical' onChange={e => {
+                                if (!activated.includes(hw[selected].subject)) setActivated(s => [...s, hw[selected].subject]);
+                                dispatch(editHW({ subject: hw[selected].subject, value: e.target.value }));
+                            }} />
+
+                            {/*{(hw[selected].content.length === 0 || hw[selected].content.filter((x: string) => x.length < 1).length === 0) && <Button fontSize='26px' onClick={() => dispatch(addHWField(hw[selected].subject))}>+</Button>}*/}
 
                             <Accordion w='90%' allowToggle>
                                 <AccordionItem>
