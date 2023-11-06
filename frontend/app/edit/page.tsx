@@ -29,6 +29,7 @@ export default function Admin() {
     }, [onOpenRaw]);
 
     function onClose() {
+        axios.get('https://api.twodev.cc/ivbo/data').then(res => dispatch(setData(res.data)));
         if (openQuery) router.push('/');
         else setSelected(0);
         // dispatch({ type: 'socket/send', payload: { action: 'closed', subject: hw[selected].subject } });
@@ -79,6 +80,8 @@ export default function Admin() {
                                 if (!activated.includes(hw[selected].subject)) setActivated(s => [...s, hw[selected].subject]);
                                 dispatch(editHW({ subject: hw[selected].subject, value: e.target.value }));
                             }} />
+
+                            <Button w='50%' bg='red.500' color='white' onClick={() => dispatch(editHW({ subject: hw[selected].subject, value: '' }))} _hover={{ cursor: 'pointer', bg: 'red.400' }} _active={{ bg: 'red.300' }}>Очистить поле</Button>
 
                             {/*{(hw[selected].content.length === 0 || hw[selected].content.filter((x: string) => x.length < 1).length === 0) && <Button fontSize='26px' onClick={() => dispatch(addHWField(hw[selected].subject))}>+</Button>}*/}
 
@@ -172,7 +175,6 @@ export default function Admin() {
                                         setLoading(false);
                                         if (res.data === 200) {
                                             if (!toast.isActive('success-toast')) toast(toasts.success('Домашка сохранена!'));
-                                            axios.get('https://api.twodev.cc/ivbo/data').then(res => dispatch(setData(res.data)));
                                             onClose();
                                         } else {
                                             if (!toast.isActive('error-toast')) toast(toasts.error());

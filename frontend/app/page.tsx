@@ -112,7 +112,7 @@ export default function Calendar() {
             </VStack>
 
             <AnimatePresence mode='wait'>
-                <motion.div style={{ overflowY: 'auto', maxHeight: '47vh', padding: isLaptop ? '14px 1% 100px 1%' : '20px 5% 60px 5%', width: isLaptop ? '50%' : '100%', position: 'relative', border: '0 solid rgba(255,255,255,0.2)', borderRadius: '25px 25px 0 0', boxShadow: '0px -4px 30px 2px rgba(255, 255, 255, 0.1)' }} initial={{ opacity: 0, x: rightDir ? 10 : -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: rightDir ? -10 : 10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
+                <motion.div style={{ overflowY: 'auto', height: '48vh', padding: isLaptop ? '14px 1% 110px 1%' : '20px 5% 100px 5%', width: isLaptop ? '50%' : '100%', position: 'relative', border: '0 solid rgba(255,255,255,0.2)', borderRadius: '25px 25px 0 0', boxShadow: '0px -4px 30px 2px rgba(255, 255, 255, 0.1)' }} initial={{ opacity: 0, x: rightDir ? 10 : -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: rightDir ? -10 : 10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
                     {data[weekIndex] && data[weekIndex][weekDayIndex] && Object.keys(data[weekIndex][weekDayIndex]).length > 0
                         ? <VStack key={weekIndex + weekDayIndex} spacing='18px'>
                             {Object.keys(data[weekIndex][weekDayIndex]).map((lesson: string, i) => {
