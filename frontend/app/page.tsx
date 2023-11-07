@@ -1,13 +1,14 @@
 'use client';
-import { Box, Button, HStack, Icon, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Text, useDisclosure, VStack } from "@chakra-ui/react";
+import { Box, Button, HStack, Icon, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "@/redux/hooks";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaBook, FaHouse } from "react-icons/fa6";
-import { HWTypes, IHomework, ILesson, lessonIntervals, LessonTypes, months } from "@/utils/misc";
+import { HWTypes, IHomework, ILesson, lessonIntervals, LessonTypes, months, weeksAndDays } from "@/utils/misc";
 import { useRouter } from "next/navigation";
-import { setSelected, swipe } from "@/redux/miscSlice";
+import { decreaseWeeksDisplayCount, increaseWeeksDisplayCount, setSelected, swipe } from "@/redux/miscSlice";
 import { BiEdit } from "react-icons/bi";
+import data from '@/utils/table';
 
 const subjectCardStyles = {
     color: 'white',
@@ -19,41 +20,66 @@ const subjectCardStyles = {
     boxShadow: '0px 0px 14px 0px rgba(255, 255, 255, 0.2)'
 };
 
-const weekIncrement = 10;
-const firstDay = 30;
+const weekIncrement = 10,
+    minSwipeDistanceX = 40,
+    minSwipeDistanceY = 30;
 
 export default function Calendar() {
-    const { hw, isLaptop, table: data, calendarSelected: [weekIndex, weekDayIndex], weeksDisplayCount } = useSelector(state => state.misc);
+    const { hw, isLaptop, calendarSelected: [weekIndex, weekDayIndex], weeksDisplayCount } = useSelector(state => state.misc);
     const [modalContent, setModalContent] = useState<IHomework>();
     const { isOpen, onClose, onOpen } = useDisclosure();
     const router = useRouter();
     const dispatch = useDispatch();
 
-    const [touchStart, setTouchStart] = useState(null);
-    const [touchEnd, setTouchEnd] = useState(null);
+    const [[touchStartX, touchStartY], setTouchStart] = useState([0, 0]);
+    const [[touchEndX, touchEndY], setTouchEnd] = useState([0, 0]);
     const [rightDir, setRightDir] = useState(true);
 
-    const minSwipeDistance = 40;
-    const onTouchStart = (e: any) => {
-        setTouchEnd(null);
-        setTouchStart(e.targetTouches[0].clientX);
+    const slicedData = data.slice(weeksDisplayCount[0], -1 * weeksDisplayCount[1]);
+
+    function onTouchStart(e: any) {
+        setTouchEnd([0, 0]);
+        setTouchStart([e.targetTouches[0].pageX, e.targetTouches[0].pageY]);
     }
-    const onTouchMove = (e: any) => setTouchEnd(e.targetTouches[0].clientX);
-    const onTouchEnd = () => {
-        if (!touchStart || !touchEnd) return;
-        const distance = touchStart - touchEnd;
-        const isLeftSwipe = distance > minSwipeDistance;
-        const isRightSwipe = distance < -minSwipeDistance;
-        if (isLeftSwipe || isRightSwipe) {
-            setRightDir(isLeftSwipe);
-            dispatch(swipe(isLeftSwipe ? 1 : -1));
+
+    function onTouchMove(e: any) {
+        // if (e.targetTouches[0].pageY < 170 + slicedData.length * 55) return; // deny scroll
+        setTouchEnd([e.targetTouches[0].pageX, e.targetTouches[0].pageY]);
+    }
+
+    function onTouchEnd() {
+        const distanceX = touchStartX - touchEndX;
+        const distanceY = touchStartY - touchEndY;
+
+        if (!touchStartX || !touchEndX || !touchStartY || !touchEndY) return; // skip clicks
+
+        const absX = Math.abs(distanceX);
+        const absY = Math.abs(distanceY);
+
+        if (absY > minSwipeDistanceY && absX < minSwipeDistanceX) { // vertical swipe
+            if (touchStartY > 170 + slicedData.length * 55) return; // if touchStart on calendar div
+
+            const isUpSwipe = distanceY > minSwipeDistanceY;
+            const isDownSwipe = distanceY < -minSwipeDistanceY;
+
+            if (isUpSwipe || isDownSwipe) dispatch(isUpSwipe ? increaseWeeksDisplayCount() : decreaseWeeksDisplayCount());
+        } else if (absX > minSwipeDistanceX) { // horizontal swipe
+            const isLeftSwipe = distanceX > minSwipeDistanceX;
+            const isRightSwipe = distanceX < -minSwipeDistanceX;
+
+            if (isLeftSwipe || isRightSwipe) {
+                setRightDir(isLeftSwipe);
+                dispatch(swipe(isLeftSwipe ? 1 : -1));
+            }
         }
     }
 
     return <>
-        <VStack w='100%' spacing='36px' pos='relative'>
-            <Text pos='absolute' color='white' opacity={0.7} top='-4vh' left={isLaptop ? '25%' : '5%'}>{months[new Date().getMonth()]}, {weekIncrement + weekIndex} неделя</Text>
+        <VStack w='100%' minH='100%' spacing={`${50 + slicedData.length * 52}px`} pos='relative' onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
+            {/*<Box w='200px' h='50px' border='2px solid red' pos='fixed' left={0} top={`${170 + slicedData.length * 55}px`} />*/}
 
+            <Text pos='absolute' color='white' opacity={0.7} top='-4vh' left={isLaptop ? '25%' : '5%'}>{months[new Date().getMonth()]}, {weekIncrement + weekIndex} неделя</Text>
+            <Box />
             {/*<HStack pos='absolute' top='-8.3vh' left='50%'>*/}
             {/*    <Flex opacity={weeksDisplayCount < data.length - 2 ? 1 : 0.5} onClick={() => {*/}
             {/*        if (weeksDisplayCount < data.length - 2) {*/}
@@ -73,51 +99,73 @@ export default function Calendar() {
             {/*    </Flex>*/}
             {/*</HStack>*/}
 
-            <VStack w='100%'>
+            <VStack w='100%' pos='absolute'>
                 <HStack spacing='32px' color='gray.500'>
                     {['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'].map(d => <Text key={d}>{d}</Text>)}
                 </HStack>
 
-                {data.length > 0
-                    ? data.slice(0, -1 * weeksDisplayCount).map((week: object[], i) => <HStack key={i} color='white' spacing='10px'>
-                        {week.map((dayTable: any, j) => {
-                            const now = new Date();
-                            let day = 7 * i + j + firstDay;
-                            let month = 9;
+                {slicedData.map((week: object[], i) => <HStack key={i} color='white' spacing='10px'>
+                    {week.map((dayTable: any, j) => {
+                        const now = new Date();
+                        const day = weeksAndDays[i + weeksDisplayCount[0]][j];
+                        const month = i === 0 && j >= 30
+                            ? 9
+                            : i >= 0 && i <= 3 && j > 1
+                                ? 10
+                                : 11;
 
-                            if (day > 31) {
-                                day -= 31;
-                                month = 10;
-                            }
+                        const isSelected = weekIndex === i && weekDayIndex === j;
 
-                            const isSelected = weekIndex === i && weekDayIndex === j;
-
-                            return <VStack w='40px' h='40px' color='white' key={j} _hover={{ cursor: 'pointer' }} onClick={() => {
+                        return <VStack
+                            w='40px'
+                            h='40px'
+                            color='white'
+                            key={j}
+                            _hover={{ cursor: 'pointer' }}
+                            onClick={() => {
                                 setRightDir(true);
                                 dispatch(setSelected([i, j]));
-                            }} pos='relative'>
-                                {day > 0 && <Text userSelect='none' pt='8px' zIndex={2}>{day}</Text>}
+                            }}
+                            pos='relative'
+                        >
+                            <Text userSelect='none' pt='8px' zIndex={2}>{day}</Text>
 
-                                <Box zIndex={1} w='75%' h='75%' borderRadius='200px' bg={isSelected ? 'linear-gradient(150deg, rgba(69,112,209,1) 0%, rgba(88,15,112,1) 100%)' : 'none'} opacity={isSelected ? 1 : 0} pos='absolute' transition='0.15s' top='5.5px' left='5px' />
-                                {now.getDate() === day && now.getMonth() === month && <Box w='75%' h='75%' borderRadius='200px' bg='green.600' pos='absolute' top='5.5px' left='5px' />}
+                            <Box zIndex={1} w='75%' h='75%' borderRadius='200px' bg={isSelected ? 'linear-gradient(150deg, rgba(69,112,209,1) 0%, rgba(88,15,112,1) 100%)' : 'none'} opacity={isSelected ? 1 : 0} pos='absolute' transition='0.15s' top='5.5px' left='5px' />
+                            {now.getDate() === day && now.getMonth() === month && <Box w='75%' h='75%' borderRadius='200px' bg='green.600' pos='absolute' top='5.5px' left='5px' />}
 
-                                <HStack pos='absolute' bottom='-5px' spacing='2px'>
-                                    {data[i][j].filter((x: ILesson | null) => x?.PROPERTY_LESSON_TYPE).map((x: any, i: number) =>
-                                        <Box key={i} w='6px' h='6px' bg={x.PROPERTY_LESSON_TYPE === 'П' ? 'blue.400' : (x.PROPERTY_LESSON_TYPE === 'ЛБ' ? 'red.300' : 'purple.500')} borderRadius='200px' />)}
-                                </HStack>
-                            </VStack>;
-                        })}
-                    </HStack>)
-                    : <Spinner size='xl' speed='0.4s' thickness='3px' mt='30px' color='white' />}
+                            <HStack pos='absolute' bottom='-5px' spacing='2px'>
+                                {/* @ts-ignore */}
+                                {data[i + weeksDisplayCount[0]][j].filter((x: ILesson | null) => x?.PROPERTY_LESSON_TYPE).map((x: any, i: number) =>
+                                    <Box key={i} w='6px' h='6px' bg={x.PROPERTY_LESSON_TYPE === 'П' ? 'blue.400' : (x.PROPERTY_LESSON_TYPE === 'ЛБ' ? 'red.300' : 'purple.500')} borderRadius='200px' />)}
+                            </HStack>
+                        </VStack>;
+                    })}
+                </HStack>)}
             </VStack>
 
             <AnimatePresence mode='wait'>
-                <motion.div style={{ overflowY: 'auto', height: '48vh', padding: isLaptop ? '14px 1% 110px 1%' : '20px 5% 100px 5%', width: isLaptop ? '50%' : '100%', position: 'relative', border: '0 solid rgba(255,255,255,0.2)', borderRadius: '25px 25px 0 0', boxShadow: '0px -4px 30px 2px rgba(255, 255, 255, 0.1)' }} initial={{ opacity: 0, x: rightDir ? 10 : -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: rightDir ? -10 : 10 }} transition={{ duration: 0.15 }} key={weekIndex + weekDayIndex} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
+                <motion.div
+                    style={{
+                        // overflowY: 'auto',
+                        height: '100%',
+                        padding: isLaptop ? '14px 1% 80px 1%' : '22px 5% 110px 5%',
+                        width: isLaptop ? '50%' : '100%',
+                        position: 'relative',
+                        borderRadius: '25px 25px 0 0',
+                        boxShadow: '0px -4px 30px 2px rgba(255, 255, 255, 0.1)'
+                    }}
+                    initial={{ opacity: 0, x: rightDir ? 10 : -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: rightDir ? -10 : 10 }}
+                    transition={{ duration: 0.15 }}
+                    key={weekIndex + weekDayIndex}
+                >
                     {data[weekIndex] && data[weekIndex][weekDayIndex] && Object.keys(data[weekIndex][weekDayIndex]).length > 0
                         ? <VStack key={weekIndex + weekDayIndex} spacing='18px'>
                             {Object.keys(data[weekIndex][weekDayIndex]).map((lesson: string, i) => {
+                                // @ts-ignore
                                 const theLesson: ILesson | null = data[weekIndex][weekDayIndex][lesson];
-                                if (!theLesson) return <VStack key={i} {...subjectCardStyles}>
+                                if (!theLesson) return <VStack key={i} opacity={0.8} {...subjectCardStyles}>
                                     <HStack w='100%' justify='space-between'>
                                         <HStack w='100%' spacing='10px'>
                                             <Text w='30px' h='30px' fontWeight={600} borderRadius='full' bg='gray.500' align='center' pt='3px'>{i + 1}</Text>
@@ -135,9 +183,9 @@ export default function Calendar() {
                                         <HStack spacing='8px' fontWeight={500}>
                                             <Text align='center' fontSize='14px' p='4px 10px' borderRadius='20px' bg='pink.500'>чилл</Text>
 
-                                            <HStack bg='red.400' p='4px 10px' borderRadius='20px'>
-                                                <Icon as={FaHouse} mt='-2px' />
-                                                <Text fontSize='14px'>{i > 0 ? 'не дома :(' : 'дома :)'}</Text>
+                                            <HStack bg='red.500' p='4px 12px' borderRadius='20px' fontWeight={600} spacing='6px'>
+                                                <Icon as={FaHouse} />
+                                                <Text fontSize='14px'>где</Text>
                                             </HStack>
                                         </HStack>
                                     </HStack>
@@ -160,15 +208,21 @@ export default function Calendar() {
                                             </VStack>
                                         </HStack>
 
-                                        {Object.keys(HWTypes).includes(PROPERTY_DISCIPLINE_NAME) && PROPERTY_LESSON_TYPE === LessonTypes['пр'] && <HStack borderRadius='20px' bg={HW ? 'green.500' : 'orange.400'} p='4px 18px' spacing='5px' boxShadow='0px 0px 10px 0px rgba(255, 255, 255, 0.35)' onClick={() => {
-                                            if (HW) {
-                                                setModalContent(HW);
-                                                onOpen();
-                                            } else router.push('/edit?open=' + PROPERTY_DISCIPLINE_NAME);
-                                        }} _hover={{ cursor: 'pointer' }}>
-                                            <Icon as={HW ? FaBook : BiEdit} boxSize='20px' pt='-2px' />
-                                            <Text userSelect='none' fontWeight={500}>ДЗ</Text>
-                                        </HStack>}
+                                        {
+                                            Object.keys(HWTypes).includes(PROPERTY_DISCIPLINE_NAME) &&
+                                            PROPERTY_LESSON_TYPE === LessonTypes['пр'] &&
+                                            // new Date().getDate() === weeksAndDays[weekIndex + weeksDisplayCount[0]][weekDayIndex] &&
+                                            // new Date().getMonth() === (weekIndex === 0 && weekDayIndex >= 30 ? 9 : weekIndex >= 0 && weekIndex <= 3 && weekDayIndex > 1 ? 10 : 11) &&
+                                            <HStack borderRadius='20px' bg={HW ? 'green.500' : 'orange.400'} p='4px 18px' spacing='5px' boxShadow='0px 0px 10px 0px rgba(255, 255, 255, 0.35)' onClick={() => {
+                                                if (HW) {
+                                                    setModalContent(HW);
+                                                    onOpen();
+                                                } else router.push('/edit?open=' + PROPERTY_DISCIPLINE_NAME);
+                                            }} _hover={{ cursor: 'pointer' }}>
+                                                <Icon as={HW ? FaBook : BiEdit} boxSize='20px' pt='-2px' />
+                                                <Text userSelect='none' fontWeight={500}>ДЗ</Text>
+                                            </HStack>
+                                        }
                                     </HStack>
 
                                     <HStack w='100%' justify='space-between' align='end'>
@@ -177,8 +231,8 @@ export default function Calendar() {
                                         <HStack spacing='8px' fontWeight={500}>
                                             <Text align='center' fontSize='14px' p='4px 10px' borderRadius='20px' bg={PROPERTY_LESSON_TYPE === LessonTypes['пр'] ? 'blue.500' : (PROPERTY_LESSON_TYPE === LessonTypes['лаб'] ? 'red.300' : 'purple.700')}>{PROPERTY_LESSON_TYPE === 'П' ? 'пр' : (PROPERTY_LESSON_TYPE === LessonTypes['лаб'] ? 'лаб' : 'лек')}</Text>
 
-                                            <HStack bg='red.400' p='4px 10px' borderRadius='20px'>
-                                                <Icon as={FaHouse} mt='-2px' />
+                                            <HStack bg='red.500' p='4px 12px' borderRadius='20px' fontWeight={600} spacing='6px'>
+                                                <Icon as={FaHouse} />
                                                 <Text fontSize='14px'>{PROPERTY_PLACE}</Text>
                                             </HStack>
                                         </HStack>

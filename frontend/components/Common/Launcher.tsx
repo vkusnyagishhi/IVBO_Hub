@@ -15,6 +15,7 @@ export function Launcher() {
         axios.get('https://api.twodev.cc/ivbo/data').then(res => dispatch(setData(res.data)));
         dispatch(setIsLaptop(!window.matchMedia("(max-width: 600px)").matches));
         if (localStorage.getItem('tg_userpic')) dispatch(setUserpic(localStorage.getItem('tg_userpic') ?? ''));
+        // if (localStorage.getItem('weeksDisplayCount')) dispatch(setWeeksDisplayCount(localStorage.getItem('weeksDisplayCount') ?? '0|5'));
 
         // if (!localStorage.getItem('weeksDisplayCount')) localStorage.setItem('weeksDisplayCount', '4');
         // else dispatch(setWeeksDisplayCount(parseInt(localStorage.getItem('weeksDisplayCount') ?? '4')));

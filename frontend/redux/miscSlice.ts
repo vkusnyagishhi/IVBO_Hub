@@ -1,9 +1,10 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from '@reduxjs/toolkit';
 import { IHomework } from "@/utils/misc";
+import table from "@/utils/table";
 
 interface IData {
-    table: any[];
+    // table: any[];
     hw: any[];
     version: string;
     currentWeek: number;
@@ -12,33 +13,47 @@ interface IData {
 interface MiscState {
     isLaptop: boolean;
     hw: IHomework[];
-    table: any[];
+    // table: any[];
     version: string;
     calendarSelected: number[];
     editingHWs: string[];
-    weeksDisplayCount: number;
+    weeksDisplayCount: number[];
 }
 
 const initialState: MiscState = {
     isLaptop: false,
     hw: [],
-    table: [],
+    // table: [],
     version: 'fetching data...',
-    calendarSelected: [0, 7],
+    calendarSelected: [1, 1],
     editingHWs: [],
-    weeksDisplayCount: 4
+    weeksDisplayCount: [0, 5]
 };
 
 export const miscSlice = createSlice({
     name: 'misc',
     initialState,
     reducers: {
-        setWeeksDisplayCount: (state, action: PayloadAction<number>) => {
-            state.weeksDisplayCount = action.payload;
+        setWeeksDisplayCount: (state, action: PayloadAction<string>) => {
+            state.weeksDisplayCount = action.payload.split('|').map((x: string) => parseInt(x));
+        },
+        increaseWeeksDisplayCount: (state) => { // уменшить календарь
+            if (state.weeksDisplayCount[1] + 1 === table.length - 1)
+                state.weeksDisplayCount = [state.calendarSelected[0], table.length - state.calendarSelected[0] - 1];
+            else {
+                if (state.weeksDisplayCount[0] < state.calendarSelected[0]) ++state.weeksDisplayCount[0];
+                else ++state.weeksDisplayCount[1];
+            }
+
+            localStorage.setItem('weeksDisplayCount', `${state.weeksDisplayCount[0]}|${state.weeksDisplayCount[1]}`);
+        },
+        decreaseWeeksDisplayCount: (state) => { // увеличить календарь
+            if (state.weeksDisplayCount[0] > 0) state.weeksDisplayCount[0]--;
+            else state.weeksDisplayCount[1]--;
         },
         setData: (state, action: PayloadAction<IData>) => {
             Object.assign(state.hw, action.payload.hw);
-            Object.assign(state.table, action.payload.table);
+            // Object.assign(state.table, action.payload.table);
             state.version = action.payload.version;
             if (new Date().getDay() !== 0) state.calendarSelected = [action.payload.currentWeek, new Date().getDay() - 1];
             else state.calendarSelected = [action.payload.currentWeek, 0];
@@ -49,14 +64,6 @@ export const miscSlice = createSlice({
         editHW: (state, action: PayloadAction<any>) => {
             const found: IHomework | any = state.hw.find((h: IHomework) => h.subject === action.payload.subject);
             if (found) found.content = action.payload.value;
-        },
-        addHWField: (state, action: PayloadAction<any>) => {
-            const found: IHomework | any = state.hw.find((h: IHomework) => h.subject === action.payload);
-            if (found) found.content.push('');
-        },
-        removeHWField: (state, action: PayloadAction<any>) => {
-            const found: IHomework | any = state.hw.find((h: IHomework) => h.subject === action.payload[0]);
-            if (found) found.content.splice(action.payload[1], 1);
         },
         deletePhoto: (state, action: PayloadAction<any>) => {
             state.hw[action.payload].image = null;
@@ -76,7 +83,7 @@ export const miscSlice = createSlice({
 
             if (
                 (weekIndex <= 0 && dayIndex < 0) ||
-                (weekIndex === state.weeksDisplayCount - 1 && dayIndex >= 6)
+                (weekIndex === state.weeksDisplayCount[1] - 1 && dayIndex >= 6)
             ) return;
 
             if (dayIndex > 5) state.calendarSelected = [weekIndex + 1, 0];
@@ -86,5 +93,5 @@ export const miscSlice = createSlice({
     }
 })
 
-export const { setData, setIsLaptop, editHW, addHWField, removeHWField, deletePhoto, addEditingHW, removeEditingHW, setSelected, swipe, setWeeksDisplayCount } = miscSlice.actions;
+export const { setData, setIsLaptop, editHW, setWeeksDisplayCount, deletePhoto, addEditingHW, removeEditingHW, setSelected, swipe, increaseWeeksDisplayCount, decreaseWeeksDisplayCount } = miscSlice.actions;
 export default miscSlice.reducer;
