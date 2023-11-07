@@ -10,6 +10,8 @@ from app.core.auth.utils.contrib import authenticate_tg, authenticate
 from app.core.auth.utils.jwt import create_access_token
 from app.settings.config import settings
 from app.core.auth.utils import password
+from app.redis.requests.core.requests import load_short_token, get_short_token
+from app.redis.requests.core.schemas import ShortToken
 
 import random
 import string
@@ -44,6 +46,9 @@ async def generate_token(
 
     token = "".join([random.choice(string.ascii_letters) for _ in range(32)])
     token_hashed = password.get_password_hash(token)
+
+    redis_token = await load_short_token(ShortToken(username=user.username, short_token=token_hashed))
+    print(redis_token)
 
     tg_token = await ShortTgToken.get_or_none(user=user)
     if tg_token is None:

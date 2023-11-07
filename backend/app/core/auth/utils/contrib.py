@@ -14,6 +14,7 @@ from app.core.auth.schemas import JWTTokenPayload, TelegramLoginData, Credential
 from app.core.auth.utils import password
 from app.core.auth.utils.jwt import ALGORITHM
 from app.settings.config import settings
+from app.redis.requests.core.requests import load_short_token, get_short_token
 
 reusable_oauth2 = OAuth2PasswordBearer(tokenUrl="/auth/login/access-token")
 
@@ -43,6 +44,8 @@ async def authenticate(credentials: CredentialSchema) -> Optional["User"]:
     if credentials.username:
         user = await User.get_by_tg_username(username=credentials.username)
         token = await ShortTgToken.get_or_none(user=user)
+        token_redis = await get_short_token(username=credentials.username)
+        print(token_redis)
     else:
         return None
     
