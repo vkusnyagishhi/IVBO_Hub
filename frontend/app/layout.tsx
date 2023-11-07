@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Launcher />
         <Header />
 
-        <main style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', width: '100%' }}>
+        <main style={{ alignItems: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 'calc(100vh - 240px)', width: '100%' }}>
             {children}
         </main>
     </Providers>

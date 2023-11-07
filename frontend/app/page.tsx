@@ -75,10 +75,10 @@ export default function Calendar() {
     }
 
     return <>
-        <VStack w='100%' minH='100%' spacing={`${50 + slicedData.length * 52}px`} pos='relative' onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
+        <VStack w='100%' h='100%' pt='30px' spacing={`${50 + slicedData.length * 52}px`} pos='relative' onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
             {/*<Box w='200px' h='50px' border='2px solid red' pos='fixed' left={0} top={`${170 + slicedData.length * 55}px`} />*/}
 
-            <Text pos='absolute' color='white' opacity={0.7} top='-4vh' left={isLaptop ? '25%' : '5%'}>{months[new Date().getMonth()]}, {weekIncrement + weekIndex} неделя</Text>
+            <Text pos='absolute' color='white' opacity={0.5} top='-7px' left={isLaptop ? '25%' : '5%'}>{months[new Date().getMonth()]}, {weekIncrement + weekIndex} неделя</Text>
             <Box />
             {/*<HStack pos='absolute' top='-8.3vh' left='50%'>*/}
             {/*    <Flex opacity={weeksDisplayCount < data.length - 2 ? 1 : 0.5} onClick={() => {*/}
@@ -108,9 +108,9 @@ export default function Calendar() {
                     {week.map((dayTable: any, j) => {
                         const now = new Date();
                         const day = weeksAndDays[i + weeksDisplayCount[0]][j];
-                        const month = i === 0 && j >= 30
+                        const month = i === 0 && weeksAndDays[i][j] >= 30
                             ? 9
-                            : i >= 0 && i <= 3 && j > 1
+                            : i >= 0 && i <= 3 && weeksAndDays[i][j] > 1
                                 ? 10
                                 : 11;
 
@@ -146,9 +146,9 @@ export default function Calendar() {
             <AnimatePresence mode='wait'>
                 <motion.div
                     style={{
-                        // overflowY: 'auto',
-                        height: '100%',
-                        padding: isLaptop ? '14px 1% 80px 1%' : '22px 5% 110px 5%',
+                        overflowY: 'auto',
+                        height: '58vh',
+                        padding: isLaptop ? '20px 1% 70px 1%' : '20px 5% 110px 5%',
                         width: isLaptop ? '50%' : '100%',
                         position: 'relative',
                         borderRadius: '25px 25px 0 0',
