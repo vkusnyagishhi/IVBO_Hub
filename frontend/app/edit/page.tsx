@@ -81,7 +81,10 @@ export default function Admin() {
                                 dispatch(editHW({ subject: hw[selected].subject, value: e.target.value }));
                             }} />
 
-                            <Button w='50%' bg='red.500' color='white' onClick={() => dispatch(editHW({ subject: hw[selected].subject, value: '' }))} _hover={{ cursor: 'pointer', bg: 'red.400' }} _active={{ bg: 'red.300' }}>Очистить поле</Button>
+                            <Button w='50%' bg='red.500' color='white' onClick={() => {
+                                if (!activated.includes(hw[selected].subject)) setActivated(s => [...s, hw[selected].subject]);
+                                dispatch(editHW({ subject: hw[selected].subject, value: '' }));
+                            }} _hover={{ cursor: 'pointer', bg: 'red.400' }} _active={{ bg: 'red.300' }}>Очистить поле</Button>
 
                             {/*{(hw[selected].content.length === 0 || hw[selected].content.filter((x: string) => x.length < 1).length === 0) && <Button fontSize='26px' onClick={() => dispatch(addHWField(hw[selected].subject))}>+</Button>}*/}
 
