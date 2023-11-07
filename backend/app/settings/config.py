@@ -25,6 +25,9 @@ class Settings:
         "endpoint",
     ]
 
+    REDIS_HOST = config("REDIS_HOST")
+    REDIS_PORT = config("REDIS_PORT")
+
     PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
     BASE_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, os.pardir))
     LOGS_ROOT = os.path.join(BASE_DIR, "app/logs")
