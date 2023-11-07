@@ -6,18 +6,27 @@ from app.core.auth.utils.password import get_password_hash
 
 async def load_short_token(schema: ShortToken) -> bool:
     async with r.pipeline(transaction=True) as pipe:
-        token = await (pipe.hget(f"{schema.username}:token", "hash"))
+        token = await (pipe.hget(f"{schema.username}:token", "hash").execute())
 
         if token is not None:
-            await (pipe.delete(f"{schema.username}:token"))
+            await (pipe.delete(f"{schema.username}:token").execute())
 
         token = await (pipe.hset(
             f"{schema.username}:token", 
             mapping={
                 "hash": get_password_hash(schema.short_token)
-            })    
+            }).execute()   
         )
 
         if token is not None:
             return True
         return False
+    
+
+async def get_short_token(username: str) -> Optional[ShortToken]:
+    async with r.pipeline(transaction=True) as pipe:
+        token = await (pipe.hgetall(f"{username}:token").execute())
+
+        if token is not None:
+            return ShortToken(**token)
+        return None
