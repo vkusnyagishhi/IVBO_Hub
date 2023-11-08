@@ -47,13 +47,15 @@ async def generate_token(
     token = "".join([random.choice(string.ascii_letters) for _ in range(32)])
     token_hashed = password.get_password_hash(token)
 
-    redis_token = await load_short_token(ShortToken(username=user.username, short_token=token_hashed))
+    await load_short_token(ShortToken(username=user.username, short_token=token_hashed))
 
-    tg_token = await ShortTgToken.get_or_none(user=user)
-    if tg_token is None:
-        tg_token = await ShortTgToken(value=token_hashed, user=user)
-    else:
-        tg_token.update_from_dict({"value": token_hashed})
-    await tg_token.save()
+    # tg_token = await ShortTgToken.get_or_none(user=user)
+    # if tg_token is None:
+    #     tg_token = await ShortTgToken(value=token_hashed, user=user)
+    # else:
+    #     tg_token.update_from_dict({"value": token_hashed})
+    # await tg_token.save()
+
+
 
     return TgToken(username=user.username, short_token=token)
