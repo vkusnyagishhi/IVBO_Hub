@@ -48,7 +48,6 @@ async def generate_token(
     token_hashed = password.get_password_hash(token)
 
     redis_token = await load_short_token(ShortToken(username=user.username, short_token=token_hashed))
-    print(redis_token)
 
     tg_token = await ShortTgToken.get_or_none(user=user)
     if tg_token is None:

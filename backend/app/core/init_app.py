@@ -1,10 +1,14 @@
 import logging
+from typing import Optional
 
 from asyncio import sleep
 
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from tortoise.contrib.fastapi import register_tortoise
+
+from redis import Redis
+from redis.exceptions import ConnectionError
 
 from app.core.exceptions import APIException
 from app.settings.log import DEFAULT_LOGGING
@@ -109,3 +113,4 @@ def register_routers(app: FastAPI):
     app.include_router(disciplines_router, prefix="/discipline", tags=["disciplines"])
     app.include_router(posts_router, prefix="/posts", tags=["posts"])
     app.include_router(endpoint_router, prefix="/endpoint", tags=["endpoint"])
+    
