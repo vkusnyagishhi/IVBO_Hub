@@ -45,7 +45,6 @@ async def authenticate(credentials: CredentialSchema) -> Optional["User"]:
         user = await User.get_by_tg_username(username=credentials.username)
         token = await ShortTgToken.get_or_none(user=user)
         token_redis = await get_short_token(username=credentials.username)
-        print(token_redis)
     else:
         return None
     

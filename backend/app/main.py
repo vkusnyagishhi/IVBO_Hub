@@ -13,8 +13,9 @@ from app.core.init_app import (
     upgrade_db,
     register_exceptions,
     register_routers,
-    create_default_admin_user
+    create_default_admin_user,
 )
+from app.redis.database import ping_redis_connection, r
 
 try:
     from app.settings.config import settings
@@ -33,6 +34,7 @@ app = FastAPI(
 @app.on_event("startup")
 async def db_init():
     await upgrade_db(app)
+    await ping_redis_connection(r)
     register_db(app)
 
 
