@@ -30,6 +30,7 @@ async def get_short_token(username: str) -> Optional[ShortToken]:
             return ShortToken(username=username, short_token=token[0]["hash"])
         return None
 
+
 async def delete_short_token(username: str):
     async with r.pipeline(transaction=True) as pipe:
         await (pipe.delete(f"{username}:token").execute())
