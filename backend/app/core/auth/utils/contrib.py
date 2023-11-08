@@ -50,8 +50,6 @@ async def authenticate(credentials: CredentialSchema) -> Optional["User"]:
     
     if user is None or token_redis is None:
         return None
-    
-    print(password.get_password_hash(credentials.token), token_redis.short_token)
 
     verified, updated_token = password.verify_and_update_password(credentials.token, token_redis.short_token)
 
