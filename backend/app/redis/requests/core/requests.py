@@ -14,7 +14,7 @@ async def load_short_token(schema: ShortToken) -> bool:
         token = await (pipe.hset(
             f"{schema.username}:token", 
             mapping={
-                "hash": get_password_hash(schema.short_token)
+                "hash": schema.short_token
             }).execute()   
         )
 
@@ -26,7 +26,10 @@ async def load_short_token(schema: ShortToken) -> bool:
 async def get_short_token(username: str) -> Optional[ShortToken]:
     async with r.pipeline(transaction=True) as pipe:
         token = await (pipe.hgetall(f"{username}:token").execute())
-
         if token is not None:
-            return ShortToken(**token)
+            return ShortToken(username=username, short_token=token[0]["hash"])
         return None
+
+async def delete_short_token(username: str):
+    async with r.pipeline(transaction=True) as pipe:
+        await (pipe.delete(f"{username}:token").execute())
