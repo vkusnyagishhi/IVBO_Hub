@@ -6,11 +6,13 @@ from app.core.auth.utils.contrib import get_current_user
 
 from app.applications.users.models import User
 from app.applications.posts.models import Post
+from app.applications.files.models import File
 from app.applications.homework.models import Homework
 
 from app.applications.homework.schemas import BaseHomeworkOut
 from app.applications.posts.schemas import BasePostOut
 from app.applications.endpoint.schemas import HomeworkByDay
+from app.applications.files.schemas import BaseFileOut
 
 from app.settings.config import settings
 
@@ -43,11 +45,19 @@ async def read_homeworks_by_semester(
 
 @router.get("/posts", response_model=List[BasePostOut], status_code=200)
 async def get_posts(
-    datetime_get: datetime = datetime.utcnow(),
-    current_user: User = Depends(get_current_user)
+    datetime_get: datetime = datetime.utcnow()
 ):
     posts = await Post.all()
 
     response = [i for i in posts if i.datetime_created < datetime_get.replace(tzinfo=pytz.utc)]
 
     return response
+
+
+@router.get("/{username}", response_model=List[BaseFileOut], status_code=200)
+async def get_user_files(
+    username: str
+):
+    files = await File.filter(user__username=username)
+
+    return files

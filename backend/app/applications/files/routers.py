@@ -15,7 +15,7 @@ from app.settings.config import settings
 
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, Form
 from fastapi import File
 from fastapi.responses import FileResponse
 from fastapi.concurrency import run_in_threadpool
@@ -34,15 +34,34 @@ async def read_files_info(
 
 
 @router.post("/", response_model=BaseFileOut, status_code=201)
-async def create_file(
-    *,
-    file_in: BaseFileCreate,
-    current_user: User = Depends(get_current_user)
+async def create_and_upload_file(
+    is_private: bool = Form(...),
+    user: User = Depends(get_current_user),
+    file: UploadFile = File(...),
 ):
-    db_file = BaseFileCreate(**file_in.model_dump())
-    created_file = await FileModel.create(db_file, user=current_user)
+    file_title, file_type = file.filename.split('.', -1)
 
-    return created_file
+    file_db = BaseFileCreate(title=file_title, type=file_type, is_private=is_private)
+    
+    file_fields = await FileModel.create(file_db, user=user)
+
+    try:
+        file_directory = f"data"
+        if not path.exists(file_directory):
+            makedirs(file_directory)
+        file.filename = f"{str(uuid_.uuid4())}.{file_fields.type}"
+        f = await run_in_threadpool(open, f"{file_directory}/{file.filename}", "wb")
+        await run_in_threadpool(shutil.copyfileobj, file.file, f)
+    except Exception():
+        raise HTTPException(status_code=400, detail="Unable to write file")
+    finally:
+        if 'f' in locals(): await run_in_threadpool(f.close)
+        await file.close()
+
+    file_fields.path = f"{file_directory}/{file.filename}"
+    await file_fields.save()
+
+    return file_fields
 
 
 @router.patch("/my_files/{uuid}", response_model=BaseFileOut, status_code=200)
@@ -122,46 +141,6 @@ async def delete_file(
         remove(file.path)
 
     await file.delete()
-
-
-@router.post("/my_files/upload/{uuid}", status_code=200)
-async def upload_file(
-    uuid: UUID4,
-    file: UploadFile = File(...),
-    current_user: User = Depends(get_current_user)
-):
-    file_fields = await FileModel.get_or_none(uuid=uuid)
-
-    if not file_fields:
-        raise HTTPException(status_code=404, detail="The file with this uuid does not exist")
-
-    if file_fields.user_id != current_user.uuid:
-        raise HTTPException(status_code=400, detail="Not enough permissions to edit this file")
-
-    media_type = ""
-
-    for keys, values in settings.MEDIA_TYPES.items():
-        if file_fields.type in values:
-            media_type = keys
-
-    if media_type == "": 
-        media_type = "application"
-
-    try:
-        file_directory = f"data"
-        if not path.exists(file_directory):
-            makedirs(file_directory)
-        file.filename = f"{str(uuid_.uuid4())}.{file_fields.type}"
-        f = await run_in_threadpool(open, f"{file_directory}/{file.filename}", "wb")
-        await run_in_threadpool(shutil.copyfileobj, file.file, f)
-    except Exception():
-        raise HTTPException(status_code=400, detail="Unable to write file")
-    finally:
-        if 'f' in locals(): await run_in_threadpool(f.close)
-        await file.close()
-
-    file_fields.path = f"{file_directory}/{file.filename}"
-    await file_fields.save()
 
 
 @router.get("/my_files/{uuid}", response_class=FileResponse, status_code=200)
