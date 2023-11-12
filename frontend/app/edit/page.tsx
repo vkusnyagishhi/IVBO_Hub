@@ -108,7 +108,7 @@ export default function Admin() {
                                                 axios.post(
                                                     'https://api.twodev.cc/ivbo/hw/unupload',
                                                     { subject: hw[selected].subject.split(' ')[1] },
-                                                    { headers: { 'x-access-token': localStorage.getItem('hash') } }
+                                                    { headers: { 'x-access-token': localStorage.getItem('ivbo_token') } }
                                                 ).then(res => {
                                                     setLoading(false);
                                                     if (res.data === 200) {
@@ -138,7 +138,7 @@ export default function Admin() {
                                                             headers: {
                                                                 'Content-Type': 'multipart/form-data',
                                                                 'filename': encodeURIComponent(`${hw[selected].subject.split(' ')[1]}`),
-                                                                'x-access-token': localStorage.getItem('hash')
+                                                                'x-access-token': localStorage.getItem('ivbo_token')
                                                             }
                                                         }
                                                     )
@@ -174,7 +174,7 @@ export default function Admin() {
                                     setLoading(true);
                                     setActivated(s => s.filter(c => c !== hw[selected].subject));
 
-                                    axios.post('https://api.twodev.cc/ivbo/hw/edit', hw[selected], { headers: { 'x-access-token': localStorage.getItem('hash') } }).then(res => {
+                                    axios.post('https://api.twodev.cc/ivbo/hw/edit', hw[selected], { headers: { 'x-access-token': localStorage.getItem('ivbo_token') } }).then(res => {
                                         setLoading(false);
                                         if (res.data === 200) {
                                             if (!toast.isActive('success-toast')) toast(toasts.success('Домашка сохранена!'));

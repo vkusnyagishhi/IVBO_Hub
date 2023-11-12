@@ -7,7 +7,6 @@ interface IData {
     // table: any[];
     hw: any[];
     version: string;
-    currentWeek: number;
 }
 
 interface MiscState {
@@ -25,7 +24,7 @@ const initialState: MiscState = {
     hw: [],
     // table: [],
     version: 'fetching data...',
-    calendarSelected: [1, 1],
+    calendarSelected: [1, 0],
     editingHWs: [],
     weeksDisplayCount: [0, 5]
 };
@@ -55,8 +54,8 @@ export const miscSlice = createSlice({
             Object.assign(state.hw, action.payload.hw);
             // Object.assign(state.table, action.payload.table);
             state.version = action.payload.version;
-            if (new Date().getDay() !== 0) state.calendarSelected = [action.payload.currentWeek, new Date().getDay() - 1];
-            else state.calendarSelected = [action.payload.currentWeek, 0];
+            if (new Date().getDay() !== 0) state.calendarSelected = [1, new Date().getDay() - 1];
+            else state.calendarSelected = [1, 0];
         },
         setIsLaptop: (state, action: PayloadAction<boolean>) => {
             state.isLaptop = action.payload;

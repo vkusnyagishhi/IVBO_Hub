@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "@/redux/hooks";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaBook, FaHouse } from "react-icons/fa6";
-import { HWTypes, IHomework, ILesson, lessonIntervals, LessonTypes, months, weeksAndDays } from "@/utils/misc";
+import { HWTypes, IHomework, ILesson, lessonIntervals, LessonTypes, months, weeksAndDays as rawWnD } from "@/utils/misc";
 import { useRouter } from "next/navigation";
 import { decreaseWeeksDisplayCount, increaseWeeksDisplayCount, setSelected, swipe } from "@/redux/miscSlice";
 import { BiEdit } from "react-icons/bi";
@@ -22,7 +22,8 @@ const subjectCardStyles = {
 
 const weekIncrement = 10,
     minSwipeDistanceX = 40,
-    minSwipeDistanceY = 30;
+    minSwipeDistanceY = 30,
+    weeksAndDays = rawWnD.slice(rawWnD.findIndex((x: number[]) => x.includes(new Date().getDate())));
 
 export default function Calendar() {
     const { hw, isLaptop, calendarSelected: [weekIndex, weekDayIndex], weeksDisplayCount } = useSelector(state => state.misc);
@@ -131,7 +132,7 @@ export default function Calendar() {
                             <Text userSelect='none' pt='8px' zIndex={2}>{day}</Text>
 
                             <Box zIndex={1} w='75%' h='75%' borderRadius='200px' bg={isSelected ? 'linear-gradient(150deg, rgba(69,112,209,1) 0%, rgba(88,15,112,1) 100%)' : 'none'} opacity={isSelected ? 1 : 0} pos='absolute' transition='0.15s' top='5.5px' left='5px' />
-                            {now.getDate() === day && now.getMonth() === month && <Box w='75%' h='75%' borderRadius='200px' bg='green.600' pos='absolute' top='5.5px' left='5px' />}
+                            {now.getDate() === day && now.getMonth() === month && <Box w='75%' h='75%' borderRadius='200px' bg='green.300' pos='absolute' top='5.5px' left='5px' opacity={0.5} />}
 
                             <HStack pos='absolute' bottom='-5px' spacing='2px'>
                                 {/* @ts-ignore */}

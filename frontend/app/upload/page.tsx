@@ -106,7 +106,7 @@ export default function Files() {
                                             {
                                                 headers: {
                                                     'Content-Type': 'multipart/form-data',
-                                                    'x-access-token': localStorage.getItem('hash')
+                                                    'x-access-token': localStorage.getItem('ivbo_token')
                                                 }
                                             }
                                         )
@@ -147,7 +147,7 @@ export default function Files() {
                                     <Input placeholder='@username' value={'@' + trustedField} onChange={e => setTrustedField(e.target.value.slice(1))} />
                                     <Button onClick={() => {
                                         if (trustedField.length >= 5) axios
-                                            .post('https://api.twodev.cc/ivbo/trust', { target: trustedField }, { headers: { 'x-access-token': localStorage.getItem('hash') } })
+                                            .post('https://api.twodev.cc/ivbo/trust', { target: trustedField }, { headers: { 'x-access-token': localStorage.getItem('ivbo_token') } })
                                             .then(res => {
                                                 if (res.data === 500) {
                                                     if (!toast.isActive('error-toast')) toast(toasts.error('Нет такого пользователя!'));
@@ -165,7 +165,7 @@ export default function Files() {
                                         <Text>{t}</Text>
                                         <IconButton aria-label='remove' icon={<HiUserRemove />} {...iconButtonStyles} onClick={() => {
                                             axios
-                                                .post('https://api.twodev.cc/ivbo/untrust', { target: t }, { headers: { 'x-access-token': localStorage.getItem('hash') } })
+                                                .post('https://api.twodev.cc/ivbo/untrust', { target: t }, { headers: { 'x-access-token': localStorage.getItem('ivbo_token') } })
                                                 .then(res => {
                                                     if (res.data === 500) {
                                                         if (!toast.isActive('error-toast')) toast(toasts.error());
@@ -199,7 +199,7 @@ export default function Files() {
                                 .post(
                                     'https://api.twodev.cc/ivbo/delete',
                                     { file: fileToDelete },
-                                    { headers: { 'x-access-token': localStorage.getItem('hash') } }
+                                    { headers: { 'x-access-token': localStorage.getItem('ivbo_token') } }
                                 )
                                 .then(res => {
                                     onClose();

@@ -22,7 +22,7 @@ export function TgLoginButton() {
                     if (!toast.isActive('error-toast')) toast(toasts.error('Вы не состоите в группе ИВБО-11-23!'));
                 } else {
                     dispatch(setAuthData(res.data));
-                    localStorage.setItem('hash', data.hash);
+                    localStorage.setItem('ivbo_token', data.hash);
                 }
             });
         }}
