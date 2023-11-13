@@ -3,7 +3,7 @@ import { BiEdit } from "react-icons/bi";
 
 export interface IHomework {
     subject: string;
-    content: string[];
+    content: string;
     image: string | null;
     updatedAt: string;
 }

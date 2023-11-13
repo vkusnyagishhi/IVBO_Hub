@@ -61,7 +61,7 @@ export const miscSlice = createSlice({
             state.isLaptop = action.payload;
         },
         editHW: (state, action: PayloadAction<any>) => {
-            const found: IHomework | any = state.hw.find((h: IHomework) => h.subject === action.payload.subject);
+            const found: IHomework | undefined = state.hw.find((h: IHomework) => h.subject === action.payload.subject);
             if (found) found.content = action.payload.value;
         },
         deletePhoto: (state, action: PayloadAction<any>) => {

@@ -13,9 +13,9 @@ export function Launcher() {
 
     useEffect(() => {
         if (localStorage.getItem('ivbo_data')) dispatch(setData(JSON.parse(localStorage.getItem('ivbo_data') ?? '{}')));
-        axios.get('https://api.twodev.cc/ivbo/data').then(res => {
+        if (!version.includes('v')) axios.get('https://api.twodev.cc/ivbo/data').then(res => {
             dispatch(setData(res.data));
-            localStorage.setItem('ivbo_data', JSON.stringify(res.data));
+            localStorage.setItem('ivbo_data', JSON.stringify(res.data).replace('v', 'x'));
         });
 
         dispatch(setIsLaptop(!window.matchMedia("(max-width: 600px)").matches));

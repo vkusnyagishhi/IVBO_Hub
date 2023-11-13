@@ -7,7 +7,7 @@ import { deletePhoto, editHW, setData } from "@/redux/miscSlice";
 import axios from "axios";
 import { TgLoginButton } from "@/components/Common";
 import { AiFillBulb } from "react-icons/ai";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Admin() {
     const { isOpen, onOpen: onOpenRaw, onClose: onCloseRaw } = useDisclosure();
@@ -21,7 +21,7 @@ export default function Admin() {
     const file = useRef(new FormData());
     const { hw, isLaptop, editingHWs } = useSelector(state => state.misc);
     const { user } = useSelector(state => state.auth);
-    const [openQuery, setOpenQuery] = useState(false);
+    const query = useSearchParams();
 
     const onOpen = useCallback(() => {
         // dispatch({ type: 'socket/send', payload: { action: 'opened', subject: hw[selected].subject } });
@@ -30,20 +30,17 @@ export default function Admin() {
 
     function onClose() {
         axios.get('https://api.twodev.cc/ivbo/data').then(res => dispatch(setData(res.data)));
-        if (openQuery) router.push('/');
+        if (query.get('open')) router.push('/');
         else setSelected(0);
         // dispatch({ type: 'socket/send', payload: { action: 'closed', subject: hw[selected].subject } });
         onCloseRaw();
     }
 
     useEffect(() => {
-        const open = new URL(window.location.href).searchParams.get('open');
-        if (open && !editingHWs.includes(HWTypes[open as keyof typeof HWTypes])) {
-            setOpenQuery(true);
-            setSelected(hw.findIndex((h: IHomework) => h.subject.includes(HWTypes[open as keyof typeof HWTypes])));
-            onOpen();
-        }
-    }, [editingHWs, hw, onOpen]);
+        if (editingHWs.includes(HWTypes[query.get('open') as keyof typeof HWTypes])) return;
+        setSelected(hw.findIndex((h: IHomework) => h.subject.includes(HWTypes[query.get('open') as keyof typeof HWTypes])));
+        onOpenRaw();
+    }, [hw, onOpenRaw, query]);
 
     return user
         ? <>

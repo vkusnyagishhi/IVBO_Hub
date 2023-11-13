@@ -23,7 +23,7 @@ const subjectCardStyles = {
 const weekIncrement = 10,
     minSwipeDistanceX = 40,
     minSwipeDistanceY = 30,
-    weeksAndDays = rawWnD.slice(rawWnD.findIndex((x: number[]) => x.includes(new Date().getDate())));
+    weeksAndDays = rawWnD.slice(rawWnD.findIndex((x: number[]) => x.includes(new Date().getDate())) - 1);
 
 export default function Calendar() {
     const { hw, isLaptop, calendarSelected: [weekIndex, weekDayIndex], weeksDisplayCount } = useSelector(state => state.misc);
