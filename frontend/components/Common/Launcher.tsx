@@ -35,7 +35,7 @@ export function Launcher() {
             }
         });
         else dispatch({ type: 'socket/connect', payload: 'unknown' });
-    }, [dispatch, user]);
+    }, [dispatch, user, version]);
 
     return <>
         <Text fontSize='14px' color='white' opacity={0.5} pos='fixed' top={2} right={3} zIndex={10}>{version}</Text>

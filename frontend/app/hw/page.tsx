@@ -1,6 +1,6 @@
 'use client';
 import { useSelector } from "@/redux/hooks";
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, HStack, Icon, Image, ListItem, OrderedList, Spinner, Text, VStack } from "@chakra-ui/react";
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, HStack, Icon, Image, Spinner, Text, VStack } from "@chakra-ui/react";
 import { IHomework } from "@/utils/misc";
 import Link from "next/link";
 import { BiEdit } from "react-icons/bi";
@@ -40,9 +40,7 @@ export default function Home() {
                             </VStack>
                         </Link>}
 
-                        <OrderedList>
-                            {x.content.map((c, i) => <ListItem key={i}>{c}</ListItem>)}
-                        </OrderedList>
+                        <Text>{x.content}</Text>
                     </AccordionPanel>}
                 </AccordionItem>)}
             </Accordion>
