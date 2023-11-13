@@ -14,6 +14,7 @@ from app.core.auth.schemas import JWTTokenPayload, TelegramLoginData, Credential
 from app.core.auth.utils import password
 from app.core.auth.utils.jwt import ALGORITHM
 from app.settings.config import settings
+from app.redis.requests.core.requests import load_short_token, get_short_token, delete_short_token
 
 reusable_oauth2 = OAuth2PasswordBearer(tokenUrl="/auth/login/access-token")
 
@@ -42,19 +43,20 @@ async def get_current_admin(current_user: User = Security(get_current_user)):
 async def authenticate(credentials: CredentialSchema) -> Optional["User"]:
     if credentials.username:
         user = await User.get_by_tg_username(username=credentials.username)
-        token = await ShortTgToken.get_or_none(user=user)
+        # token = await ShortTgToken.get_or_none(user=user)
+        token_redis = await get_short_token(username=credentials.username)
     else:
         return None
     
-    if user is None or token is None:
+    if user is None or token_redis is None:
         return None
-    
-    verified, updated_token = password.verify_and_update_password(credentials.token, token.value)
+
+    verified, updated_token = password.verify_and_update_password(credentials.token, token_redis.short_token)
 
     if not verified:
         return None
     
-    await token.delete()
+    await delete_short_token(credentials.username)
 
     return user
 
