@@ -37,9 +37,11 @@ export default function Admin() {
     }
 
     useEffect(() => {
-        if (editingHWs.includes(HWTypes[query.get('open') as keyof typeof HWTypes])) return;
-        setSelected(hw.findIndex((h: IHomework) => h.subject.includes(HWTypes[query.get('open') as keyof typeof HWTypes])));
-        onOpenRaw();
+        // if (editingHWs.includes(HWTypes[query.get('open') as keyof typeof HWTypes])) return;
+        if (query.has('open')) {
+            setSelected(hw.findIndex((h: IHomework) => h.subject.includes(HWTypes[query.get('open') as keyof typeof HWTypes])));
+            onOpenRaw();
+        }
     }, [hw, onOpenRaw, query]);
 
     return user

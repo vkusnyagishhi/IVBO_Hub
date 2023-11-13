@@ -23,7 +23,8 @@ const subjectCardStyles = {
 const weekIncrement = 10,
     minSwipeDistanceX = 40,
     minSwipeDistanceY = 30,
-    weeksAndDays = rawWnD.slice(rawWnD.findIndex((x: number[]) => x.includes(new Date().getDate())) - 1);
+    toSlice = rawWnD.findIndex((x: number[]) => x.includes(new Date().getDate())) - 1,
+    weeksAndDays = rawWnD.slice(toSlice);
 
 export default function Calendar() {
     const { hw, isLaptop, calendarSelected: [weekIndex, weekDayIndex], weeksDisplayCount } = useSelector(state => state.misc);
@@ -36,7 +37,7 @@ export default function Calendar() {
     const [[touchEndX, touchEndY], setTouchEnd] = useState([0, 0]);
     const [rightDir, setRightDir] = useState(true);
 
-    const slicedData = data.slice(weeksDisplayCount[0], -1 * weeksDisplayCount[1]);
+    const slicedData = data.slice(toSlice + 1, -1 * (data.length - 4));
 
     function onTouchStart(e: any) {
         setTouchEnd([0, 0]);
@@ -136,7 +137,7 @@ export default function Calendar() {
 
                             <HStack pos='absolute' bottom='-5px' spacing='2px'>
                                 {/* @ts-ignore */}
-                                {data[i + weeksDisplayCount[0]][j].filter((x: ILesson | null) => x?.PROPERTY_LESSON_TYPE).map((x: any, i: number) =>
+                                {slicedData[i + weeksDisplayCount[0]][j].filter((x: ILesson | null) => x?.PROPERTY_LESSON_TYPE).map((x: any, i: number) =>
                                     <Box key={i} w='6px' h='6px' bg={x.PROPERTY_LESSON_TYPE === 'П' ? 'blue.400' : (x.PROPERTY_LESSON_TYPE === 'ЛБ' ? 'red.300' : 'purple.500')} borderRadius='200px' />)}
                             </HStack>
                         </VStack>;
@@ -161,11 +162,11 @@ export default function Calendar() {
                     transition={{ duration: 0.15 }}
                     key={weekIndex + weekDayIndex}
                 >
-                    {data[weekIndex] && data[weekIndex][weekDayIndex] && Object.keys(data[weekIndex][weekDayIndex]).length > 0
+                    {slicedData[weekIndex] && slicedData[weekIndex][weekDayIndex] && Object.keys(slicedData[weekIndex][weekDayIndex]).length > 0
                         ? <VStack key={weekIndex + weekDayIndex} spacing='18px'>
-                            {Object.keys(data[weekIndex][weekDayIndex]).map((lesson: string, i) => {
+                            {Object.keys(slicedData[weekIndex][weekDayIndex]).map((lesson: string, i) => {
                                 // @ts-ignore
-                                const theLesson: ILesson | null = data[weekIndex][weekDayIndex][lesson];
+                                const theLesson: ILesson | null = slicedData[weekIndex][weekDayIndex][lesson];
                                 if (!theLesson) return <VStack key={i} opacity={0.8} {...subjectCardStyles}>
                                     <HStack w='100%' justify='space-between'>
                                         <HStack w='100%' spacing='10px'>

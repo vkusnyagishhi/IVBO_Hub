@@ -25,7 +25,7 @@ export function Launcher() {
         // if (!localStorage.getItem('weeksDisplayCount')) localStorage.setItem('weeksDisplayCount', '4');
         // else dispatch(setWeeksDisplayCount(parseInt(localStorage.getItem('weeksDisplayCount') ?? '4')));
 
-        if (localStorage.getItem('ivbo_token')) axios.post('https://api.twodev.cc/ivbo/login', { hash: localStorage.getItem('ivbo_token') }).then(res => {
+        if (!user && localStorage.getItem('ivbo_token')) axios.post('https://api.twodev.cc/ivbo/login', { hash: localStorage.getItem('ivbo_token') }).then(res => {
             if (res.data === 500) {
                 localStorage.removeItem('ivbo_token');
                 dispatch({ type: 'socket/connect', payload: 'unknown' });
