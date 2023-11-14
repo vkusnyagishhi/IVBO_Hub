@@ -12,14 +12,16 @@ export function Launcher() {
     const { user } = useSelector(state => state.auth);
 
     useEffect(() => {
-        if (localStorage.getItem('ivbo_data')) dispatch(setData(JSON.parse(localStorage.getItem('ivbo_data') ?? '{}')));
-        if (!version.includes('v')) axios.get('https://api.twodev.cc/ivbo/data').then(res => {
+        dispatch(setIsLaptop(!window.matchMedia("(max-width: 600px)").matches));
+        dispatch(setData(JSON.parse(localStorage.getItem('ivbo_data') ?? '{}')));
+        dispatch(setUserpic(localStorage.getItem('tg_userpic') ?? ''));
+        // dispatch(setShowHW(localStorage.getItem('ivbo_showHW') === 'true'));
+
+        axios.get('https://api.twodev.cc/ivbo/data').then(res => {
             dispatch(setData(res.data));
-            localStorage.setItem('ivbo_data', JSON.stringify(res.data).replace('v', 'x'));
+            localStorage.setItem('ivbo_data', JSON.stringify(res.data));
         });
 
-        dispatch(setIsLaptop(!window.matchMedia("(max-width: 600px)").matches));
-        if (localStorage.getItem('tg_userpic')) dispatch(setUserpic(localStorage.getItem('tg_userpic') ?? ''));
         // if (localStorage.getItem('weeksDisplayCount')) dispatch(setWeeksDisplayCount(localStorage.getItem('weeksDisplayCount') ?? '0|5'));
 
         // if (!localStorage.getItem('weeksDisplayCount')) localStorage.setItem('weeksDisplayCount', '4');

@@ -1,6 +1,6 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from '@reduxjs/toolkit';
-import { IHomework } from "@/utils/misc";
+import { IHomework } from "@/utils/types";
 import table from "@/utils/table";
 
 interface IData {
@@ -11,6 +11,7 @@ interface IData {
 
 interface MiscState {
     isLaptop: boolean;
+    showHW: boolean;
     hw: IHomework[];
     // table: any[];
     version: string;
@@ -21,6 +22,7 @@ interface MiscState {
 
 const initialState: MiscState = {
     isLaptop: false,
+    showHW: false,
     hw: [],
     // table: [],
     version: 'fetching data...',
@@ -33,6 +35,11 @@ export const miscSlice = createSlice({
     name: 'misc',
     initialState,
     reducers: {
+        setShowHW: (state, action: PayloadAction<boolean>) => { state.showHW = action.payload; },
+        setIsLaptop: (state, action: PayloadAction<boolean>) => { state.isLaptop = action.payload; },
+        deletePhoto: (state, action: PayloadAction<any>) => { state.hw[action.payload].image = null; },
+        addEditingHW: (state, action: PayloadAction<string>) => { state.editingHWs.push(action.payload); },
+        setSelected: (state, action: PayloadAction<number[]>) => { state.calendarSelected = action.payload; },
         setWeeksDisplayCount: (state, action: PayloadAction<string>) => {
             state.weeksDisplayCount = action.payload.split('|').map((x: string) => parseInt(x));
         },
@@ -57,24 +64,12 @@ export const miscSlice = createSlice({
             if (new Date().getDay() !== 0) state.calendarSelected = [1, new Date().getDay() - 1];
             else state.calendarSelected = [1, 0];
         },
-        setIsLaptop: (state, action: PayloadAction<boolean>) => {
-            state.isLaptop = action.payload;
-        },
         editHW: (state, action: PayloadAction<any>) => {
             const found: IHomework | undefined = state.hw.find((h: IHomework) => h.subject === action.payload.subject);
             if (found) found.content = action.payload.value;
         },
-        deletePhoto: (state, action: PayloadAction<any>) => {
-            state.hw[action.payload].image = null;
-        },
-        addEditingHW: (state, action: PayloadAction<string>) => {
-            state.editingHWs.push(action.payload);
-        },
         removeEditingHW: (state, action: PayloadAction<string>) => {
             state.editingHWs = state.editingHWs.filter((hw: string) => hw !== action.payload);
-        },
-        setSelected: (state, action: PayloadAction<number[]>) => {
-            state.calendarSelected = action.payload;
         },
         swipe: (state, action: PayloadAction<number>) => {
             const weekIndex = state.calendarSelected[0];
@@ -92,5 +87,5 @@ export const miscSlice = createSlice({
     }
 })
 
-export const { setData, setIsLaptop, editHW, setWeeksDisplayCount, deletePhoto, addEditingHW, removeEditingHW, setSelected, swipe, increaseWeeksDisplayCount, decreaseWeeksDisplayCount } = miscSlice.actions;
+export const { setData, setIsLaptop, editHW, setShowHW, setWeeksDisplayCount, deletePhoto, addEditingHW, removeEditingHW, setSelected, swipe, increaseWeeksDisplayCount, decreaseWeeksDisplayCount } = miscSlice.actions;
 export default miscSlice.reducer;

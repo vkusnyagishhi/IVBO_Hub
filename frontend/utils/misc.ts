@@ -1,35 +1,6 @@
 import { BsFillCalendarWeekFill, BsFillFileEarmarkEaselFill } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
 
-export interface IHomework {
-    subject: string;
-    content: string;
-    image: string | null;
-    updatedAt: string;
-}
-
-export interface IUser {
-    tg_username: string;
-    tg_id: number;
-    tg_userpic: string | null;
-    trusted: string[];
-}
-
-export enum LessonTypes {
-    'пр' = 'П',
-    'лек' = 'Л',
-    'лаб' = 'ЛБ'
-}
-
-export enum HWTypes {
-    'Иностранный язык' = 'Англ',
-    'Математический анализ' = 'МатАн',
-    'Основы российской государственности' = 'ОРГ',
-    'Физика' = 'Физика',
-    'История России' = 'История',
-    'Линейная алгебра и аналитическая геометрия' = 'ЛинАл'
-}
-
 export const lessonIntervals = ['9:00 - 10:30', '10:40 - 12:10', '12:40 - 14:10', '14:20 - 15:50', '16:20 - 17:50', '18:00 - 19:30'];
 export const months = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
 
@@ -42,12 +13,11 @@ export const months = ['январь', 'февраль', 'март', 'апрел
 //     'ЛинАл': 'Линейная алгебра и аналитическая геометрия'
 // }
 
-export interface ILesson {
-    PROPERTY_DISCIPLINE_NAME: string;
-    PROPERTY_LESSON_TYPE: LessonTypes;
-    PROPERTY_LECTOR: string;
-    PROPERTY_PLACE: string;
-}
+export const gradients = {
+    teal: 'linear-gradient(155deg, rgba(0,128,128,1) 0%, rgba(56,161,105,1) 100%)',
+    orange: 'linear-gradient(155deg, rgba(237,127,54,1) 0%, rgba(237,155,54,1) 100%)',
+    purple: 'linear-gradient(150deg, rgba(69,112,209,1) 0%, rgba(88,15,112,1) 100%)'
+};
 
 export const weeksAndDays = [
     [6, 7, 8, 9, 10, 11, 12],

@@ -1,6 +1,6 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from '@reduxjs/toolkit';
-import { IUser } from "@/utils/misc";
+import { IUser } from "@/utils/types";
 
 interface AuthState {
     user: IUser | null;
@@ -18,12 +18,8 @@ export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        setUserpic: (state, action: PayloadAction<string>) => {
-            state.userpic = action.payload;
-        },
-        setAuthData: (state, action: PayloadAction<object>) => {
-            Object.assign(state, action.payload);
-        },
+        setUserpic: (state, action: PayloadAction<string>) => { state.userpic = action.payload; },
+        setAuthData: (state, action: PayloadAction<object>) => { Object.assign(state, action.payload); },
         addFile: (state, action: PayloadAction<string>) => {
             if (!state.user) return;
             if (!state.files[state.user.tg_username].includes(action.payload)) state.files[state.user.tg_username].unshift(action.payload);

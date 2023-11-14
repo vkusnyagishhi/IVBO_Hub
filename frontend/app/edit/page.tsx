@@ -1,7 +1,8 @@
 'use client';
 import { useDispatch, useSelector } from "@/redux/hooks";
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Button, HStack, Icon, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Textarea, useDisclosure, useToast, VStack } from "@chakra-ui/react";
-import { HWTypes, IHomework, toasts } from "@/utils/misc";
+import { toasts } from "@/utils/misc";
+import { HWTypes, IHomework } from '@/utils/types';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { deletePhoto, editHW, setData } from "@/redux/miscSlice";
 import axios from "axios";

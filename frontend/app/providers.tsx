@@ -1,8 +1,11 @@
 'use client';
 import { CacheProvider } from '@chakra-ui/next-js';
-import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+import { ChakraProvider, createMultiStyleConfigHelpers, extendTheme } from '@chakra-ui/react';
 import { Provider } from "@/redux/provider";
 import '@fontsource-variable/manrope';
+import { switchAnatomy } from "@chakra-ui/anatomy";
+
+const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(switchAnatomy.keys);
 
 export function Providers({ children }: { children: React.ReactNode }) {
     return <Provider>
@@ -17,6 +20,18 @@ export function Providers({ children }: { children: React.ReactNode }) {
                         100: '#102334',
                         200: '#141414' // '#0c1b28'
                     }
+                },
+                components: {
+                    Switch: defineMultiStyleConfig({
+                        baseStyle: definePartsStyle({
+                            track: {
+                                bg: 'gray.700',
+                                _checked: {
+                                    bg: 'blue.600'
+                                }
+                            }
+                        })
+                    })
                 }
             })}>
                 {children}
