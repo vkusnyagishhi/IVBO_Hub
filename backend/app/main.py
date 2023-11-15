@@ -1,16 +1,11 @@
 import asyncio
-from os import environ
-from time import tzset
-from datetime import datetime
 
 from fastapi import FastAPI
-from fastapi import Request
-from fastapi.responses import HTMLResponse
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from app.core.exceptions import SettingNotFound
 from app.core.init_app import (
-    # configure_logging,
+    configure_logging,
     init_middlewares,
     register_db,
     upgrade_db,
@@ -45,12 +40,12 @@ async def db_init():
 @app.on_event("startup")
 async def schedule_birthday():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(check_if_birthday_and_return_name, 'cron', hour="9", minute="0")
+    scheduler.add_job(check_if_birthday_and_return_name, 'cron', hour="09", minute="00")
     scheduler.start()
 
 asyncio.create_task(create_default_admin_user())
 
-# configure_logging()
+configure_logging()
 init_middlewares(app)
 register_exceptions(app)
 register_routers(app)

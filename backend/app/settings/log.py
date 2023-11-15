@@ -45,7 +45,7 @@ DEFAULT_LOGGING = {
         },
     },
     "loggers": {
-        "": {
+        "debug_logger": {
             "handlers": ["console", "production_file", "debug_file"],
             "level": "DEBUG",
         },

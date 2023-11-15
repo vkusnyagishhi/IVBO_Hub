@@ -1,5 +1,4 @@
 import logging
-from typing import Optional
 
 from asyncio import sleep
 
@@ -7,13 +6,9 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from tortoise.contrib.fastapi import register_tortoise
 
-from redis import Redis
-from redis.exceptions import ConnectionError
-
 from app.core.exceptions import APIException
 from app.settings.log import DEFAULT_LOGGING
 from app.settings.config import settings
-from app.core.auth.utils.contrib import get_current_admin, get_current_user
 from app.applications.users.models import User
 from app.applications.users.schemas import BaseUserCreate
 from app.core.auth.utils.password import get_password_hash
@@ -29,9 +24,9 @@ from app.applications.endpoint.routers import router as endpoint_router
 
 from aerich import Command
 
-# def configure_logging(log_settings: dict = None):
-#     log_settings = log_settings or DEFAULT_LOGGING
-#     logging.config.dictConfig(log_settings)
+def configure_logging(log_settings: dict = None):
+    log_settings = log_settings or DEFAULT_LOGGING
+    logging.config.dictConfig(log_settings)
 
 
 def init_middlewares(app: FastAPI):
@@ -96,8 +91,7 @@ def register_db(app: FastAPI, db_url: str = None):
 async def upgrade_db(app: FastAPI, db_url: str = None):
     command = Command(tortoise_config=TORTOISE_ORM, app="models")
     await command.init()
-    # await command.migrate("test")
-    # await command.upgrade(run_in_transction=False)
+    await command.upgrade(run_in_transaction=True)
 
 
 def register_exceptions(app: FastAPI):

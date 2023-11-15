@@ -3,8 +3,6 @@ import json
 from typing import Optional
 from datetime import date
 
-from apscheduler.schedulers.background import BackgroundScheduler 
-
 
 def check_if_birthday_and_return_name() -> Optional[list]:
     birthdays_today_names = list()
