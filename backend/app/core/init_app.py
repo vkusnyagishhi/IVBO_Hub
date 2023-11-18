@@ -21,6 +21,7 @@ from app.applications.homework.routers import router as homework_router
 from app.applications.disciplines.routers import router as disciplines_router
 from app.applications.posts.routers import router as posts_router
 from app.applications.endpoint.routers import router as endpoint_router
+from app.applications.websocket.websocket import router as websocket_router
 
 from aerich import Command
 
@@ -107,4 +108,5 @@ def register_routers(app: FastAPI):
     app.include_router(disciplines_router, prefix="/discipline", tags=["disciplines"])
     app.include_router(posts_router, prefix="/posts", tags=["posts"])
     app.include_router(endpoint_router, prefix="/endpoint", tags=["endpoint"])
+    app.include_router(websocket_router)
     
