@@ -78,7 +78,7 @@ export default function Calendar() {
     return <VStack w='100%' h='100%' pt='30px' spacing={`${50 + slicedData.length * 52}px`} pos='relative' onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
         {/*<Box w='200px' h='50px' border='2px solid red' pos='fixed' left={0} top={`${170 + slicedData.length * 55}px`} />*/}
 
-        <Text pos='absolute' color='white' opacity={0.5} top='-7px' left={isLaptop ? '30%' : '5%'}>{months[new Date().getMonth()]}, {weekIncrement + weekIndex} неделя</Text>
+        <Text pos='absolute' color='white' opacity={0.5} top={0} left={isLaptop ? '30%' : '5%'}>{months[new Date().getMonth()]}, {weekIncrement + weekIndex} неделя</Text>
         <Box />
         {/*<HStack pos='absolute' top='-8.3vh' left='50%'>*/}
         {/*    <Flex opacity={weeksDisplayCount < data.length - 2 ? 1 : 0.5} onClick={() => {*/}
