@@ -46,3 +46,5 @@ redis[hiredis]
 asyncio-redis
 apscheduler
 websockets
+jinja2
+broadcaster
