@@ -50,6 +50,19 @@ class HomeworkEditConnectionManager(ConnectionManager):
         return False
     
 
+HEART_BEAT_INTERVAL = 5
+async def is_websocket_active(ws: WebSocket) -> bool:
+    if not (ws.application_state == WebSocketState.CONNECTED and ws.client_state == WebSocketState.CONNECTED):
+        return False
+    try:
+        await asyncio.wait_for(ws.send_json({'type': 'ping'}), HEART_BEAT_INTERVAL)
+        message = await asyncio.wait_for(ws.receive_json(), HEART_BEAT_INTERVAL)
+        assert message['type'] == 'pong'
+    except BaseException:  # asyncio.TimeoutError and ws.close()
+        return False
+    return True
+
+
 homework_manager = HomeworkEditConnectionManager()
 
 
@@ -73,6 +86,8 @@ async def websocket_endpoint(
             raise HTTPException(status_code=404, detail="The homework with this uuid does not exist")
         while True:
             data.text = await websocket.receive_text()
+            if not is_websocket_active(websocket):
+                await data.save()
     except WebSocketDisconnect:
         await data.save()
         homework_manager.disconnect(websocket)
