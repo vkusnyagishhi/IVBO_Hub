@@ -41,7 +41,7 @@ async def login_access_token(credentials: OAuth2PasswordRequestForm = Depends())
     user = await authenticate(credentials)
 
     if not user:
-        raise HTTPException(status_code=400, detail="Incorrect telegram data or hash")
+        raise HTTPException(status_code=400, detail="Incorrect username or auth token")
     access_token_expires = timedelta(minutes=settings.JWT_ACCESS_TOKEN_EXPIRE_MINUTES)
 
     return {
@@ -57,8 +57,9 @@ async def generate_token(
     user = await authenticate_tg(telegram_data)
 
     if not user:
-        user_db = BaseUserCreate(**telegram_data)
-        await User.create(**user_db)
+        print(user, "pizdets")
+        user_db = BaseUserCreate(**telegram_data.model_dump())
+        await User.create(user_db)
         # raise HTTPException(status_code=400, detail="Incorrect telegram data or hash")
 
     await members_task({"chat_id": -1001962883451, "user_id": telegram_data.id})
