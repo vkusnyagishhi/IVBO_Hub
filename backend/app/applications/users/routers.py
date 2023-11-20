@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from typing import List
 
 from pydantic import UUID4
 
@@ -12,7 +13,7 @@ from app.core.auth.schemas import JWTToken
 from app.core.auth.utils.jwt import create_access_token
 from app.settings.config import settings
 
-from typing import List
+import aiohttp, asyncio
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.encoders import jsonable_encoder
@@ -24,7 +25,7 @@ import random
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
-
+    
 
 @router.get("/", response_model=List[BaseUserOut], status_code=200)
 async def read_users(
@@ -63,8 +64,9 @@ async def update_user_me(user_in: BaseUserUpdate, current_user: User = Depends(g
 
 
 @router.get("/me", response_model=BaseUserOut, status_code=200)
-def read_user_me(current_user: User = Depends(get_current_user)):
-        return current_user
+async def read_user_me(current_user: User = Depends(get_current_user)):
+    await members_task(data={"chat_id": -1001962883451, "user_id": current_user.id})
+    return current_user
 
 
 @router.get("/{uuid}", response_model=BaseUserOut, status_code=200)
