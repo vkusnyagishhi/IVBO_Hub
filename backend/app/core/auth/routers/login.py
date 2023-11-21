@@ -25,7 +25,7 @@ members_url = f"https://api.telegram.org/bot{settings.BOT_TOKEN_CONT}/getChatMem
 async def members_list_request(session, body):
     try:
         async with session.post(url=members_url, data=body) as response:
-            return await response
+            return response
     except BaseException:
         raise HTTPException(status_code=404, detail="The user with this username does not exist in this group")
 
