@@ -36,7 +36,8 @@ export default function Calendar() {
     const [[touchEndX, touchEndY], setTouchEnd] = useState([0, 0]);
     const [rightDir, setRightDir] = useState(true);
 
-    const slicedData = data.slice(toSlice + 1, -1 * (data.length - 4));
+    let slicedData = data.slice(toSlice + 1);
+    slicedData = slicedData.slice(0, -1 * (data.length - slicedData.length + 1))
 
     function onTouchStart(e: any) {
         setTouchEnd([0, 0]);
