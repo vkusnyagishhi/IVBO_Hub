@@ -7,32 +7,17 @@ from app.applications.users.models import ShortTgToken, User
 from app.applications.users.schemas import BaseUserCreate
 
 from app.core.auth.schemas import JWTToken, TelegramLoginData, TgToken, CredentialSchema
-from app.core.auth.utils.contrib import authenticate_tg, authenticate
+from app.core.auth.utils.contrib import authenticate_tg, authenticate, members_task
 from app.core.auth.utils.jwt import create_access_token
 from app.settings.config import settings
 from app.core.auth.utils import password
 from app.redis.requests.core.requests import load_short_token, get_short_token
 from app.redis.requests.core.schemas import ShortToken
 
-import aiohttp, asyncio
-
 import random
 import string
 
 router = APIRouter()
-
-members_url = f"https://api.telegram.org/bot{settings.BOT_TOKEN_CONT}/getChatMember"
-async def members_list_request(session, body):
-    try:
-        async with session.post(url=members_url, data=body) as response:
-            return response
-    except BaseException:
-        raise HTTPException(status_code=404, detail="The user with this username does not exist in this group")
-
-async def members_task(data):
-    async with aiohttp.ClientSession() as session:
-        task = members_list_request(session, data)
-        return await asyncio.gather(task)
 
 @router.post("/access-token", response_model=JWTToken)
 async def login_access_token(credentials: OAuth2PasswordRequestForm = Depends()):
@@ -62,7 +47,7 @@ async def generate_token(
         await User.create(user_db)
         # raise HTTPException(status_code=400, detail="Incorrect telegram data or hash")
 
-    await members_task({"chat_id": -1001962883451, "user_id": telegram_data.id})
+    await members_task({"chat_id": settings.TELEGRAM_CHAT_ID, "user_id": telegram_data.id})
 
     token = "".join([random.choice(string.ascii_letters) for _ in range(32)])
     token_hashed = password.get_password_hash(token)
