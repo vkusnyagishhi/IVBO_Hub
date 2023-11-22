@@ -52,15 +52,23 @@ export const toasts = {
         isClosable: true,
         containerStyle: { marginBottom: '100px' }
     }),
-    error: (desc?: string): any => ({
-        // id: 'error-toast',
-        status: 'error',
-        title: 'Ошибка',
-        description: desc ?? 'Обратитесь к админу',
-        duration: 3000,
-        isClosable: true,
-        containerStyle: { marginBottom: '100px' }
-    })
+    error: (err?: any): any => {
+        console.error(err);
+        if (typeof err === 'string') return ({
+            title: 'Ошибка',
+            description: err,
+            status: 'error',
+            duration: 5000,
+            isClosable: true
+        });
+        else if (err.response) return ({
+            title: err.response.statusText ?? 'Ошибка',
+            description: err.response.data.detail[0]?.msg ?? err.response.data.detail,
+            status: 'error',
+            duration: 5000,
+            isClosable: true
+        });
+}
 };
 
 export const headerLinks = [

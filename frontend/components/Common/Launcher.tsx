@@ -4,11 +4,13 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from '@/redux/hooks';
 import { setAuthData, setUserpic } from "@/redux/authSlice";
 import axios from "axios";
-import { Text } from "@chakra-ui/react";
+import { Text, useToast } from "@chakra-ui/react";
 import { api } from "@/utils/api";
+import { toasts } from "@/utils/misc";
 
 export function Launcher() {
     const dispatch = useDispatch();
+    const toast = useToast();
     const { version } = useSelector(state => state.misc);
     const { user } = useSelector(state => state.auth);
 
@@ -35,7 +37,8 @@ export function Launcher() {
             api.get('/auth/users/me', { headers: { Authorization: localStorage.getItem('ivbo_auth') } })
                 .then(res => {
                     console.log(res.data);
-                });
+                })
+                .catch(err => toast(toasts.error(err)));
         }
 
         // if (!user && localStorage.getItem('ivbo_token')) axios.post('https://api.twodev.cc/ivbo/login', { hash: localStorage.getItem('ivbo_token') }).then(res => {
@@ -48,7 +51,7 @@ export function Launcher() {
         //     }
         // });
         // else dispatch({ type: 'socket/connect', payload: 'unknown' });
-    }, [dispatch, user, version]);
+    }, [dispatch, user, version, toast]);
 
     return <>
         <Text fontSize='14px' color='white' opacity={0.5} pos='fixed' top={2} right={3} zIndex={10}>{version}</Text>
