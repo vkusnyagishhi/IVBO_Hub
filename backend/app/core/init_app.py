@@ -75,17 +75,6 @@ async def create_default_admin_user():
     return admin_user
 
 
-def register_db(app: FastAPI, db_url: str = None):
-    db_url = db_url or settings.DB_URL
-    app_list = get_app_list()
-    app_list.append("aerich.models")
-    register_tortoise(
-        app, 
-        db_url=db_url,
-        modules={"models": app_list},
-        generate_schemas=True,
-        add_exception_handlers=True,
-    )
 
 
 async def upgrade_db(app: FastAPI, db_url: str = None):
