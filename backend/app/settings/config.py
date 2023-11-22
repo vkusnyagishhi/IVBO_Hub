@@ -45,6 +45,8 @@ class Settings:
     ROOT_ADMIN_TG_ID=config("ROOT_ADMIN_TG_ID")
 
     BOT_TOKEN = config("BOT_TOKEN")
+    BOT_TOKEN_CONT = config("BOT_TOKEN_CONT")
+    TELEGRAM_CHAT_ID = config("TELEGRAM_CHAT_ID")
 
     DB_URL = f"postgres://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
     DB_CONNECTIONS = {

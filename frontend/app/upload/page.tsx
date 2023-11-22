@@ -214,6 +214,7 @@ export default function Files() {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
+            
         </>
         : <VStack spacing='10px' color='white'>
             <Text>Войди, чтобы загрузить файлы</Text>

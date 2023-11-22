@@ -3,10 +3,11 @@ from datetime import timedelta
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 
-from app.applications.users.models import ShortTgToken
+from app.applications.users.models import ShortTgToken, User
+from app.applications.users.schemas import BaseUserCreate
 
 from app.core.auth.schemas import JWTToken, TelegramLoginData, TgToken, CredentialSchema
-from app.core.auth.utils.contrib import authenticate_tg, authenticate
+from app.core.auth.utils.contrib import authenticate_tg, authenticate, members_task
 from app.core.auth.utils.jwt import create_access_token
 from app.settings.config import settings
 from app.core.auth.utils import password
@@ -18,7 +19,6 @@ import string
 
 router = APIRouter()
 
-
 @router.post("/access-token", response_model=JWTToken)
 async def login_access_token(credentials: OAuth2PasswordRequestForm = Depends()):
     credentials = CredentialSchema(username=credentials.username, token=credentials.password)
@@ -26,7 +26,7 @@ async def login_access_token(credentials: OAuth2PasswordRequestForm = Depends())
     user = await authenticate(credentials)
 
     if not user:
-        raise HTTPException(status_code=400, detail="Incorrect telegram data or hash")
+        raise HTTPException(status_code=400, detail="Incorrect username or auth token")
     access_token_expires = timedelta(minutes=settings.JWT_ACCESS_TOKEN_EXPIRE_MINUTES)
 
     return {
@@ -42,7 +42,12 @@ async def generate_token(
     user = await authenticate_tg(telegram_data)
 
     if not user:
-        raise HTTPException(status_code=400, detail="Incorrect telegram data or hash")
+        print(user, "pizdets")
+        user_db = BaseUserCreate(**telegram_data.model_dump())
+        await User.create(user_db)
+        # raise HTTPException(status_code=400, detail="Incorrect telegram data or hash")
+
+    await members_task({"chat_id": settings.TELEGRAM_CHAT_ID, "user_id": telegram_data.id})
 
     token = "".join([random.choice(string.ascii_letters) for _ in range(32)])
     token_hashed = password.get_password_hash(token)

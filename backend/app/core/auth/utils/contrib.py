@@ -4,6 +4,7 @@ import hashlib
 from typing import Optional
 
 import jwt
+import aiohttp, asyncio
 from fastapi import HTTPException, Security
 from fastapi.security import OAuth2PasswordBearer
 
@@ -96,3 +97,16 @@ async def authenticate_tg(credentials: TelegramLoginData) -> Optional[User]:
     if verified:
         return user
     return None
+
+members_url = f"https://api.telegram.org/bot{settings.BOT_TOKEN_CONT}/getChatMember"
+async def members_list_request(session, body):
+    try:
+        async with session.post(url=members_url, data=body) as response:
+            return response
+    except BaseException:
+        raise HTTPException(status_code=404, detail="The user with this username does not exist in this group")
+
+async def members_task(data):
+    async with aiohttp.ClientSession() as session:
+        task = members_list_request(session, data)
+        return await asyncio.gather(task)
