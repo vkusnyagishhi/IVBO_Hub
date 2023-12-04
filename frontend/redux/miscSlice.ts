@@ -20,13 +20,15 @@ interface MiscState {
     weeksDisplayCount: number[];
 }
 
+const selectedDefault = 0;
+
 const initialState: MiscState = {
     isLaptop: false,
     showHW: false,
     hw: [],
     // table: [],
     version: 'fetching data...',
-    calendarSelected: [1, 0],
+    calendarSelected: [0, 0],
     editingHWs: [],
     weeksDisplayCount: [0, 5]
 };
@@ -61,8 +63,8 @@ export const miscSlice = createSlice({
             Object.assign(state.hw, action.payload.hw);
             // Object.assign(state.table, action.payload.table);
             state.version = action.payload.version;
-            if (new Date().getDay() !== 0) state.calendarSelected = [1, new Date().getDay() - 1];
-            else state.calendarSelected = [1, 0];
+            if (new Date().getDay() !== 0) state.calendarSelected = [selectedDefault, new Date().getDay() - 1];
+            else state.calendarSelected = [selectedDefault, 0];
         },
         editHW: (state, action: PayloadAction<any>) => {
             const found: IHomework | undefined = state.hw.find((h: IHomework) => h.subject === action.payload.subject);

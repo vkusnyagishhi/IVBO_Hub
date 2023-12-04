@@ -42,7 +42,6 @@ async def generate_token(
     user = await authenticate_tg(telegram_data)
 
     if not user:
-        print(user, "pizdets")
         user_db = BaseUserCreate(**telegram_data.model_dump())
         await User.create(user_db)
         # raise HTTPException(status_code=400, detail="Incorrect telegram data or hash")
