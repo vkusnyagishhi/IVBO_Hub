@@ -24,8 +24,9 @@ const subjectCardStyles = {
 const weekIncrement = 10,
     minSwipeDistanceX = 40,
     minSwipeDistanceY = 30,
-    toSlice = rawWnD.findIndex((x: number[]) => x.includes(new Date().getDate())) - 1,
-    weeksAndDays = rawWnD.slice(toSlice);
+    // toSlice = rawWnD.findIndex((x: number[]) => x.includes(new Date().getDate())),
+    weeksAndDays = rawWnD.slice(0),
+    slicedData = data.slice(1);
 
 export default function Calendar() {
     const { hw, isLaptop, calendarSelected: [weekIndex, weekDayIndex], weeksDisplayCount, showHW } = useSelector(state => state.misc);
@@ -35,9 +36,6 @@ export default function Calendar() {
     const [[touchStartX, touchStartY], setTouchStart] = useState([0, 0]);
     const [[touchEndX, touchEndY], setTouchEnd] = useState([0, 0]);
     const [rightDir, setRightDir] = useState(true);
-
-    let slicedData = data.slice(toSlice + 1);
-    slicedData = slicedData.slice(0, -1 * (slicedData.length - toSlice - 1));
 
     function onTouchStart(e: any) {
         setTouchEnd([0, 0]);
