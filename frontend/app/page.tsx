@@ -21,7 +21,7 @@ const subjectCardStyles = {
     boxShadow: '0px 0px 14px 0px rgba(255, 255, 255, 0.2)'
 };
 
-const weekIncrement = 10,
+const weekIncrement = 15,
     minSwipeDistanceX = 40,
     minSwipeDistanceY = 30,
     // toSlice = rawWnD.findIndex((x: number[]) => x.includes(new Date().getDate())),
