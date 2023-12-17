@@ -21,7 +21,7 @@ const subjectCardStyles = {
     boxShadow: '0px 0px 14px 0px rgba(255, 255, 255, 0.2)'
 };
 
-const weekIncrement = 15,
+const weekIncrement = 16,
     minSwipeDistanceX = 40,
     minSwipeDistanceY = 30,
     toSlice = rawWnD.findIndex((x: number[]) => x.includes(new Date().getDate())),
@@ -59,8 +59,8 @@ export default function Calendar() {
         if (absY > minSwipeDistanceY && absX < minSwipeDistanceX) { // vertical swipe
             if (touchStartY > 170 + slicedData.length * 55) return; // if touchStart on calendar div
 
-            const isUpSwipe = distanceY > minSwipeDistanceY;
-            const isDownSwipe = distanceY < -minSwipeDistanceY;
+            // const isUpSwipe = distanceY > minSwipeDistanceY;
+            // const isDownSwipe = distanceY < -minSwipeDistanceY;
 
             // if (isUpSwipe || isDownSwipe) dispatch(isUpSwipe ? increaseWeeksDisplayCount() : decreaseWeeksDisplayCount());
         } else if (absX > minSwipeDistanceX) { // horizontal swipe
@@ -258,7 +258,7 @@ export default function Calendar() {
                             </VStack>;
                         })}
                     </VStack>
-                    : (weekDayIndex < 7 && <Text align='center' color='white'>{weekDayIndex === 6 ? 'нахер ты на воскресенье нажал' : 'Пар нет!'}</Text>)}
+                    : <Text align='center' color='white'>no pari, chill</Text>}
             </motion.div>
         </AnimatePresence>
     </VStack>
