@@ -255,7 +255,7 @@ export default function Calendar() {
                                 </HStack>
 
                                 {
-                                    Object.keys(HWTypes).includes(PROPERTY_DISCIPLINE_NAME) && HW && showHW &&
+                                    Object.keys(HWTypes).includes(PROPERTY_DISCIPLINE_NAME) && HW && showHW && (PROPERTY_LESSON_TYPE === LessonTypes['пр'] || PROPERTY_LESSON_TYPE === LessonTypes['нг']) &&
                                     <VStack w='100%' py='8px' align={isLaptop ? 'center' : 'start'} fontSize='15px' spacing='2px'>
                                         {HW.content.split('\n').map((c: string, i: number) => <Text color='white' opacity={0.8} key={i}>{c}</Text>)}
 
