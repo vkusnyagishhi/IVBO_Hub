@@ -1,5 +1,5 @@
 'use client';
-import { Box, Flex, HStack, Icon, Text, VStack, useToast } from "@chakra-ui/react";
+import { Box, Flex, HStack, Icon, Text, VStack, Image } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "@/redux/hooks";
 import { AnimatePresence, motion } from "framer-motion";
@@ -60,7 +60,7 @@ export default function Calendar() {
                 r['НГ'] = getRandomColor();
                 return r;
             });
-        }, 400);
+        }, 500);
     }, []);
 
     function onTouchStart(e: any) {
@@ -105,6 +105,7 @@ export default function Calendar() {
 
         <Text pos='absolute' color='white' opacity={0.5} top='-7px' left={isLaptop ? '30%' : '5%'}>{months[new Date().getMonth()]}, {weekIncrement + weekIndex} неделя</Text>
         <Box />
+
         {/*<HStack pos='absolute' top='-8.3vh' left='50%'>*/}
         {/*    <Flex opacity={weeksDisplayCount < data.length - 2 ? 1 : 0.5} onClick={() => {*/}
         {/*        if (weeksDisplayCount < data.length - 2) {*/}
@@ -280,6 +281,11 @@ export default function Calendar() {
                                 </HStack>
                             </VStack>;
                         })}
+
+                        {new Date().getDate() === 19 && <VStack mt='10px' spacing='8px'>
+                            <Text color={colors['НГ']} fontSize='24px'>С днюхой, Аня :)</Text>
+                            <Image src='/amogus.gif' h='200px' alt='' />
+                        </VStack>}
                     </VStack>
                     : <Text align='center' color='white'>no pari, chill</Text>}
             </motion.div>
