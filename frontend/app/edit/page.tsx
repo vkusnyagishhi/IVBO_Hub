@@ -48,11 +48,11 @@ export default function Admin() {
     return user
         ? <>
             <VStack spacing='20px' w={isLaptop ? '30%' : '50%'}>
-                {hw.map((x: IHomework, i) => <Button opacity={editingHWs.includes(x.subject) ? 0.5 : 1} w='100%' h='50px' fontSize='20px' key={i} bg='gray.600' _hover={{ bg: 'gray.500' }} _active={{ bg: 'gray.400' }} color='white' onClick={() => {
+                {hw.map((x: IHomework, i) => <Button opacity={editingHWs.includes(x.subject) ? 0.5 : 1} w='100%' h='50px' fontSize='20px' key={i} bg='gray.600' _hover={{ bg: 'gray.500' }} _active={{ bg: 'gray.400' }} onClick={() => {
                     if (editingHWs.includes(x.subject)) return;
                     setSelected(i);
                     onOpen();
-                }}>{x.subject}</Button>)}
+                }} color={x.subject.includes('НГ') ? 'green.400' : 'white'}>{x.subject}</Button>)}
             </VStack>
 
             <Modal isOpen={isOpen} onClose={onClose} size='full'>
