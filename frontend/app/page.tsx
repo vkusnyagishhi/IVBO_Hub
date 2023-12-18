@@ -163,6 +163,10 @@ export default function Calendar() {
                             {/* @ts-ignore */}
                             {slicedData[i + weeksDisplayCount[0]][j].filter((x: ILesson | null) => x?.PROPERTY_LESSON_TYPE).map((x: any, i: number) =>
                                 <Box key={i} w='6px' h='6px' bg={colors[x.PROPERTY_LESSON_TYPE as keyof typeof colors]} borderRadius='200px' />)}
+                            {day === 19 && <Box key={i} w='6px' h='6px' bg={colors['НГ']} borderRadius='200px' />}
+                            {day === 19 && <Box key={i} w='6px' h='6px' bg={colors['НГ']} borderRadius='200px' />}
+                            {day === 19 && <Box key={i} w='6px' h='6px' bg={colors['НГ']} borderRadius='200px' />}
+                            {day === 19 && <Box key={i} w='6px' h='6px' bg={colors['НГ']} borderRadius='200px' />}
                         </HStack>
                     </VStack>;
                 })}
@@ -283,7 +287,7 @@ export default function Calendar() {
                         })}
 
                         {new Date().getDate() === 19 && <VStack mt='10px' spacing='8px'>
-                            <Text color={colors['НГ']} fontSize='24px'>С днюхой, Аня :)</Text>
+                            <Text color={colors['НГ']} fontSize='24px'>С днюхой, Аня, и с днюхой, Стёпа :)</Text>
                             <Image src='/amogus.gif' h='200px' alt='' />
                         </VStack>}
                     </VStack>
