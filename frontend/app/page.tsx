@@ -286,8 +286,8 @@ export default function Calendar() {
                             </VStack>;
                         })}
 
-                        {new Date().getDate() === 19 && <VStack mt='10px' spacing='8px'>
-                            <Text color={colors['НГ']} fontSize='24px'>С днюхой, Аня, и с днюхой, Стёпа :)</Text>
+                        {new Date().getDate() === 19 && <VStack w='100%' mt='10px' spacing='8px'>
+                            <Text color={colors['НГ']} fontSize='24px' textAlign='center'>С днюхой, Аня,<br />и с днюхой, Стёпа :)</Text>
                             <Image src='/amogus.gif' h='200px' alt='' />
                         </VStack>}
                     </VStack>
