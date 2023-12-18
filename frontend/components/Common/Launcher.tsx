@@ -5,10 +5,12 @@ import { useDispatch, useSelector } from '@/redux/hooks';
 import { setAuthData, setUserpic } from "@/redux/authSlice";
 import axios from "axios";
 import { Text } from "@chakra-ui/react";
+import { ease } from "@/utils/misc";
+import { motion } from "framer-motion";
 
 export function Launcher() {
     const dispatch = useDispatch();
-    const { version } = useSelector(state => state.misc);
+    const { version, isLaptop } = useSelector(state => state.misc);
     const { user } = useSelector(state => state.auth);
 
     useEffect(() => {
@@ -41,5 +43,12 @@ export function Launcher() {
 
     return <>
         <Text fontSize='14px' color='white' opacity={0.5} pos='fixed' top={2} right={3} zIndex={10}>{version}</Text>
+
+        <motion.div
+            style={{ width: '100vw', height: '100vh', position: 'fixed', top: 0, left: 0, zIndex: 10000, background: 'black', pointerEvents: 'none' }}
+            initial={{ opacity: 1 }}
+            animate={{ opacity: isLaptop === null ? 1 : 0 }}
+            transition={{ duration: 0.2, ease }}
+        />
     </>
 }

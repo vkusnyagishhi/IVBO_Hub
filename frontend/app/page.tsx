@@ -1,6 +1,6 @@
 'use client';
-import { Box, Flex, HStack, Icon, Text, VStack } from "@chakra-ui/react";
-import { useState } from "react";
+import { Box, Flex, HStack, Icon, Text, VStack, useToast } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "@/redux/hooks";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaBook, FaChevronDown, FaChevronUp, FaHouse } from "react-icons/fa6";
@@ -28,6 +28,15 @@ const weekIncrement = 16,
     weeksAndDays = rawWnD.slice(toSlice),
     slicedData = data.slice(toSlice + 1);
 
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
 export default function Calendar() {
     const { hw, isLaptop, calendarSelected: [weekIndex, weekDayIndex], weeksDisplayCount, showHW } = useSelector(state => state.misc);
     const router = useRouter();
@@ -36,6 +45,23 @@ export default function Calendar() {
     const [[touchStartX, touchStartY], setTouchStart] = useState([0, 0]);
     const [[touchEndX, touchEndY], setTouchEnd] = useState([0, 0]);
     const [rightDir, setRightDir] = useState(true);
+
+    const [colors, setColors] = useState<any>({
+        'П': 'blue.400',
+        'ЛБ': 'red.300',
+        'Л': 'purple.500',
+        'НГ': 'green.500'
+    });
+
+    useEffect(() => {
+        setInterval(() => {
+            setColors((s: any) => {
+                const r = structuredClone(s);
+                r['НГ'] = getRandomColor();
+                return r;
+            });
+        }, 400);
+    }, []);
 
     function onTouchStart(e: any) {
         setTouchEnd([0, 0]);
@@ -135,7 +161,7 @@ export default function Calendar() {
                         <HStack pos='absolute' bottom='-5px' spacing='2px'>
                             {/* @ts-ignore */}
                             {slicedData[i + weeksDisplayCount[0]][j].filter((x: ILesson | null) => x?.PROPERTY_LESSON_TYPE).map((x: any, i: number) =>
-                                <Box key={i} w='6px' h='6px' bg={x.PROPERTY_LESSON_TYPE === 'П' ? 'blue.400' : (x.PROPERTY_LESSON_TYPE === 'ЛБ' ? 'red.300' : 'purple.500')} borderRadius='200px' />)}
+                                <Box key={i} w='6px' h='6px' bg={colors[x.PROPERTY_LESSON_TYPE as keyof typeof colors]} borderRadius='200px' />)}
                         </HStack>
                     </VStack>;
                 })}
@@ -199,7 +225,7 @@ export default function Calendar() {
                             return <VStack key={i} {...subjectCardStyles}>
                                 <HStack w='100%' justify='space-between' align='start'>
                                     <HStack w='100%' spacing='10px'>
-                                        <Text w='30px' h='30px' fontWeight={600} borderRadius='full' bg={PROPERTY_LESSON_TYPE === LessonTypes['пр'] ? 'blue.400' : (PROPERTY_LESSON_TYPE === LessonTypes['лаб'] ? 'red.400' : 'purple.500')} align='center' pt='3px'>{i + 1}</Text>
+                                        <Text w='30px' h='30px' fontWeight={600} borderRadius='full' bg={colors[PROPERTY_LESSON_TYPE as keyof typeof colors]} align='center' pt='3px'>{i + 1}</Text>
 
                                         <VStack w='calc(100% - 30px)' align='start' spacing='2px'>
                                             <Text fontWeight={500}>{PROPERTY_DISCIPLINE_NAME}</Text>
@@ -209,7 +235,7 @@ export default function Calendar() {
 
                                     {
                                         Object.keys(HWTypes).includes(PROPERTY_DISCIPLINE_NAME) &&
-                                        PROPERTY_LESSON_TYPE === LessonTypes['пр'] &&
+                                        (PROPERTY_LESSON_TYPE === LessonTypes['пр'] || PROPERTY_LESSON_TYPE === LessonTypes['нг']) &&
                                         <HStack borderRadius='20px' bg={HW ? gradients.teal : gradients.orange} p='4px 14px' spacing='6px' boxShadow='0px 0px 10px 0px rgba(255, 255, 255, 0.35)' onClick={() => {
                                             if (HW) {
                                                 dispatch(setShowHW(!showHW));
@@ -224,10 +250,7 @@ export default function Calendar() {
                                 </HStack>
 
                                 {
-                                    Object.keys(HWTypes).includes(PROPERTY_DISCIPLINE_NAME) &&
-                                    PROPERTY_LESSON_TYPE === LessonTypes['пр'] &&
-                                    HW &&
-                                    showHW &&
+                                    Object.keys(HWTypes).includes(PROPERTY_DISCIPLINE_NAME) && HW && showHW &&
                                     <VStack w='100%' py='8px' align={isLaptop ? 'center' : 'start'} fontSize='15px' spacing='2px'>
                                         {HW.content.split('\n').map((c: string, i: number) => <Text color='white' opacity={0.8} key={i}>{c}</Text>)}
 
@@ -245,8 +268,8 @@ export default function Calendar() {
                                     <Text h='30px' color='gray.400' fontSize='14px' fontWeight={600} pt='5px' pl='4px'>{lessonIntervals[i]}</Text>
 
                                     <HStack spacing='8px' h='30px' fontWeight={500}>
-                                        <Flex pb='2px' align='center' h='100%' px='10px' fontWeight={600} borderRadius='20px' bg={PROPERTY_LESSON_TYPE === LessonTypes['пр'] ? 'blue.500' : (PROPERTY_LESSON_TYPE === LessonTypes['лаб'] ? 'red.400' : 'purple.700')}>
-                                            <Text fontSize='14px'>{PROPERTY_LESSON_TYPE === 'П' ? 'пр' : (PROPERTY_LESSON_TYPE === LessonTypes['лаб'] ? 'лаб' : 'лек')}</Text>
+                                        <Flex pb='2px' align='center' h='100%' px='10px' fontWeight={600} borderRadius='20px' bg={colors[PROPERTY_LESSON_TYPE as keyof typeof colors]}>
+                                            <Text fontSize='14px'>{PROPERTY_LESSON_TYPE.toLowerCase()}</Text>
                                         </Flex>
 
                                         <HStack bg='#c8414a' h='100%' px='12px' borderRadius='20px' fontWeight={600} spacing='6px'>

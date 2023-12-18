@@ -10,7 +10,7 @@ interface IData {
 }
 
 interface MiscState {
-    isLaptop: boolean;
+    isLaptop: boolean | null;
     showHW: boolean;
     hw: IHomework[];
     // table: any[];
@@ -23,7 +23,7 @@ interface MiscState {
 const selectedDefault = 0;
 
 const initialState: MiscState = {
-    isLaptop: false,
+    isLaptop: null,
     showHW: false,
     hw: [],
     // table: [],
