@@ -163,10 +163,10 @@ export default function Calendar() {
                             {/* @ts-ignore */}
                             {slicedData[i + weeksDisplayCount[0]][j].filter((x: ILesson | null) => x?.PROPERTY_LESSON_TYPE).map((x: any, i: number) =>
                                 <Box key={i} w='6px' h='6px' bg={colors[x.PROPERTY_LESSON_TYPE as keyof typeof colors]} borderRadius='200px' />)}
+                            {/* {day === 19 && <Box key={i} w='6px' h='6px' bg={colors['НГ']} borderRadius='200px' />}
                             {day === 19 && <Box key={i} w='6px' h='6px' bg={colors['НГ']} borderRadius='200px' />}
                             {day === 19 && <Box key={i} w='6px' h='6px' bg={colors['НГ']} borderRadius='200px' />}
-                            {day === 19 && <Box key={i} w='6px' h='6px' bg={colors['НГ']} borderRadius='200px' />}
-                            {day === 19 && <Box key={i} w='6px' h='6px' bg={colors['НГ']} borderRadius='200px' />}
+                            {day === 19 && <Box key={i} w='6px' h='6px' bg={colors['НГ']} borderRadius='200px' />} */}
                         </HStack>
                     </VStack>;
                 })}
@@ -286,10 +286,10 @@ export default function Calendar() {
                             </VStack>;
                         })}
 
-                        {new Date().getDate() === 19 && <VStack w='100%' mt='10px' spacing='8px'>
+                        {/* {new Date().getDate() === 19 && <VStack w='100%' mt='10px' spacing='8px'>
                             <Text color={colors['НГ']} fontSize='24px' textAlign='center'>С днюхой, Аня :)</Text>
                             <Image src='/amogus.gif' h='200px' alt='' />
-                        </VStack>}
+                        </VStack>} */}
                     </VStack>
                     : <Text align='center' color='white'>no pari, chill</Text>}
             </motion.div>
