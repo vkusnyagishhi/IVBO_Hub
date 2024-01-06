@@ -2,11 +2,11 @@ version: '3.9'
 name: 'ivbo'
 
 services:
-  front:
-    build: ./frontend
-    restart: always
-    ports:
-      - "3005:3000"
+  #front:
+  #  build: ./frontend
+  #  restart: always
+  #  ports:
+  #    - "3005:3000"
   back:
     build: ./backend
     ports:
