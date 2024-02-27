@@ -54,7 +54,7 @@ export default [
             "PROPERTY_PLACE": "А-316"
         },
         {
-            "PROPERTY_DISCIPLINE_NAME": "Физическая культура и спорт (элективная дисциплина)",
+            "PROPERTY_DISCIPLINE_NAME": "Физическая культура и спорт",
             "PROPERTY_LESSON_TYPE": "ПР",
             "PROPERTY_LECTOR": null,
             "PROPERTY_PLACE": "ФОК-1"
@@ -81,6 +81,7 @@ export default [
         },
       ],
       [
+        /* 
         {
             "PROPERTY_DISCIPLINE_NAME": "Физика (ЛАБ.)",
             "PROPERTY_LESSON_TYPE": "ЛАБ",
@@ -92,7 +93,10 @@ export default [
             "PROPERTY_LESSON_TYPE": "ЛАБ",
             "PROPERTY_LECTOR": null,
             "PROPERTY_PLACE": "В-326 В-327"
-        },
+        }, 
+        */
+        null,
+        null,
         {
             "PROPERTY_DISCIPLINE_NAME": "Математическая логика и теория алгоритмов",
             "PROPERTY_LESSON_TYPE": "ЛК",
@@ -218,7 +222,7 @@ export default [
             "PROPERTY_PLACE": "А-316"
         },
         {
-            "PROPERTY_DISCIPLINE_NAME": "Физическая культура и спорт (элективная дисциплина)",
+            "PROPERTY_DISCIPLINE_NAME": "Физическая культура и спорт",
             "PROPERTY_LESSON_TYPE": "ПР",
             "PROPERTY_LECTOR": null,
             "PROPERTY_PLACE": "ФОК-1"
@@ -243,8 +247,10 @@ export default [
             "PROPERTY_LECTOR": null,
             "PROPERTY_PLACE": "База"
         },
+        
       ],
       [
+        /*
         {
             "PROPERTY_DISCIPLINE_NAME": "Физика (ЛАБ.)",
             "PROPERTY_LESSON_TYPE": "ЛАБ",
@@ -257,6 +263,9 @@ export default [
             "PROPERTY_LECTOR": "1 п/г 2 п/г",
             "PROPERTY_PLACE": "В-326 В-327"
         },
+        */
+        null,
+        null,
         {
             "PROPERTY_DISCIPLINE_NAME": "Математическая логика и теория алгоритмов",
             "PROPERTY_LESSON_TYPE": "ЛК",
@@ -299,7 +308,7 @@ export default [
             "PROPERTY_DISCIPLINE_NAME": "Системы искусственного интеллекта",
             "PROPERTY_LESSON_TYPE": "ЛК",
             "PROPERTY_LECTOR": null,
-            "PROPERTY_PLACE": "А-63"
+            "PROPERTY_PLACE": "А-150"
         },
       ],
       [
@@ -370,9 +379,9 @@ export default [
             "PROPERTY_PLACE": "А-12"
         },
         {
-            "PROPERTY_DISCIPLINE_NAME": "Русский язык и культура речи",
+            "PROPERTY_DISCIPLINE_NAME": "Объектно-ориентированное программирование",
             "PROPERTY_LESSON_TYPE": "ЛК",
-            "PROPERTY_LECTOR": null,
+            "PROPERTY_LECTOR": "Ингтем Ж.Г.",
             "PROPERTY_PLACE": "А-15"
         },
         {
@@ -382,7 +391,7 @@ export default [
             "PROPERTY_PLACE": "А-316"
         },
         {
-            "PROPERTY_DISCIPLINE_NAME": "Физическая культура и спорт (элективная дисциплина)",
+            "PROPERTY_DISCIPLINE_NAME": "Физическая культура и спорт",
             "PROPERTY_LESSON_TYPE": "ПР",
             "PROPERTY_LECTOR": null,
             "PROPERTY_PLACE": "ФОК-1"
@@ -407,8 +416,17 @@ export default [
             "PROPERTY_LECTOR": null,
             "PROPERTY_PLACE": "База"
         },
+        null,
+        null,
+        {
+            "PROPERTY_DISCIPLINE_NAME": "Правоведение",
+            "PROPERTY_LESSON_TYPE": "ЛК",
+            "PROPERTY_LECTOR": null,
+            "PROPERTY_PLACE": "СДО"
+        },
       ],
       [
+        /*
         {
             "PROPERTY_DISCIPLINE_NAME": "Физика (ЛАБ.)",
             "PROPERTY_LESSON_TYPE": "ЛАБ",
@@ -420,6 +438,14 @@ export default [
             "PROPERTY_LESSON_TYPE": "ЛАБ",
             "PROPERTY_LECTOR": "1 п/г 2 п/г",
             "PROPERTY_PLACE": "В-326 В-327"
+        },
+        */
+        null,
+        {
+            "PROPERTY_DISCIPLINE_NAME": "Математическая логика и теория алгоритмов",
+            "PROPERTY_LESSON_TYPE": "ПР",
+            "PROPERTY_LECTOR": null,
+            "PROPERTY_PLACE": "А-150"
         },
         {
             "PROPERTY_DISCIPLINE_NAME": "Математическая логика и теория алгоритмов",
@@ -454,28 +480,19 @@ export default [
             "PROPERTY_PLACE": "А-331"
         },
         {
-            "PROPERTY_DISCIPLINE_NAME": "Системы искусственного интеллекта",
+            "PROPERTY_DISCIPLINE_NAME": "Правоведение",
             "PROPERTY_LESSON_TYPE": "ПР",
-            "PROPERTY_LECTOR": null,
-            "PROPERTY_PLACE": "Б-214"
+            "PROPERTY_LECTOR": "Ширёва И.В.",
+            "PROPERTY_PLACE": "А-346"
         },
-        {
-            "PROPERTY_DISCIPLINE_NAME": "Системы искусственного интеллекта",
-            "PROPERTY_LESSON_TYPE": "ЛК",
-            "PROPERTY_LECTOR": null,
-            "PROPERTY_PLACE": "А-63"
-        },
+        
       ],
       [
         null,
         null,
         null,
-        {
-            "PROPERTY_DISCIPLINE_NAME": "Русский язык и культура речи",
-            "PROPERTY_LESSON_TYPE": "ПР",
-            "PROPERTY_LECTOR": null,
-            "PROPERTY_PLACE": "А-314"
-        },
+        null,
+        
         {
             "PROPERTY_DISCIPLINE_NAME": "Математический анализ",
             "PROPERTY_LESSON_TYPE": "ПР",
@@ -546,7 +563,7 @@ export default [
             "PROPERTY_PLACE": "А-316"
         },
         {
-            "PROPERTY_DISCIPLINE_NAME": "Физическая культура и спорт (элективная дисциплина)",
+            "PROPERTY_DISCIPLINE_NAME": "Физическая культура и спорт",
             "PROPERTY_LESSON_TYPE": "ПР",
             "PROPERTY_LECTOR": null,
             "PROPERTY_PLACE": "ФОК-1"
@@ -573,6 +590,7 @@ export default [
         },
       ],
       [
+        /*
         {
             "PROPERTY_DISCIPLINE_NAME": "Физика (ЛАБ.)",
             "PROPERTY_LESSON_TYPE": "ЛАБ",
@@ -585,6 +603,9 @@ export default [
             "PROPERTY_LECTOR": "1 п/г 2 п/г",
             "PROPERTY_PLACE": "В-326 В-327"
         },
+        */
+        null,
+        null,
         {
             "PROPERTY_DISCIPLINE_NAME": "Математическая логика и теория алгоритмов",
             "PROPERTY_LESSON_TYPE": "ЛК",
@@ -684,7 +705,6 @@ export default [
                 "PROPERTY_LECTOR": null,
                 "PROPERTY_PLACE": "ИВЦ-102"
             },
-            null
         ],
         [
             {
@@ -712,13 +732,11 @@ export default [
                 "PROPERTY_PLACE": "А-316"
             },
             {
-                "PROPERTY_DISCIPLINE_NAME": "Физическая культура и спорт (элективная дисциплина)",
+                "PROPERTY_DISCIPLINE_NAME": "Физическая культура и спорт",
                 "PROPERTY_LESSON_TYPE": "ПР",
                 "PROPERTY_LECTOR": null,
                 "PROPERTY_PLACE": "ФОК-1"
             },
-            null,
-            null
         ],
         [
             {
@@ -747,7 +765,6 @@ export default [
                 "PROPERTY_LECTOR": null,
                 "PROPERTY_PLACE": "СДО"
             },
-            null
         ],
         [
             null,
@@ -775,8 +792,6 @@ export default [
                 "PROPERTY_LECTOR": null,
                 "PROPERTY_PLACE": "В-303"
             },
-            null,
-            null
         ],
         [
             {
@@ -797,10 +812,6 @@ export default [
                 "PROPERTY_LECTOR": "Ширёва И.В.",
                 "PROPERTY_PLACE": "А-346"
             },
-            null,
-            null,
-            null,
-            null
         ],
         [
             null,
@@ -819,7 +830,6 @@ export default [
                 "PROPERTY_LECTOR": null,
                 "PROPERTY_PLACE": "А-405"
             },
-            null
         ],
         []
     ],

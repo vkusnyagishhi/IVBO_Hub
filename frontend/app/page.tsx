@@ -21,8 +21,7 @@ const subjectCardStyles = {
     boxShadow: '0px 0px 14px 0px rgba(255, 255, 255, 0.2)'
 };
 
-const weekIncrement = 0,
-    minSwipeDistanceX = 4,
+const minSwipeDistanceX = 4,
     minSwipeDistanceY = 30,
     toSlice = rawWnD.findIndex((x: number[]) => x.includes(new Date().getDate())),
     weeksAndDays = rawWnD.slice(toSlice),
@@ -107,7 +106,7 @@ export default function Calendar() {
     return <VStack w='100%' h='100%' pt='30px' spacing={`${50 + slicedData.length * 52}px`} pos='relative' onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
         {/*<Box w='200px' h='50px' border='2px solid red' pos='fixed' left={0} top={`${170 + slicedData.length * 55}px`} />*/}
 
-        <Text pos='absolute' color='white' opacity={0.5} top='-7px' left={isLaptop ? '30%' : '5%'}>{months[new Date().getMonth()]}, {weekIncrement + weekIndex} неделя</Text>
+        <Text pos='absolute' color='white' opacity={0.5} top='-7px' left={isLaptop ? '30%' : '5%'}>{months[new Date().getMonth()]}, {weekIndex} неделя</Text>
         <Box />
 
         {/*<HStack pos='absolute' top='-8.3vh' left='50%'>*/}
