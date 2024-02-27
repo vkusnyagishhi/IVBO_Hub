@@ -21,8 +21,8 @@ const subjectCardStyles = {
     boxShadow: '0px 0px 14px 0px rgba(255, 255, 255, 0.2)'
 };
 
-const weekIncrement = 16,
-    minSwipeDistanceX = 40,
+const weekIncrement = 0,
+    minSwipeDistanceX = 4,
     minSwipeDistanceY = 30,
     toSlice = rawWnD.findIndex((x: number[]) => x.includes(new Date().getDate())),
     weeksAndDays = rawWnD.slice(toSlice),
@@ -47,21 +47,25 @@ export default function Calendar() {
     const [rightDir, setRightDir] = useState(true);
 
     const [colors, setColors] = useState<any>({
-        'П': 'blue.400',
-        'ЛБ': 'red.300',
-        'Л': 'purple.500',
-        'НГ': 'green.500'
+        'ПР': 'blue.400',
+        'ЛАБ': 'red.300',
+        'ЛК': 'purple.500',
+        'СР': 'green.400',
+        'Л': 'orange.100', // legacy
+        'П': 'orange.500', // legacy
+        'ЛБ': 'orange.300', // legacy
+        'НГ': 'green.500' // legacy
     });
 
-    useEffect(() => {
-        setInterval(() => {
-            setColors((s: any) => {
-                const r = structuredClone(s);
-                r['НГ'] = getRandomColor();
-                return r;
-            });
-        }, 500);
-    }, []);
+    // useEffect(() => {
+    //     setInterval(() => {
+    //         setColors((s: any) => {
+    //             const r = structuredClone(s);
+    //             r['НГ'] = getRandomColor();
+    //             return r;
+    //         });
+    //     }, 500);
+    // }, []);
 
     function onTouchStart(e: any) {
         setTouchEnd([0, 0]);
@@ -257,7 +261,7 @@ export default function Calendar() {
                                 {
                                     Object.keys(HWTypes).includes(PROPERTY_DISCIPLINE_NAME) && HW && showHW && (PROPERTY_LESSON_TYPE === LessonTypes['пр'] || PROPERTY_LESSON_TYPE === LessonTypes['нг']) &&
                                     <VStack w='100%' py='8px' align={isLaptop ? 'center' : 'start'} fontSize='15px' spacing='2px'>
-                                        {HW.content.split('\n').map((c: string, i: number) => <Text color='white' opacity={0.8} key={i}>{c}</Text>)}
+                                        {HW.content.split('').map((c: string, i: number) => <Text color='white' opacity={0.8} key={i}>{c}</Text>)}
 
                                         <HStack w='100%' justify='center' mt='6px' spacing='12px'>
                                             <HStack bg='linear-gradient(155deg, rgba(0,128,128,1) 0%, rgba(56,161,105,1) 100%)' p='6px 12px' fontWeight={600} spacing='6px' color='white' borderRadius='25px' onClick={() => router.push('/edit?open=' + PROPERTY_DISCIPLINE_NAME)}>
@@ -291,7 +295,7 @@ export default function Calendar() {
                             <Image src='/amogus.gif' h='200px' alt='' />
                         </VStack>} */}
                     </VStack>
-                    : <Text align='center' color='white'>no pari, chill</Text>}
+                    : <Text align='center' color='white'>spokooha</Text>}
             </motion.div>
         </AnimatePresence>
     </VStack>
