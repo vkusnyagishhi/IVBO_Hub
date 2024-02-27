@@ -19,13 +19,8 @@ export const gradients = {
     purple: 'linear-gradient(150deg, rgba(69,112,209,1) 0%, rgba(88,15,112,1) 100%)'
 };
 
-export const weeksAndDays = [
-    [4, 5, 6, 7, 8, 9, 10],
-    [11, 12, 13, 14, 15, 16, 17],
-    [18, 19, 20, 21, 22, 23, 24],
-    [25, 26, 27, 28, 29, 30, 31],
-    [1, 2, 3, 4, 5, 6, 7]
-];
+const cal = new (require('calendar').Calendar)(1);
+export const weeksAndDays = cal.monthDates(2024, new Date().getMonth() + 1, (d: Date) => d.getDate());
 
 export const ease = [0.410, 0.030, 0.000, 0.995];
 export const iconButtonStyles = {
