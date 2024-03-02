@@ -103,7 +103,7 @@ export default function Calendar() {
         }
     }
 
-    return <VStack w='100%' h='100%' pt='30px' spacing={`${50 + slicedData.length * 52}px`} pos='relative' onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
+    return <VStack w='100%' h='100%' pt='30px' spacing={`${slicedData.length * 52}px`} pos='relative' onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
         {/*<Box w='200px' h='50px' border='2px solid red' pos='fixed' left={0} top={`${170 + slicedData.length * 55}px`} />*/}
 
         <Text pos='absolute' color='white' opacity={0.5} top='-7px' left={isLaptop ? '30%' : '5%'}>{months[new Date().getMonth()]}, {weekIndex} неделя</Text>
@@ -181,7 +181,7 @@ export default function Calendar() {
                 style={{
                     overflowY: 'auto',
                     height: '58vh',
-                    padding: isLaptop ? '20px 1% 100px 1%' : '20px 5% 110px 5%',
+                    padding: isLaptop ? '14px 1% 100px 1%' : '14px 5% 110px 5%',
                     width: isLaptop ? '40%' : '100%',
                     position: 'relative',
                     borderRadius: '25px 25px 0 0',
