@@ -20,7 +20,7 @@ export const gradients = {
 };
 
 const cal = new (require('calendar').Calendar)(1);
-export const weeksAndDays = cal.monthDates(2024, new Date().getMonth() + 1, (d: Date) => d.getDate());
+export const weeksAndDays = cal.monthDates(2024, new Date().getMonth(), (d: Date) => d.getDate());
 
 export const ease = [0.410, 0.030, 0.000, 0.995];
 export const iconButtonStyles = {
