@@ -1,4 +1,4 @@
-FROM oven/bun:latest AS base
+FROM oven/bun:alpine AS base
 
 FROM base AS deps
 WORKDIR /deps
@@ -14,7 +14,7 @@ RUN bun run build
 
 FROM base
 WORKDIR /serve
-# RUN apk --no-cache add curl
+RUN apk --no-cache add curl
 RUN bun add sharp
 RUN mkdir .next
 
