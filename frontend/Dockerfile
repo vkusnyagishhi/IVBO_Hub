@@ -1,4 +1,4 @@
-FROM oven/bun:alpine AS base
+FROM oven/bun:latest AS base
 
 FROM base AS deps
 WORKDIR /deps
@@ -24,7 +24,6 @@ COPY --from=build /build/.next/static ./.next/static
 
 HEALTHCHECK CMD curl -f http://localhost:3000 || exit 1
 
-ENV NODE_ENV production
 ENV HOSTNAME "0.0.0.0"
 
-CMD [ "bun", "run", "server.js" ]
+CMD [ "bun", "server.js" ]
