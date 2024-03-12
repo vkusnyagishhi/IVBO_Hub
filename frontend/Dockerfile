@@ -14,7 +14,7 @@ RUN bun run build
 
 FROM base
 WORKDIR /serve
-RUN apk --no-cache add curl
+# RUN apk --no-cache add curl
 RUN bun add sharp
 RUN mkdir .next
 
